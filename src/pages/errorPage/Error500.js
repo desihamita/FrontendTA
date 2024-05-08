@@ -1,12 +1,16 @@
 import React from 'react'
+import Breadcrumb from '../../components/partials/Breadcrumb'
 
 const Error500 = () => {
   return (
-    <div className="d-flex justify-content-center mt-5">
-      <section className="content mt-5">
-      <div className="error-page mt-5">
-        <h2 className="headline text-danger">500</h2>
-        <div className="error-content">
+    <div className="content-wrapper">
+      <section className="content-header">
+        <Breadcrumb title='Error 500' breadcrumb="Error page" />
+      </section>
+      <section className="content mt-5 pt-5">
+        <div className="error-page">
+          <h2 className="headline text-danger">500</h2>
+          <div className="error-content">
             <h3><i className="fas fa-exclamation-triangle text-danger" /> Oops! Something went wrong.</h3>
             <p>
               We will work on fixing that right away.
@@ -25,6 +29,7 @@ const Error500 = () => {
         </div>
       </section>
     </div>
+
   )
 }
 

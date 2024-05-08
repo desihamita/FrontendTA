@@ -1,68 +1,107 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Breadcrumb from '../../components/partials/Breadcrumb'
-import $ from 'jquery'
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
+import axios from 'axios';
+import Constants from '../../Constants';
+import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 
 const CategoryList = () => {
+  const [modalShow, setModalShow] = React.useState(false);
+  const [categories, setCategories] = useState([])
+  const [modalPhoto, setModalPhoto] = useState('');
+
+  const getCategories = () => {
+    axios.get(`${Constants.BASE_URL}/category`).then(res => {
+      setCategories(res.data.data)
+    })
+  }
+
+  const handlePhotoModal = (photo) => {
+    setModalPhoto(photo)
+    setModalShow(true)
+  } 
+
   useEffect(() => {
-    $(function () {
-      $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
-    });
-  }, []);
+    getCategories()
+  }, [])
+
   return (
     <div className="content-wrapper">
-        <section className="content-header">
-          <Breadcrumb title="Category List" breadcrumb="category"/>
-        </section>
-        <section className="content">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="card card-outline card-orange">
-                  <form>
-                    <div className="card-body">
-                      <div className="form-group">
-                        <label htmlFor="exampleInputEmail1">Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Enter email" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputPassword1">Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputFile">File input</label>
-                        <div className="input-group">
-                          <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="exampleInputFile" />
-                            <label className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                          </div>
-                          <div className="input-group-append">
-                            <span className="input-group-text">Upload</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-footer">
-                      <button type="submit" className="btn btn-primary">Submit</button>
-                    </div>
-                  </form>
+      <section className="content-header">
+        <Breadcrumb title="Category List" breadcrumb="category"/>
+      </section>
+      <section className="content">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <div className="card card-outline card-warning">
+                <div className="card-header">
+                  <CardHeader add={'/category/create'} />
+                </div>
+                <div className="card-body">
+                  <div className='table-responsive'>
+                    <table className='table table-hover table-striped table-bordered'>
+                      <thead>
+                        <tr>
+                          <th>SL</th>
+                          <th>Name / SLug</th>
+                          <th>Serial / Status</th>
+                          <th>Photo</th>
+                          <th>Created By</th>
+                          <th>Date Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {categories.map((category, index) => (
+                          <tr>
+                            <td>{++index}</td>
+                            <td>
+                              <p className='mb-0'>Name : {category.name}</p>
+                              <p className='text-success'>Slug : {category.slug}</p>
+                            </td>
+                            <td>
+                              <p className='mb-0'>Serial : {category.serial}</p>
+                              <p className='text-success'>Status : {category.status}</p>
+                            </td>
+                            <td>
+                              <img src={category.photo} alt={category.name} className='img-thumbnail table-image' width={75} style={{cursor: 'pointer'}} onClick={() => handlePhotoModal(category.photo_full)} />
+                            </td>
+                            <td>{category.created_by}</td>
+                            <td>
+                              <p className='mb-0'><small>Created : {category.created_at}</small></p>
+                              <p className='text-success'><small>Updated : {category.updated_at}</small></p>
+                            </td>
+                            <td>as</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>SL</th>
+                          <th>Name / SLug</th>
+                          <th>Serial</th>
+                          <th>Status</th>
+                          <th>Created By</th>
+                          <th>Date Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                    <CategoryPhotoModal
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                      title={'Category Photo'}
+                      photo={modalPhoto}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-    </div>
+        </div>
+      </section>
+  </div>
   )
 }
 

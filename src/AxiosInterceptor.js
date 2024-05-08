@@ -16,7 +16,7 @@ axios.interceptors.response.use(function (response) {
     if (error.response.status === 401) {
         GlobalFunction.logout()
     } else if (error.response.status === 500){
-        window.location.href = window.location.origin + '/CategoryList'
+        window.location.href = window.location.origin + '/error500'
     }
     return Promise.reject(error);
 });

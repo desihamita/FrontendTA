@@ -11,7 +11,7 @@ function App() {
     if(localStorage.token !== undefined) {
       setAuth(true)
     }
-  }, [5000])
+  }, [])
 
   return (
     <>
