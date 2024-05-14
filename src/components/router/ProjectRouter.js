@@ -6,6 +6,7 @@ import Error500 from '../../pages/errorPage/Error500'
 import Error404 from '../../pages/errorPage/Error404'
 import AddCategory from '../../pages/category/AddCategory'
 import CategoryList from '../../pages/category/CategoryList'
+import CategoryEdit from '../../pages/category/CategoryEdit'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -21,6 +22,9 @@ const ProjectRouter = createBrowserRouter([
             }, {
                 path: '/category/create',
                 element: <AddCategory/>
+            }, {
+                path: '/category/edit/:id',
+                element: <CategoryEdit/>
             }, {
                 path: '/error500',
                 element: <Error500/>
