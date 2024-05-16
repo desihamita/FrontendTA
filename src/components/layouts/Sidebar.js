@@ -65,6 +65,12 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
+                                <Link to='/brand' className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Data Brand</p>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
                                 <a href='#' className="nav-link">
                                     <i className="far fa-circle nav-icon"></i>
                                     <p>Data Barang</p>

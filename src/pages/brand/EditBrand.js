@@ -1,80 +1,80 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import Constants from '../../Constants';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 
-const AddSubCategory = () => {
+const EditBrand = () => {
+    const params = useParams();
     const navigate = useNavigate();
-  const [input, setInput] = useState({
-        name: '',
-        slug: '',
-        serial: '',
-        status: 1,
-        description: '',
-        photo: ''
-  });
-  const [errors, setErrors] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
-
-  const getCategories = () => {
-    axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-        setCategories(res.data)
-    })
-  }
-
-  const handleInput = (e) => {
-    if (e.target.name === 'name') {
-        let slug = e.target.value
-        slug = slug.toLowerCase()
-        slug = slug.replaceAll(' ','-')
-        setInput(prevState =>  ({...prevState, slug: slug}))
-    }
-    setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
-  }
-
-  const handlePhoto = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.onloadend = () => {
-        setInput(prevState => ({...prevState, photo: reader.result}));
-        document.getElementById('fileLabel').innerText = file.name;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleCategoryCreate = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    axios.post(`${Constants.BASE_URL}/sub-category`, input).then(res => {
-        setIsLoading(false);
-        Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
-        });
-        navigate('/sub-category');
-    }).catch(errors => {
-        setIsLoading(false);
-        if(errors.response.status === 422) {
-          setErrors(errors.response.data.errors);
-        }
+    const [input, setInput] = useState({
+          name: '',
+          slug: '',
+          serial: '',
+          status: 1,
+          description: '',
+          logo: ''
     });
-  };
+    const [errors, setErrors] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [category, setCategory] = useState([]);
 
-  useEffect(() => {
-    getCategories()
-  }, []);
+    const getCategory = () => {
+        axios.get(`${Constants.BASE_URL}/brand/${params.id}`).then(res => {
+            setInput(res.data.data)
+        })
+    }
+  
+    const handleInput = (e) => {
+      if (e.target.name === 'name') {
+          let slug = e.target.value
+          slug = slug.toLowerCase()
+          slug = slug.replaceAll(' ','-')
+          setInput(prevState =>  ({...prevState, slug: slug}))
+      }
+      setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
+    }
+  
+    const handleLogo = (e) => {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      reader.onloadend = () => {
+          setInput(prevState => ({...prevState, logo: reader.result}));
+          document.getElementById('fileLabel').innerText = file.name;
+      };
+      reader.readAsDataURL(file);
+    };
+  
+    const handleBrandUpdate = (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+      axios.put(`${Constants.BASE_URL}/brand/${params.id}`, input).then(res => {
+          setIsLoading(false);
+          Swal.fire({
+              position: "top-end",
+              icon: res.data.cls,
+              title: res.data.msg,
+              showConfirmButton: false,
+              toast: true,
+              timer: 3000
+          });
+          navigate('/brand');
+      }).catch(errors => {
+          setIsLoading(false);
+          if(errors.response.status === 422) {
+            setErrors(errors.response.data.errors);
+          }
+      });
+    };
 
+    useEffect(() => {
+        getCategory()
+    },[])
   return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Add Sub Category" breadcrumb="Form Data" />
+            <Breadcrumb title="Brand Edit" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">
@@ -84,34 +84,14 @@ const AddSubCategory = () => {
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">
-                                        <label>Select Category</label>
-                                        <select 
-                                            name="category_id"
-                                            value={input.category_id}
-                                            onChange={handleInput} 
-                                            className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Select Category" 
-                                        >
-                                            <option value="" disabled selected>Select Category</option>
-                                            {categories.map((category) => (
-                                                <option value={category.id}>{category.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.category_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.category_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6">
-                                        <label>Category Name</label>
+                                        <label>Brand Name</label>
                                         <input 
                                             type="text" 
                                             name="name"
                                             value={input.name}
                                             onChange={handleInput} 
                                             className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Name" 
+                                            placeholder="Enter Brand Name" 
                                         />
                                         {errors.name !== undefined && (
                                             <div className="invalid-feedback">
@@ -120,14 +100,14 @@ const AddSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
-                                        <label>Category Slug</label>
+                                        <label>Brand Slug</label>
                                         <input 
                                             type="text" 
                                             name="slug"
                                             value={input.slug}
                                             onChange={handleInput} 
                                             className={errors.slug !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Name" 
+                                            placeholder="Enter Brand Name" 
                                         />
                                         {errors.slug !== undefined && (
                                             <div className="invalid-feedback">
@@ -143,7 +123,7 @@ const AddSubCategory = () => {
                                             value={input.serial}
                                             onChange={handleInput} 
                                             className={errors.serial !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Serial" 
+                                            placeholder="Enter Brand Serial" 
                                         />
                                         {errors.serial !== undefined && (
                                             <div className="invalid-feedback">
@@ -158,7 +138,9 @@ const AddSubCategory = () => {
                                             value={input.status}
                                             onChange={handleInput}
                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                            placeholder="Select Brand Status"
                                         >
+                                            <option disabled={true}>Select Brand Status</option>
                                             <option value={1}>Active</option>
                                             <option value={2}>Inactive</option>
                                         </select>
@@ -175,7 +157,7 @@ const AddSubCategory = () => {
                                             value={input.description}
                                             onChange={handleInput} 
                                             className={errors.description !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Description" 
+                                            placeholder="Enter Brand Description" 
                                         />
                                         {errors.description !== undefined && (
                                             <div className="invalid-feedback">
@@ -184,27 +166,27 @@ const AddSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">Photo</label>
+                                        <label htmlFor="exampleInputFile">File input</label>
                                         <div className="input-group">
                                             <div className="custom-file">
-                                                <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
+                                                <input type="file" name="Logo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
                                                 <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
                                             </div>
-                                            {errors.photo !== undefined && (
+                                            {errors.logo !== undefined && (
                                                 <div className="invalid-feedback">
-                                                    {errors.photo[0]}
+                                                    {errors.logo[0]}
                                                 </div>
                                             )}
                                         </div>
-                                        {input.photo && (
+                                        {(input.logo || input.logo_preview !== undefined) && (
                                             <div className="card-body">
-                                                <img className="img-fluid w-50 h-50" src={input.photo} alt="Photo" />
+                                                <img className="img-fluid w-50 h-50" src={input.logo === undefined ? input.logo_preview : input.logo} alt="logo" />
                                             </div>
                                         )}
                                     </div>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-warning w-30" onClick={handleCategoryCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Sub Category'}} />
+                                    <button className="btn btn-warning w-30" onClick={handleBrandUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Update Brand'}} />
                                 </div>
                             </form>
                         </div>
@@ -216,4 +198,4 @@ const AddSubCategory = () => {
   )
 }
 
-export default AddSubCategory
+export default EditBrand

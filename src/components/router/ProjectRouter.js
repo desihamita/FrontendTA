@@ -10,6 +10,9 @@ import CategoryEdit from '../../pages/category/CategoryEdit'
 import AddSubCategory from '../../pages/subCategory/AddSubCategory'
 import ListSubCategory from '../../pages/subCategory/ListSubCategory'
 import EditSubCategory from '../../pages/subCategory/EditSubCategory'
+import AddBrand from '../../pages/brand/AddBrand'
+import EditBrand from '../../pages/brand/EditBrand'
+import ListBrand from '../../pages/brand/ListBrand'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -37,6 +40,15 @@ const ProjectRouter = createBrowserRouter([
             }, {
                 path: '/sub-category/create',
                 element: <AddSubCategory/>
+            }, {
+                path: '/brand',
+                element: <ListBrand/>
+            }, {
+                path: '/brand/create',
+                element: <AddBrand/>
+            }, {
+                path: '/brand/edit/:id',
+                element: <EditBrand/>
             }, {
                 path: '/error500',
                 element: <Error500/>

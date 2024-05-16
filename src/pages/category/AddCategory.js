@@ -154,7 +154,7 @@ const AddCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">File input</label>
+                                        <label htmlFor="exampleInputFile">Photo</label>
                                         <div className="input-group">
                                             <div className="custom-file">
                                                 <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
