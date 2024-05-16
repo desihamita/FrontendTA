@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Breadcrumb from '../../components/partials/Breadcrumb'
-import axios from 'axios'
-import Constants from '../../Constants'
-import Swal from 'sweetalert2'
-import { useNavigate, useParams } from 'react-router-dom'
+import Swal from 'sweetalert2';
+import Constants from '../../Constants';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import Breadcrumb from '../../components/partials/Breadcrumb';
 
-const CategoryEdit = () => {
+const EditSubCategory = () => {
     const params = useParams();
     const navigate = useNavigate();
     const [input, setInput] = useState({
@@ -18,11 +18,18 @@ const CategoryEdit = () => {
     });
     const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState([]); 
+    const [categories, setCategories] = useState([]);
 
     const getCategory = () => {
-        axios.get(`${Constants.BASE_URL}/category/${params.id}`).then(res => {
+        axios.get(`${Constants.BASE_URL}/sub-category/${params.id}`).then(res => {
             setInput(res.data.data)
+        })
+    }
+
+    const getCategories = () => {
+        axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
+            setCategories(res.data)
         })
     }
   
@@ -49,7 +56,7 @@ const CategoryEdit = () => {
     const handleCategoryUpdate = (e) => {
       e.preventDefault();
       setIsLoading(true);
-      axios.put(`${Constants.BASE_URL}/category/${params.id}`, input).then(res => {
+      axios.put(`${Constants.BASE_URL}/sub-category/${params.id}`, input).then(res => {
           setIsLoading(false);
           Swal.fire({
               position: "top-end",
@@ -59,7 +66,7 @@ const CategoryEdit = () => {
               toast: true,
               timer: 3000
           });
-          navigate('/category');
+          navigate('/sub-category');
       }).catch(errors => {
           setIsLoading(false);
           if(errors.response.status === 422) {
@@ -69,13 +76,14 @@ const CategoryEdit = () => {
     };
 
     useEffect(() => {
-        getCategory()
+        getCategory();
+        getCategories();
     },[])
-    
+
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Category Edit" breadcrumb="Form Data" />
+            <Breadcrumb title="Sub Category Edit" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">
@@ -85,6 +93,26 @@ const CategoryEdit = () => {
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">
+                                        <label>Select Category</label>
+                                        <select 
+                                            name="category_id"
+                                            value={input.category_id}
+                                            onChange={handleInput} 
+                                            className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                            placeholder="Select Category" 
+                                        >
+                                            <option value="" disabled selected>Select Category</option>
+                                            {categories.map((category) => (
+                                                <option value={category.id}>{category.name}</option>
+                                            ))}
+                                        </select>
+                                        {errors.category_id !== undefined && (
+                                            <div className="invalid-feedback">
+                                            {errors.category_id[0]}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="form-group col-md-6">
                                         <label>Category Name</label>
                                         <input 
                                             type="text" 
@@ -92,7 +120,7 @@ const CategoryEdit = () => {
                                             value={input.name}
                                             onChange={handleInput} 
                                             className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Name" 
+                                            placeholder="Enter Sub Category Name" 
                                         />
                                         {errors.name !== undefined && (
                                             <div className="invalid-feedback">
@@ -108,7 +136,7 @@ const CategoryEdit = () => {
                                             value={input.slug}
                                             onChange={handleInput} 
                                             className={errors.slug !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Name" 
+                                            placeholder="Enter Sub Category Name" 
                                         />
                                         {errors.slug !== undefined && (
                                             <div className="invalid-feedback">
@@ -124,7 +152,7 @@ const CategoryEdit = () => {
                                             value={input.serial}
                                             onChange={handleInput} 
                                             className={errors.serial !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Serial" 
+                                            placeholder="Enter Sub Category Serial" 
                                         />
                                         {errors.serial !== undefined && (
                                             <div className="invalid-feedback">
@@ -141,7 +169,7 @@ const CategoryEdit = () => {
                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
                                             placeholder="Select Category Status"
                                         >
-                                            <option disabled={true}>Select Category Status</option>
+                                            <option disableb selected>Select Category Status</option>
                                             <option value={1}>Active</option>
                                             <option value={2}>Inactive</option>
                                         </select>
@@ -158,7 +186,7 @@ const CategoryEdit = () => {
                                             value={input.description}
                                             onChange={handleInput} 
                                             className={errors.description !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Description" 
+                                            placeholder="Enter Sub Category Description" 
                                         />
                                         {errors.description !== undefined && (
                                             <div className="invalid-feedback">
@@ -187,7 +215,7 @@ const CategoryEdit = () => {
                                     </div>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-warning w-30" onClick={handleCategoryUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Update Category'}} />
+                                    <button className="btn btn-warning w-30" onClick={handleCategoryUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Update Sub   Category'}} />
                                 </div>
                             </form>
                         </div>
@@ -196,7 +224,7 @@ const CategoryEdit = () => {
             </div>
         </section>
     </div>
-  )
+    )
 }
 
-export default CategoryEdit
+export default EditSubCategory

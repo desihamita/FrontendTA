@@ -6,45 +6,44 @@ import Swal from 'sweetalert2';
 import Constants from '../../Constants';
 import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 import Pagination from 'react-js-pagination';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
 import Loader from '../../components/partials/miniComponent/Loader';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 
 const CategoryList = () => {
   const [input, setInput] = useState({
-    order_by : 'serial',
-    per_page : 10,
-    direction : 'asc',
-    search : ''
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [category, setCategory] = useState([])
-
-  const [itemsCountPerPage, setitemsCountPerPage] = useState(0);
+    order_by: 'serial',
+    per_page: 10,
+    direction: 'asc',
+    search: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
   const [startFrom, setStartFrom] = useState(1);
   const [activePage, setActivePage] = useState(1);
-
   const [modalShow, setModalShow] = useState(false);
   const [modalPhotoShow, setModalPhotoShow] = useState(false);
   const [categories, setCategories] = useState([]);
   const [modalPhoto, setModalPhoto] = useState('');
 
   const handleInput = (e) => {
-    setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
-  }
+    setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
+  };
 
   const getCategories = (pageNumber = 1) => {
-    setIsLoading(true)
-    axios.get(`${Constants.BASE_URL}/category?page=${pageNumber}&search=${input.search}&ordey_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`).then(res => {
-      setCategories(res.data.data);
-      setitemsCountPerPage(res.data.meta.per_page);
-      setStartFrom(res.data.meta.from);
-      setTotalItemsCount(res.data.meta.total);
-      setActivePage(res.data.meta.current_page);
-      setIsLoading(false)
-    });
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/category?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+        .then(res => {
+            setCategories(res.data.data);
+            setItemsCountPerPage(res.data.meta.per_page);
+            setStartFrom(res.data.meta.from);
+            setTotalItemsCount(res.data.meta.total);
+            setActivePage(res.data.meta.current_page);
+            setIsLoading(false);
+        });
   };
 
   const handlePhotoModal = (photo) => {
@@ -66,21 +65,23 @@ const CategoryList = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Delete it!"
-      }).then((result) => {
+    }).then((result) => {
       if (result.isConfirmed) {
-          axios.delete(`${Constants.BASE_URL}/category/${id}`).then(res => {
-            Swal.fire({
-              position: "top-end",
-              icon: res.data.cls,
-              title: res.data.msg,
-              showConfirmButton: false,
-              toast: true,
-              timer: 1500
-            });
-          })
+        axios.delete(`${Constants.BASE_URL}/category/${id}`).then(res => {
+          Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
+          // Refresh the categories list
+          getCategories(activePage);
+        });
       }
     });
-  }
+  };
 
   useEffect(() => {
     getCategories();
@@ -106,9 +107,9 @@ const CategoryList = () => {
                     <div className='row'>
                       <div className='col-md-3'>
                         <label className='w-100'>
-                          <p className='mb-0'>Search : </p>
+                          <p className='mb-0'>Search :</p>
                           <input 
-                            className='form-control '
+                            className='form-control'
                             type='search'
                             name='search'
                             value={input.search}
@@ -119,7 +120,7 @@ const CategoryList = () => {
                       </div>
                       <div className='col-md-3'>
                         <label className='w-100'>
-                          <p className='mb-0'>Order By : </p>
+                          <p className='mb-0'>Order By :</p>
                           <select 
                             className='form-control select2'
                             name='order_by'
@@ -135,7 +136,7 @@ const CategoryList = () => {
                       </div>
                       <div className='col-md-2'>
                         <label className='w-100'>
-                          <p className='mb-0'>Order Direction : </p>
+                          <p className='mb-0'>Order Direction :</p>
                           <select 
                             className='form-control select2'
                             name='direction'
@@ -149,7 +150,7 @@ const CategoryList = () => {
                       </div>
                       <div className='col-md-2'>
                         <label className='w-100'>
-                          <p className='mb-0'>Per Page : </p>
+                          <p className='mb-0'>Per Page :</p>
                           <select 
                             className='form-control select2'
                             name='per_page'
@@ -179,7 +180,7 @@ const CategoryList = () => {
                         <thead>
                           <tr>
                             <th>SL</th>
-                            <th>Name / SLug</th>
+                            <th>Name / Slug</th>
                             <th>Serial / Status</th>
                             <th>Photo</th>
                             <th>Created By</th>
@@ -189,7 +190,7 @@ const CategoryList = () => {
                         </thead>
                         {/* Table Body */}
                         <tbody>
-                          {Object.keys(categories).length > 0 ? categories.map((category, index) => (
+                          {categories.length > 0 ? categories.map((category, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
@@ -221,9 +222,7 @@ const CategoryList = () => {
                               </td>
                               <td className='m-1'>
                                 <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
-
                                 <Link to={`/category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-
                                 <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                               </td>
                             </tr>
@@ -233,7 +232,7 @@ const CategoryList = () => {
                         <tfoot>
                           <tr>
                             <th>SL</th>
-                            <th>Name / SLug</th>
+                            <th>Name / Slug</th>
                             <th>Serial</th>
                             <th>Status</th>
                             <th>Created By</th>
@@ -259,9 +258,8 @@ const CategoryList = () => {
                         size={''}
                         category={category}
                       />
-                    </div> 
+                    </div>
                   }
-                  
                 </div>
                 {/* Pagination */}
                 <div className="card-footer">

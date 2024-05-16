@@ -31,6 +31,12 @@ const CategoryDetailsModal = (props) => {
                             <th>Slug</th>
                             <th>{props.category.slug}</th>
                         </tr>
+                        {props.category.category_name !== undefined ? 
+                            <tr>
+                                <th>Category</th>
+                                <th>{props.category.category_name}</th>
+                            </tr> : ''
+                        }
                         <tr>
                             <th>Description</th>
                             <th>{props.category.description}</th>

@@ -59,6 +59,12 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
+                                <Link to='/sub-category' className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Sub Data Kategori</p>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
                                 <a href='#' className="nav-link">
                                     <i className="far fa-circle nav-icon"></i>
                                     <p>Data Barang</p>
