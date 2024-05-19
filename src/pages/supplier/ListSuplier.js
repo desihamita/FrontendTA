@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import Constants from '../../Constants';
+import Swal from 'sweetalert2';
+import Pagination from 'react-js-pagination';
+import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
+import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
+import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
+import { Link } from 'react-router-dom';
+import Loader from '../../components/partials/miniComponent/Loader';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import Constants from '../../Constants';
-import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
-import Pagination from 'react-js-pagination';
-import { Link } from 'react-router-dom';
-import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
-import Loader from '../../components/partials/miniComponent/Loader';
-import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 
-const CategoryList = () => {
+const ListSuplier = () => {
   const [input, setInput] = useState({
     order_by: 'serial',
     per_page: 10,
@@ -85,11 +85,10 @@ const CategoryList = () => {
   useEffect(() => {
     getCategories();
   }, []);
-
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Category List" breadcrumb="category" />
+        <Breadcrumb title="Suplier List" breadcrumb="suplier" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -98,7 +97,7 @@ const CategoryList = () => {
               <div className="card card-outline card-warning">
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
-                    <CardHeader add={'/category/create'} />
+                    <CardHeader add={'/suplier/create'} />
                   </div>
                 </div>
                 <div className="card-body">
@@ -264,7 +263,9 @@ const CategoryList = () => {
                 <div className="card-footer">
                   <div className="row">
                     <div className="col-sm-12 col-md-5">
-                      <div className="data_tables_info">Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries</div>
+                      <div className="data_tables_info">
+                        Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
+                      </div>
                     </div>
                     <div className="col-sm-12 col-md-7">
                       <nav className="pagination-sm">
@@ -289,7 +290,7 @@ const CategoryList = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default CategoryList;
+export default ListSuplier
