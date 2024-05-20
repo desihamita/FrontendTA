@@ -8,21 +8,25 @@ import Modal from 'react-bootstrap/Modal';
 import Loader from '../../components/partials/miniComponent/Loader'
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
 import Pagination from 'react-js-pagination'
+import './attribute.css';
 
 const ProductAttributes = () => {
   const navigate = useNavigate()
-  const [input, setInput] = useState({ name: '', status: 1 });
-  const [errors, setErrors] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const [attributes, setAttributes] = useState([]);
+  const [input, setInput] = useState({ name: '', status: 1 })
+  const [errors, setErrors] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [modalShow, setModalShow] = useState(false)
+  const [attributes, setAttributes] = useState([])
 
-  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
-  const [totalItemsCount, setTotalItemsCount] = useState(1);
-  const [startFrom, setStartFrom] = useState(1);
-  const [activePage, setActivePage] = useState(1);
-  const [modalTitle, setModalTitle] = useState('Add');
-  const [isEditModal, setIsEditModal] = useState(false);
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
+  const [totalItemsCount, setTotalItemsCount] = useState(1)
+  const [startFrom, setStartFrom] = useState(1)
+  const [activePage, setActivePage] = useState(1)
+  const [modalTitle, setModalTitle] = useState('Add')
+  const [isEditModal, setIsEditModal] = useState(false)
+
+  const [valueModalTitle, setValueModalTitle] = useState('Add')
+  const [valueModalShow, setValueModalShow] = useState(false)
 
   const getAttributes = () => {
     setIsLoading(true);
@@ -37,6 +41,38 @@ const ProductAttributes = () => {
   }
 
   const handleInput = (e) => setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
+
+  const handleValueCreateModal = (id) => {
+    setValueModalShow(true)
+    setValueModalTitle('Add')
+    setInput({ name: '', status: 1, attribute_id: id });
+  }
+
+  const handleValueCreate = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    axios.post(`${Constants.BASE_URL}/value`, input).then(res => {
+        setIsLoading(false);
+        Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+        });
+        setErrors([]);
+        setInput({ name: '', status: 1 });
+        setValueModalShow(false);
+        getAttributes();
+        navigate('/product-attribute');
+    }).catch(errors => {
+        setIsLoading(false);
+        if (errors.response && errors.response.status === 422) {
+            setErrors(errors.response.data.errors);
+        }
+    });
+  }
 
   const handleAttributeCreate = (e) => {
     e.preventDefault();
@@ -157,6 +193,7 @@ const ProductAttributes = () => {
                         <tr>
                           <th>SL</th>
                           <th>Name</th>
+                          <th>Value</th>
                           <th>Status</th>
                           <th>Created By</th>
                           <th>Date Time</th>
@@ -165,27 +202,53 @@ const ProductAttributes = () => {
                       </thead>
                       <tbody>
                       {attributes.length > 0 ? attributes.map((attribute, index) => (
-                            <tr key={index}>
-                              <td>{startFrom + index}</td>
-                              <td>{attribute.name}</td>
-                              <td>{attribute.status}</td>
-                              <td>{attribute.created_by}</td>
-                              <td>
-                                <p className="mb-0">
-                                  <small>Created : {attribute.created_at}</small>
-                                </p>
-                                <p className="text-success">
-                                  <small>Updated : {attribute.updated_at}</small>
-                                </p>
-                              </td>
-                              <td className='m-1'>
-                                <button onClick={() => handleModalShow(attribute)} className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button>
-                                
-                                <button onClick={() => handleAttributeDelete(attribute.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
-                              </td>
-                            </tr>
-                          )) : <NoDataFound/> }
-                        </tbody>
+                        <tr key={index}>
+                          <td>{startFrom + index}</td>
+                          <td>{attribute.name}</td>
+                          <td>
+                            <div className='value-container-parent'>
+                              {attribute.value !== undefined ? attribute.value.map((value, index) => (
+                                <div className='value-container'>
+                                  <span class="value-name">{value.name}</span>
+                                  <div className='value-buttons'>
+                                    <button className='btn-info'><i className="fas fa-solid fa-plus"></i></button>
+                                    <button className='btn-primary'><i className="fas fa-solid fa-edit"></i></button>
+                                    <button className='btn-danger'><i className="fas fa-solid fa-trash"></i></button>
+                                  </div>
+                                </div>
+                              )) : null}
+                            </div>
+                            <button onClick={() => handleValueCreateModal(attribute.id)} className='btn btn-success btn-xs'><i className="fas fa-solid fa-plus"></i></button>
+                          </td>
+                          <td>{attribute.status}</td>
+                          <td>{attribute.created_by}</td>
+                          <td>
+                            <p className="mb-0">
+                              <small>Created : {attribute.created_at}</small>
+                            </p>
+                            <p className="text-success">
+                              <small>Updated : {attribute.updated_at}</small>
+                            </p>
+                          </td>
+                          <td className='m-1'>
+                            <button onClick={() => handleModalShow(attribute)} className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button>
+                            
+                            <button onClick={() => handleAttributeDelete(attribute.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                          </td>
+                        </tr>
+                      )) : <NoDataFound/> }
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>SL</th>
+                          <th>Name</th>
+                          <th>Value</th>
+                          <th>Status</th>
+                          <th>Created By</th>
+                          <th>Date Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 }
@@ -215,15 +278,18 @@ const ProductAttributes = () => {
         </div>
         {/* Modal Add Product Attribute */}
         <Modal
-          aria-labelledby="contained-modal-title-vcenter"
           centered
           show={modalShow}
           onHide={() => setModalShow(false)}
+          closeButton="true"
         >
-          <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">
-                {modalTitle} Product Attribute
-              </Modal.Title>
+          <Modal.Header>
+            <Modal.Title id="contained-modal-title-vcenter">
+              {modalTitle} Product Attribute
+            </Modal.Title>
+            <button className="close" onClick={() => setModalShow(false)}>
+              <span aria-hidden="true">&times;</span>
+            </button>
           </Modal.Header>
           <Modal.Body>
             <div className="form-group">
@@ -263,6 +329,62 @@ const ProductAttributes = () => {
             </div>
             <div className="modal-footer justify-content-between">
               <button className="btn btn-warning" onClick={isEditModal ? () => handleAttributeUpdate(input.id) : handleAttributeCreate } dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
+            </div>
+          </Modal.Body>
+        </Modal>
+        {/* Modal Add Product Attribute Value*/}
+        <Modal
+          centered
+          show={valueModalShow}
+          onHide={() =>setValueModalShow(false)}
+          closeButton="true"
+        >
+          <Modal.Header>
+            <Modal.Title id="contained-modal-title-vcenter">
+              {modalTitle} Attribute Value
+            </Modal.Title>
+            <button className="close" onClick={() => setValueModalShow(false)}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="form-group">
+              <label>Name</label>
+              <input 
+                  type="text" 
+                  name="name"
+                  value={input.name}
+                  onChange={handleInput} 
+                  className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                  placeholder="Enter Product Attribute Name" 
+              />
+              {errors.name !== undefined && (
+                  <div className="invalid-feedback">
+                  {errors.name[0]}
+                  </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Status</label>
+              <select
+                  name='status'
+                  value={input.status}
+                  onChange={handleInput}
+                  className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                  placeholder="Select Product Attribute Status"
+                >
+                  <option value="" disabled>Select Attribute Status</option>
+                  <option value={1}>Active</option>
+                  <option value={2}>Inactive</option>
+              </select>
+              {errors.status && (
+                <div className="invalid-feedback">
+                  {errors.status[0]}
+                </div>
+              )}
+            </div>
+            <div className="modal-footer justify-content-between">
+              <button className="btn btn-warning" onClick={handleValueCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
             </div>
           </Modal.Body>
         </Modal>

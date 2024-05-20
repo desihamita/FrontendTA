@@ -1,0 +1,54 @@
+.value-container-parent {
+    width: 320px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.value-container-parent .value-container {
+    position: relative;
+    width: 100px;
+    background: peachpuff;
+    margin: 2px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    line-height: 30px;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.value-name {
+    transition: visibility 0.3s ease;
+}
+
+.value-buttons {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.value-buttons button {
+    border: 0;
+    padding: 0 6px;
+    font-size: 13px;
+    color: white;
+    border-radius: 3px;
+    line-height: 24px;
+    margin: 1px;
+    transition: color 0.3s ease;
+}
+
+.value-buttons button:hover {
+    color: black;
+}
+
+.value-container:hover .value-name {
+    display: none;
+}
+
+.value-container:hover .value-buttons {
+    display: flex;
+    padding: 5px;
+}
