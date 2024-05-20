@@ -82,6 +82,12 @@ const Sidebar = () => {
                                     <p>Data Barang</p>
                                 </a>
                             </li>
+                            <li className="nav-item">
+                                <a href='/product-attribute' className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Product Attribute</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li className="nav-header">TRANSAKSI</li>

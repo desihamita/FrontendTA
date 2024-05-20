@@ -20,6 +20,7 @@ const ListBrand = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [brand, setBrand] = useState([]);
+    const [brands, setBrands] = useState([]);
 
     const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(1);
@@ -28,7 +29,6 @@ const ListBrand = () => {
 
     const [modalShow, setModalShow] = useState(false);
     const [modalPhotoShow, setModalPhotoShow] = useState(false);
-    const [brands, setBrands] = useState([]);
     const [modalPhoto, setModalPhoto] = useState('');
     
     const handleInput = (e) => {
@@ -223,7 +223,9 @@ const ListBrand = () => {
                               </td>
                               <td className='m-1'>
                                 <button onClick={() => handleDetailsModal(brand)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+                                
                                 <Link to={`/brand/edit/${brand.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                
                                 <button onClick={() => handleBrandDelete(brand.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                               </td>
                             </tr>
@@ -263,27 +265,23 @@ const ListBrand = () => {
                   }
                 </div>
                 {/* Pagination */}
-                <div className="card-footer">
-                  <div className="row">
-                    <div className="col-sm-12 col-md-5">
-                      <div className="data_tables_info">Showing {startFrom} to {startFrom + brands.length - 1} of {totalItemsCount} entries</div>
-                    </div>
-                    <div className="col-sm-12 col-md-7">
-                      <nav className="pagination-sm">
-                        <Pagination
-                          activePage={activePage}
-                          itemsCountPerPage={itemsCountPerPage}
-                          totalItemsCount={totalItemsCount}
-                          pageRangeDisplayed={10}
-                          onChange={getCategories}
-                          nextPageText={'Next'}
-                          prevPageText={'Previous'}
-                          itemClass="page-item"
-                          linkClass="page-link"
-                        />
-                      </nav>
-                    </div>
+                <div className="card-footer d-flex justify-content-between align-items-center">
+                  <div className="data_tables_info">
+                    Showing {startFrom} to {startFrom + brands.length - 1} of {totalItemsCount} entries
                   </div>
+                  <nav className="pagination-sm ml-auto">
+                    <Pagination
+                      activePage={activePage}
+                      itemsCountPerPage={itemsCountPerPage}
+                      totalItemsCount={totalItemsCount}
+                      pageRangeDisplayed={10}
+                      onChange={getCategories}
+                      nextPageText={'Next'}
+                      prevPageText={'Previous'}
+                      itemClass="page-item"
+                      linkClass="page-link"
+                    />
+                  </nav>
                 </div>
               </div>
             </div>
