@@ -17,6 +17,9 @@ import ListSuplier from '../../pages/supplier/ListSuplier'
 import AddSuplier from '../../pages/supplier/AddSuplier'
 import EditSuplier from '../../pages/supplier/EditSuplier'
 import ProductAttributes from '../../pages/productAttribute/ProductAttributes'
+import ProductList from '../../pages/product/ProductList'
+import ProductAdd from '../../pages/product/ProductAdd'
+import ProductEdit from '../../pages/product/ProductEdit'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -65,7 +68,16 @@ const ProjectRouter = createBrowserRouter([
             }, {
                 path: '/product-attribute',
                 element: <ProductAttributes/>
+            },  {
+                path: '/product',
+                element: <ProductList/>
             }, {
+                path: '/product/create',
+                element: <ProductAdd/>
+            }, {
+                path: '/product/edit/:id',
+                element: <ProductEdit/>
+            },{
                 path: '/error500',
                 element: <Error500/>
             }

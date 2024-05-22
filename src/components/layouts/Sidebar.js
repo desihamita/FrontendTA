@@ -44,13 +44,13 @@ const Sidebar = () => {
                     </li>
                     <li className="nav-header">MASTER DATA</li>
                     <li className="nav-item">
-                        <a href="#" className="nav-link">
+                        <Link to="#" className="nav-link">
                             <i className="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Master Data
                                 <i className="right fas fa-angle-left"></i>
                             </p>
-                        </a>
+                        </Link>
                         <ul className="nav nav-treeview">
                             <li className="nav-item">
                                 <Link to='/category' className="nav-link">
@@ -76,42 +76,55 @@ const Sidebar = () => {
                                     <p>Data Supplier</p>
                                 </Link>
                             </li>
+                        </ul>
+                    </li>
+                    <li className="nav-header">MASTER BARANG</li>
+                    <li className="nav-item">
+                        <Link to="#" className="nav-link">
+                            <i className="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Master Barang
+                                <i className="right fas fa-angle-left"></i>
+                            </p>
+                        </Link>
+                        <ul className="nav nav-treeview">
                             <li className="nav-item">
-                                <a href='#' className="nav-link">
-                                    <i className="far fa-circle nav-icon"></i>
-                                    <p>Data Barang</p>
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a href='/product-attribute' className="nav-link">
+                                <Link to='/product-attribute' className="nav-link">
                                     <i className="far fa-circle nav-icon"></i>
                                     <p>Product Attribute</p>
-                                </a>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/product' className="nav-link">
+                                    <i className="far fa-circle nav-icon"></i>
+                                    <p>Data Barang</p>
+                                </Link>
                             </li>
                         </ul>
                     </li>
                     <li className="nav-header">TRANSAKSI</li>
                     <li className="nav-item">
-                        <a href='#' className="nav-link">
+                        <Link to='#' className="nav-link">
                             <i className="nav-icon fas fa-ellipsis-h" />
                             <p>Barang Masuk</p>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a href='#' className="nav-link">
+                        <Link to='#' className="nav-link">
                             <i className="nav-icon fas fa-file" />
                             <p>Barang Keluar</p>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-header">MANAGEMENT</li>
                     <li className="nav-item">
-                        <a href='#' className="nav-link">
+                        <Link to='#' className="nav-link">
                             <i className="fas fa-circle nav-icon" />
                             <p>Prediksi Stok</p>
-                        </a>
+                        </Link>
                     </li>
-                    <li className="nav-item mt-5 m-2">
-                        <button onClick={handleLogout} className="nav-link btn btn-warning" style={{width: '100%'}}>
+                    <li className="nav-item active mt-3 ">
+                        <button onClick={handleLogout} className="nav-link btn-warning">
+                            <i className="nav-icon fas fa-tachometer-alt" />    
                             <p>Logout</p>
                         </button>
                     </li>
