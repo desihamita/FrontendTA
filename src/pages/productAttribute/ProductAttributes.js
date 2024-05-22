@@ -3,7 +3,7 @@ import Breadcrumb from '../../components/partials/Breadcrumb'
 import axios from 'axios'
 import Constants from '../../Constants'
 import Swal from 'sweetalert2'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 import Loader from '../../components/partials/miniComponent/Loader'
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
@@ -23,7 +23,10 @@ const ProductAttributes = () => {
   const [startFrom, setStartFrom] = useState(1)
   const [activePage, setActivePage] = useState(1)
   const [modalTitle, setModalTitle] = useState('Add')
-  const [isEditModal, setIsEditModal] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  const [modalValue, setModalValue] = useState([])
+  const [modalValueShow, setModalValueShow] = useState(false)
 
   const [valueModalTitle, setValueModalTitle] = useState('Add')
   const [valueModalShow, setValueModalShow] = useState(false)
@@ -41,12 +44,6 @@ const ProductAttributes = () => {
   }
 
   const handleInput = (e) => setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
-
-  const handleValueCreateModal = (id) => {
-    setValueModalShow(true)
-    setValueModalTitle('Add')
-    setInput({ name: '', status: 1, attribute_id: id });
-  }
 
   const handleValueCreate = (e) => {
     e.preventDefault();
@@ -104,10 +101,10 @@ const ProductAttributes = () => {
     setInput({status: 1})
     if(attribute !== undefined) {
       setModalTitle('Update')
-      setIsEditModal(true)
+      setIsEditMode(true)
       setInput({status : attribute.original_status, name: attribute.name, id: attribute.id})
     } else {
-      setIsEditModal(false)
+      setIsEditMode(false)
       setModalTitle('Add')
     }
     setErrors([]);
@@ -166,6 +163,76 @@ const ProductAttributes = () => {
     });
   }
 
+  const handleValueDetailsModal = (value) => {
+    setModalValue(value);
+    setModalValueShow(true);
+  }
+
+  const handleValueDeleteModal = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Attribute Value will be deleted",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${Constants.BASE_URL}/value/${id}`).then(res => {
+          Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
+          getAttributes(activePage);
+        });
+      }
+    });
+  }
+
+  const handleValueCreateModal = (id) => {
+    setValueModalShow(true)
+    setIsEditMode(false)
+    setValueModalTitle('Add')
+    setInput({ name: '', status: 1, attribute_id: id });
+  }
+
+  const handleValueEditModal = (value) => {
+    setIsEditMode(true)
+    setValueModalShow(true)
+    setValueModalTitle('Update')
+    setInput({status: value.status_original, name: value.name, id:value.id })
+  }
+
+  const handleValueEdit = () => {
+    setIsLoading(true);
+    axios.put(`${Constants.BASE_URL}/value/${input.id}`, input).then(res => {
+        setIsLoading(false);
+        Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+        });
+        setErrors([]);
+        setInput({ name: '', status: 1 });
+        setValueModalShow(false);
+        getAttributes();
+        navigate('/product-attribute');
+    }).catch(errors => {
+        setIsLoading(false);
+        if (errors.response && errors.response.status === 422) {
+            setErrors(errors.response.data.errors);
+        }
+    });
+  }
+
   useEffect(() => {
     getAttributes()
   }, [])
@@ -209,11 +276,13 @@ const ProductAttributes = () => {
                             <div className='value-container-parent'>
                               {attribute.value !== undefined ? attribute.value.map((value, index) => (
                                 <div className='value-container'>
-                                  <span class="value-name">{value.name}</span>
-                                  <div className='value-buttons'>
-                                    <button className='btn-info'><i className="fas fa-solid fa-plus"></i></button>
-                                    <button className='btn-primary'><i className="fas fa-solid fa-edit"></i></button>
-                                    <button className='btn-danger'><i className="fas fa-solid fa-trash"></i></button>
+                                  <span className="value-name">{value.name}</span>
+                                  <div className='value-buttons justify-content-center'>
+                                    <button onClick={() => handleValueDetailsModal(value)} className='btn-info'><i className="fas fa-solid fa-eye"></i></button>
+
+                                    <button onClick={() => handleValueEditModal(value)} className='btn-primary'><i className="fas fa-solid fa-edit"></i></button>
+
+                                    <button onClick={() => handleValueDeleteModal(value.id)} className='btn-danger'><i className="fas fa-solid fa-trash"></i></button>
                                   </div>
                                 </div>
                               )) : null}
@@ -276,6 +345,7 @@ const ProductAttributes = () => {
             </div>
           </div>
         </div>
+
         {/* Modal Add Product Attribute */}
         <Modal
           centered
@@ -328,10 +398,11 @@ const ProductAttributes = () => {
               )}
             </div>
             <div className="modal-footer justify-content-between">
-              <button className="btn btn-warning" onClick={isEditModal ? () => handleAttributeUpdate(input.id) : handleAttributeCreate } dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
+              <button className="btn btn-warning" onClick={isEditMode ? () => handleAttributeUpdate(input.id) : handleAttributeCreate } dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
             </div>
           </Modal.Body>
         </Modal>
+
         {/* Modal Add Product Attribute Value*/}
         <Modal
           centered
@@ -341,7 +412,7 @@ const ProductAttributes = () => {
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
-              {modalTitle} Attribute Value
+              {valueModalTitle} Attribute Value
             </Modal.Title>
             <button className="close" onClick={() => setValueModalShow(false)}>
               <span aria-hidden="true">&times;</span>
@@ -384,8 +455,54 @@ const ProductAttributes = () => {
               )}
             </div>
             <div className="modal-footer justify-content-between">
-              <button className="btn btn-warning" onClick={handleValueCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
+            <button className="btn btn-warning" onClick={isEditMode ? handleValueEdit : handleValueCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : `${modalTitle} Attribute` }}/>
             </div>
+          </Modal.Body>
+        </Modal>
+
+        {/* Modal Details Attribute Value*/}
+        <Modal
+          centered
+          show={modalValueShow}
+          onHide={() => setModalValueShow(false)}
+        >
+          <Modal.Header>
+            <Modal.Title id="contained-modal-title-vcenter">
+              {modalTitle} Product Attribute
+            </Modal.Title>
+            <button className="close" onClick={() => setModalValueShow(false)}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </Modal.Header>
+          <Modal.Body>
+            <table className='table table-hover table-striped table-bordered'>
+              <tbody>
+                <tr>
+                  <th>ID</th>
+                  <td>{modalValue.id}</td>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <td>{modalValue.name}</td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td>{modalValue.status}</td>
+                </tr>
+                <tr>
+                  <th>Created By</th>
+                  <td>{modalValue.created_by}</td>
+                </tr>
+                <tr>
+                  <th>Created At</th>
+                  <td>{modalValue.created_at}</td>
+                </tr>
+                <tr>
+                  <th>Updated At</th>
+                  <td>{modalValue.updated_at}</td>
+                </tr>
+              </tbody>
+            </table>
           </Modal.Body>
         </Modal>
       </section>

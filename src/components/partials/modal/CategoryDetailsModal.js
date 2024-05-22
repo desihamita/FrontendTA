@@ -21,49 +21,49 @@ const CategoryDetailsModal = (props) => {
                     <tbody>
                         <tr>
                             <th>ID</th>
-                            <th>{props.category.id}</th>
+                            <td>{props.category.id}</td>
                         </tr>
                         <tr>
                             <th>Name</th>
-                            <th>{props.category.name}</th>
+                            <td>{props.category.name}</td>
                         </tr>
                         <tr>
                             <th>Slug</th>
-                            <th>{props.category.slug}</th>
+                            <td>{props.category.slug}</td>
                         </tr>
                         {props.category.category_name !== undefined ? 
                             <tr>
                                 <th>Category</th>
-                                <th>{props.category.category_name}</th>
+                                <td>{props.category.category_name}</td>
                             </tr> : ''
                         }
                         <tr>
                             <th>Description</th>
-                            <th>{props.category.description}</th>
+                            <td>{props.category.description}</td>
                         </tr>
                         <tr>
                             <th>Serial</th>
-                            <th>{props.category.serial}</th>
+                            <td>{props.category.serial}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <th>{props.category.status}</th>
+                            <td>{props.category.status}</td>
                         </tr>
                         <tr>
                             <th>Created By</th>
-                            <th>{props.category.created_by}</th>
+                            <td>{props.category.created_by}</td>
                         </tr>
                         <tr>
                             <th>Created At</th>
-                            <th>{props.category.created_at}</th>
+                            <td>{props.category.created_at}</td>
                         </tr>
                         <tr>
                             <th>Updated At</th>
-                            <th>{props.category.updated_at}</th>
+                            <td>{props.category.updated_at}</td>
                         </tr>
                         <tr>
                             <th>Photo</th>
-                            <th><img src={props.category.photo} className='img-thumbnail' alt='Photo' /></th>
+                            <td><img src={props.category.photo} className='img-thumbnail' alt='Photo' /></td>
                         </tr>
                     </tbody>
                 </table>
