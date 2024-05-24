@@ -1,9 +1,10 @@
-import axios from 'axios';
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import Constants from '../../Constants';
-import Swal from 'sweetalert2';
-import Breadcrumb from '../../components/partials/Breadcrumb';
+import { useNavigate } from 'react-router-dom'
+import Constants from '../../Constants'
+import Swal from 'sweetalert2'
+import Breadcrumb from '../../components/partials/Breadcrumb'
+import Select from 'react-select'
 
 const AddSuplier = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const AddSuplier = () => {
   const [divisions, setDivisions] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [subDistrict, setSubDistricts] = useState([]);
-  const [area, setAreas] = useState([]);
+  const [areas, setAreas] = useState([]);
 
   const getDevisions = () => {
     axios.get(`${Constants.BASE_URL}/divisions`).then(res => {
@@ -33,11 +34,42 @@ const AddSuplier = () => {
         setDistricts(res.data);
     })
   }
+  
+  const getSubDistricts = (district_id) => {
+    axios.get(`${Constants.BASE_URL}/sub-districts/${district_id}`).then(res => {
+        setSubDistricts(res.data);
+    })
+  }
+
+  const getAreas = (sub_district_id) => {
+    axios.get(`${Constants.BASE_URL}/areas/${sub_district_id}`).then(res => {
+        setAreas(res.data);
+    })
+  }
 
   const handleInput = (e) => {
-    if(e.target.name == 'division_id') {
-        getDistricts(e.target.value)
-    }
+    if(e.target.name === 'division_id') {
+        setDistricts([])
+        setSubDistricts([])
+        setAreas([])
+        let division_id = parseInt(e.target.value)
+        if(!Number.isNaN(division_id)) {
+            getDistricts(e.target.value)
+        }
+    } else if (e.target.name === 'district_id') {
+        setSubDistricts([])
+        setAreas([])
+        let district_id = parseInt(e.target.value)
+        if(!Number.isNaN(district_id)) {
+            getSubDistricts(e.target.value)
+        }
+    } else if (e.target.name === 'sub_district_id') {
+        setAreas([])
+        let sub_district_id = parseInt(e.target.value)
+        if(!Number.isNaN(sub_district_id)) {
+            getAreas(e.target.value)
+        }
+    } 
     setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
   }
 
@@ -73,9 +105,12 @@ const AddSuplier = () => {
     });
   };
 
+  const handleAreaInput = (selected_option, name) => {
+    setInput(prevState => ({...prevState, [name] : selected_option.value}));
+  }
+
   useEffect(() => {
     getDevisions();
-    getDistricts();
   });
 
   return (
@@ -88,255 +123,256 @@ const AddSuplier = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
-                            <form id="quickForm">
-                                <div className="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="card card-warning">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">Supplier Details</h3>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="card card-warning">
+                                            <div className="card-header">
+                                                <h3 className="card-title">Supplier Details</h3>
+                                            </div>
+                                            <form>
+                                                <div className="card-body">
+                                                    <div className="form-group">
+                                                        <label>Company Name</label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="name"
+                                                            value={input.company_name}
+                                                            onChange={handleInput} 
+                                                            className={errors.company_name !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Company Name" 
+                                                        />
+                                                        {errors.company_name !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.company_name[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Phone</label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="phone"
+                                                            value={input.phone}
+                                                            onChange={handleInput} 
+                                                            className={errors.phone !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Phone Number" 
+                                                        />
+                                                        {errors.phone !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.phone[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Email Address</label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="email"
+                                                            value={input.email}
+                                                            onChange={handleInput} 
+                                                            className={errors.email !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Email Address" 
+                                                        />
+                                                        {errors.email !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.email[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Status</label>
+                                                        <select
+                                                            name='status'
+                                                            value={input.status}
+                                                            onChange={handleInput}
+                                                            className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                            placeholder="Select Supplier Status"
+                                                        >
+                                                            <option disabled={true}>Select Supplier Status</option>
+                                                            <option value={1}>Active</option>
+                                                            <option value={2}>Inactive</option>
+                                                        </select>
+                                                        {errors.status !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.status[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Details</label>
+                                                        <textarea 
+                                                            name="details"
+                                                            value={input.details}
+                                                            onChange={handleInput} 
+                                                            className={errors.details !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Details" 
+                                                        />
+                                                        {errors.details !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.details[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputFile">Logo</label>
+                                                        <div className="input-group">
+                                                            <div className="custom-file">
+                                                                <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
+                                                                <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
+                                                            </div>
+                                                            {errors.logo !== undefined && (
+                                                                <div className="invalid-feedback">
+                                                                    {errors.logo[0]}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        {input.logo && (
+                                                            <div className="card-body">
+                                                                <img className="img-fluid w-50 h-50" src={input.logo} alt="Logo" />
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <form>
-                                                    <div className="card-body">
-                                                        <div className="form-group">
-                                                            <label>Company Name</label>
-                                                            <input 
-                                                                type="text" 
-                                                                name="name"
-                                                                value={input.company_name}
-                                                                onChange={handleInput} 
-                                                                className={errors.company_name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Company Name" 
-                                                            />
-                                                            {errors.company_name !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.company_name[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Phone</label>
-                                                            <input 
-                                                                type="text" 
-                                                                name="phone"
-                                                                value={input.phone}
-                                                                onChange={handleInput} 
-                                                                className={errors.phone !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Phone Number" 
-                                                            />
-                                                            {errors.phone !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.phone[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Email Address</label>
-                                                            <input 
-                                                                type="text" 
-                                                                name="email"
-                                                                value={input.email}
-                                                                onChange={handleInput} 
-                                                                className={errors.email !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Email Address" 
-                                                            />
-                                                            {errors.email !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.email[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Status</label>
-                                                            <select
-                                                                name='status'
-                                                                value={input.status}
-                                                                onChange={handleInput}
-                                                                className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                                placeholder="Select Supplier Status"
-                                                            >
-                                                                <option disabled={true}>Select Supplier Status</option>
-                                                                <option value={1}>Active</option>
-                                                                <option value={2}>Inactive</option>
-                                                            </select>
-                                                            {errors.status !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.status[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Details</label>
-                                                            <textarea 
-                                                                name="details"
-                                                                value={input.details}
-                                                                onChange={handleInput} 
-                                                                className={errors.details !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Details" 
-                                                            />
-                                                            {errors.details !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.details[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputFile">Logo</label>
-                                                            <div className="input-group">
-                                                                <div className="custom-file">
-                                                                    <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
-                                                                    <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                                                                </div>
-                                                                {errors.logo !== undefined && (
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="card card-warning">
+                                            <div className="card-header">
+                                                <h3 className="card-title">Supplier Address</h3>
+                                            </div>
+                                            <form>
+                                                <div className="card-body">
+                                                    <div className="form-group">
+                                                        <label>Address <small>(House/Road/village etc)</small></label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="address"
+                                                            value={input.address}
+                                                            onChange={handleInput} 
+                                                            className={errors.address !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Company Name" 
+                                                        />
+                                                        {errors.address !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.address[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className='col-md-6'>
+                                                            <div className='form-group'>
+                                                                <label>Province</label>
+                                                                <select
+                                                                    name='division_id'
+                                                                    value={input.division_id}
+                                                                    onChange={handleInput}
+                                                                    className={errors.division_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                                >
+                                                                    <option disabled>Select Province</option>
+                                                                    {divisions.map((division, index) => (
+                                                                        <option key={index} value={division.id}>{division.name}</option>
+                                                                    ))}
+                                                                </select>
+                                                                {errors.division_id !== undefined && (
                                                                     <div className="invalid-feedback">
-                                                                        {errors.logo[0]}
+                                                                    {errors.division_id[0]}
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            {input.logo && (
-                                                                <div className="card-body">
-                                                                    <img className="img-fluid w-50 h-50" src={input.logo} alt="Logo" />
-                                                                </div>
-                                                            )}
+                                                        </div>
+                                                        <div className='col-md-6'>
+                                                            <div className='form-group'>
+                                                                <label>City/District</label>
+                                                                <select
+                                                                    name='district_id'
+                                                                    value={input.district_id}
+                                                                    onChange={handleInput}
+                                                                    className={errors.district_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                                    disabled={Object.keys(districts).length < 1}
+                                                                >
+                                                                    <option disabled>Select city/district</option>
+                                                                    {districts.map((district, index) => (
+                                                                        <option key={index} value={district.id}>{district.name}</option>
+                                                                    ))}
+                                                                </select>
+                                                                {errors.district_id !== undefined && (
+                                                                    <div className="invalid-feedback">
+                                                                        {errors.district_id[0]}
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card card-warning">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">Supplier Address</h3>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <div className='form-group'>
+                                                                <label>Sub District</label>
+                                                                <select
+                                                                    name='sub_district_id'
+                                                                    value={input.sub_district_id}
+                                                                    onChange={handleInput}
+                                                                    className={errors.sub_district_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                                    disabled={Object.keys(subDistrict).length < 1}
+                                                                >
+                                                                    <option disabled>Select sub district</option>
+                                                                    {subDistrict.map((subDistrict, index) => (
+                                                                        <option key={index} value={subDistrict.id}>{subDistrict.name}</option>
+                                                                    ))}
+                                                                </select>
+                                                                {errors.sub_district_id !== undefined && (
+                                                                    <div className="invalid-feedback">
+                                                                        {errors.sub_district_id[0]}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className='col-md-6'>
+                                                            <div className='form-group'>
+                                                                <label>Postal Code</label>
+                                                                <Select
+                                                                    className={errors.area_id !== undefined ? 'is-invalid ' : ''}
+                                                                    value={input.area_id}
+                                                                    onChange={(selected_option) => handleAreaInput(selected_option, 'area_id')}
+                                                                    //isDisabled={true}
+                                                                    options={areas}
+                                                                />
+                                                                {errors.area !== undefined && (
+                                                                    <div className="invalid-feedback">
+                                                                        {errors.area[0]}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Landmark</label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="landmark"
+                                                            value={input.landmark}
+                                                            onChange={handleInput} 
+                                                            className={errors.landmark !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            placeholder="Enter Supplier Company Name" 
+                                                        />
+                                                        {errors.landmark !== undefined && (
+                                                            <div className="invalid-feedback">
+                                                            {errors.landmark[0]}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <form>
-                                                    <div className="card-body">
-                                                        <div className="form-group">
-                                                            <label>Address <small>(House/Road/village etc)</small></label>
-                                                            <input 
-                                                                type="text" 
-                                                                name="address"
-                                                                value={input.address}
-                                                                onChange={handleInput} 
-                                                                className={errors.address !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Company Name" 
-                                                            />
-                                                            {errors.address !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.address[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className='col-md-6'>
-                                                                <div className='form-group'>
-                                                                    <label>Province</label>
-                                                                    <select
-                                                                        name='division'
-                                                                        value={input.division}
-                                                                        onChange={handleInput}
-                                                                        className={errors.division !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                                    >
-                                                                        <option disabled>Select Province</option>
-                                                                        {divisions.map((division, index) => (
-                                                                            <option key={index} value={division.id}>{division.name}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {errors.status !== undefined && (
-                                                                        <div className="invalid-feedback">
-                                                                        {errors.status[0]}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            <div className='col-md-6'>
-                                                                <div className='form-group'>
-                                                                    <label>City/District</label>
-                                                                    <select
-                                                                        name='district'
-                                                                        value={input.district}
-                                                                        onChange={handleInput}
-                                                                        className={errors.district !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                                    >
-                                                                        <option disabled>Select city/district</option>
-                                                                        {districts.map((district, index) => (
-                                                                            <option key={index} value={district.id}>{district.name}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {errors.district !== undefined && (
-                                                                        <div className="invalid-feedback">
-                                                                            {errors.district[0]}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className='row'>
-                                                            <div className='col-md-6'>
-                                                                <div className='form-group'>
-                                                                    <label>Sub District</label>
-                                                                    <select
-                                                                        name='sub_district'
-                                                                        value={input.sub_district}
-                                                                        onChange={handleInput}
-                                                                        className={errors.sub_district !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                                    >
-                                                                        <option disabled>Select Sub District</option>
-                                                                    </select>
-                                                                    {errors.sub_district !== undefined && (
-                                                                        <div className="invalid-feedback">
-                                                                            {errors.sub_district[0]}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            <div className='col-md-6'>
-                                                                <div className='form-group'>
-                                                                    <label>Postal Code</label>
-                                                                    <select
-                                                                        name='area'
-                                                                        value={input.area}
-                                                                        onChange={handleInput}
-                                                                        className={errors.area !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                                    >
-                                                                        <option disabled>Select Area</option>
-                                                                    </select>
-                                                                    {errors.area !== undefined && (
-                                                                        <div className="invalid-feedback">
-                                                                            {errors.area[0]}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Landmark</label>
-                                                            <input 
-                                                                type="text" 
-                                                                name="landmark"
-                                                                value={input.landmark}
-                                                                onChange={handleInput} 
-                                                                className={errors.landmark !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                                                placeholder="Enter Supplier Company Name" 
-                                                            />
-                                                            {errors.landmark !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.landmark[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-footer">
-                                    <div className='row justify-content-center'>
-                                        <button className="btn btn-warning pr-5 pl-5" onClick={handleSupplierCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Supplier'}} />
-                                    </div>
-                                    
+                            </div>
+                            <div className="card-footer">
+                                <div className='row justify-content-center'>
+                                    <button className="btn btn-warning pr-5 pl-5" onClick={handleSupplierCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Supplier'}} />
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
