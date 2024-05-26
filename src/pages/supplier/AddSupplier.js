@@ -6,16 +6,15 @@ import Swal from 'sweetalert2'
 import Breadcrumb from '../../components/partials/Breadcrumb'
 import Select from 'react-select'
 
-const AddSuplier = () => {
+const AddSupplier = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({
-        name: '',
-        slug: '',
-        serial: '',
-        status: 1,
-        description: '',
-        photo: ''
-  });
+    status: 1, 
+    division_id: 0,
+    district_id: 0,
+    sub_district_id: 0,
+    area_id: 0,
+});
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [divisions, setDivisions] = useState([]);
@@ -77,7 +76,7 @@ const AddSuplier = () => {
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.onloadend = () => {
-        setInput(prevState => ({...prevState, photo: reader.result}));
+        setInput(prevState => ({...prevState, logo: reader.result}));
         document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
@@ -104,10 +103,6 @@ const AddSuplier = () => {
         }
     });
   };
-
-  const handleAreaInput = (selected_option, name) => {
-    setInput(prevState => ({...prevState, [name] : selected_option.value}));
-  }
 
   useEffect(() => {
     getDevisions();
@@ -137,14 +132,14 @@ const AddSuplier = () => {
                                                         <input 
                                                             type="text" 
                                                             name="name"
-                                                            value={input.company_name}
+                                                            value={input.name}
                                                             onChange={handleInput} 
-                                                            className={errors.company_name !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                                            className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                                             placeholder="Enter Supplier Company Name" 
                                                         />
-                                                        {errors.company_name !== undefined && (
+                                                        {errors.name !== undefined && (
                                                             <div className="invalid-feedback">
-                                                            {errors.company_name[0]}
+                                                            {errors.name[0]}
                                                             </div>
                                                         )}
                                                     </div>
@@ -189,13 +184,13 @@ const AddSuplier = () => {
                                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
                                                             placeholder="Select Supplier Status"
                                                         >
-                                                            <option disabled={true}>Select Supplier Status</option>
+                                                            <option value="" disabled>Select Supplier Status</option>
                                                             <option value={1}>Active</option>
-                                                            <option value={2}>Inactive</option>
+                                                            <option value={0}>Inactive</option>
                                                         </select>
                                                         {errors.status !== undefined && (
                                                             <div className="invalid-feedback">
-                                                            {errors.status[0]}
+                                                                {errors.status[0]}
                                                             </div>
                                                         )}
                                                     </div>
@@ -218,7 +213,7 @@ const AddSuplier = () => {
                                                         <label htmlFor="exampleInputFile">Logo</label>
                                                         <div className="input-group">
                                                             <div className="custom-file">
-                                                                <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
+                                                                <input type="file" name="logo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
                                                                 <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
                                                             </div>
                                                             {errors.logo !== undefined && (
@@ -229,7 +224,7 @@ const AddSuplier = () => {
                                                         </div>
                                                         {input.logo && (
                                                             <div className="card-body">
-                                                                <img className="img-fluid w-50 h-50" src={input.logo} alt="Logo" />
+                                                                <img className="img-fluid w-50 h-50" src={input.logo} alt="logo" />
                                                             </div>
                                                         )}
                                                     </div>
@@ -284,7 +279,7 @@ const AddSuplier = () => {
                                                         </div>
                                                         <div className='col-md-6'>
                                                             <div className='form-group'>
-                                                                <label>City/District</label>
+                                                                <label>District</label>
                                                                 <select
                                                                     name='district_id'
                                                                     value={input.district_id}
@@ -331,16 +326,21 @@ const AddSuplier = () => {
                                                         <div className='col-md-6'>
                                                             <div className='form-group'>
                                                                 <label>Postal Code</label>
-                                                                <Select
-                                                                    className={errors.area_id !== undefined ? 'is-invalid ' : ''}
+                                                                <select
+                                                                    name='area_id'
                                                                     value={input.area_id}
-                                                                    onChange={(selected_option) => handleAreaInput(selected_option, 'area_id')}
-                                                                    //isDisabled={true}
-                                                                    options={areas}
-                                                                />
-                                                                {errors.area !== undefined && (
+                                                                    onChange={handleInput}
+                                                                    className={errors.area_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                                    disabled={Object.keys(areas).length < 1}
+                                                                >
+                                                                    <option disabled>Select Postal Code</option>
+                                                                    {areas.map((area, index) => (
+                                                                        <option key={index} value={area.id}>{area.name}</option>
+                                                                    ))}
+                                                                </select>
+                                                                {errors.area_id !== undefined && (
                                                                     <div className="invalid-feedback">
-                                                                        {errors.area[0]}
+                                                                        {errors.area_id[0]}
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -382,4 +382,4 @@ const AddSuplier = () => {
   )
 }
 
-export default AddSuplier
+export default AddSupplier

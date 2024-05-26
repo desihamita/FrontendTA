@@ -13,9 +13,9 @@ import EditSubCategory from '../../pages/subCategory/EditSubCategory'
 import AddBrand from '../../pages/brand/AddBrand'
 import EditBrand from '../../pages/brand/EditBrand'
 import ListBrand from '../../pages/brand/ListBrand'
-import ListSuplier from '../../pages/supplier/ListSuplier'
-import AddSuplier from '../../pages/supplier/AddSuplier'
-import EditSuplier from '../../pages/supplier/EditSuplier'
+import ListSupplier from '../../pages/supplier/ListSupplier'
+import AddSupplier from '../../pages/supplier/AddSupplier'
+import EditSupplier from '../../pages/supplier/EditSupplier'
 import ProductAttributes from '../../pages/productAttribute/ProductAttributes'
 import ProductList from '../../pages/product/ProductList'
 import ProductAdd from '../../pages/product/ProductAdd'
@@ -57,14 +57,14 @@ const ProjectRouter = createBrowserRouter([
                 path: '/brand/edit/:id',
                 element: <EditBrand/>
             }, {
-                path: '/suplier',
-                element: <ListSuplier/>
+                path: '/supplier',
+                element: <ListSupplier/>
             }, {
-                path: '/suplier/create',
-                element: <AddSuplier/>
+                path: '/supplier/create',
+                element: <AddSupplier/>
             }, {
-                path: '/suplier/edit/:id',
-                element: <EditSuplier/>
+                path: '/supplier/edit/:id',
+                element: <EditSupplier/>
             }, {
                 path: '/product-attribute',
                 element: <ProductAttributes/>

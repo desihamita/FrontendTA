@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 
-const EditSuplier = () => {
+const EditSupplier = () => {
     const params = useParams();
     const navigate = useNavigate();
     const [input, setInput] = useState({
@@ -198,4 +198,4 @@ const EditSuplier = () => {
     )
 }
 
-export default EditSuplier
+export default EditSupplier

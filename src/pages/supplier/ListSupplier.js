@@ -11,7 +11,7 @@ import Loader from '../../components/partials/miniComponent/Loader';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
-const ListSuplier = () => {
+const ListSupplier = () => {
   const [input, setInput] = useState({
     order_by: 'serial',
     per_page: 10,
@@ -34,57 +34,25 @@ const ListSuplier = () => {
   };
 
   const getCategories = (pageNumber = 1) => {
-    setIsLoading(true);
-    axios.get(`${Constants.BASE_URL}/category?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-        .then(res => {
-            setCategories(res.data.data);
-            setItemsCountPerPage(res.data.meta.per_page);
-            setStartFrom(res.data.meta.from);
-            setTotalItemsCount(res.data.meta.total);
-            setActivePage(res.data.meta.current_page);
-            setIsLoading(false);
-        });
+   
   };
 
   const handlePhotoModal = (photo) => {
-    setModalPhoto(photo);
-    setModalPhotoShow(true);
+    
   };
 
   const handleDetailsModal = (category) => {
-    setCategory(category);
-    setModalShow(true);
+    
   };
 
   const handleCategoryDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Category will be deleted",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/category/${id}`).then(res => {
-          Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
-          });
-          getCategories(activePage);
-        });
-      }
-    });
+    
   };
 
   useEffect(() => {
     getCategories();
   }, []);
+
   return (
     <div className="content-wrapper">
       <section className="content-header">
@@ -97,7 +65,7 @@ const ListSuplier = () => {
               <div className="card card-outline card-warning">
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
-                    <CardHeader add={'/suplier/create'} />
+                    <CardHeader add={'/supplier/create'} />
                   </div>
                 </div>
                 <div className="card-body">
@@ -287,4 +255,4 @@ const ListSuplier = () => {
   )
 }
 
-export default ListSuplier
+export default ListSupplier
