@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Pagination from 'react-js-pagination';
@@ -10,53 +10,93 @@ import { Link } from 'react-router-dom';
 import Loader from '../../components/partials/miniComponent/Loader';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
+import DetailsSupplier from './DetailsSupplier';
 
 const ListSupplier = () => {
   const [input, setInput] = useState({
-    order_by: 'serial',
+    order_by: 'created_at',
     per_page: 10,
-    direction: 'asc',
+    direction: 'desc',
     search: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [category, setCategory] = useState([]);
+  const [supplier, setSupplier] = useState([]);
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
   const [startFrom, setStartFrom] = useState(1);
   const [activePage, setActivePage] = useState(1);
   const [modalShow, setModalShow] = useState(false);
-  const [modalPhotoShow, setModalPhotoShow] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [modalPhoto, setModalPhoto] = useState('');
+  const [modalLogoShow, setModalLogoShow] = useState(false);
+  const [suppliers, setSuppliers] = useState([]);
+  const [modalLogo, setModalLogo] = useState('');
 
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
 
-  const getCategories = (pageNumber = 1) => {
-   
+  const getSuppliers = (pageNumber = 1) => {
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/supplier?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+      .then(res => {
+        const { data, meta } = res.data;
+        if (data && meta) {
+          setSuppliers(data);
+          setItemsCountPerPage(meta.per_page);
+          setStartFrom(meta.from);
+          setTotalItemsCount(meta.total);
+          setActivePage(meta.current_page);
+        } 
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setIsLoading(false);
+      });
   };
 
-  const handlePhotoModal = (photo) => {
-    
+  const handleLogoModal = (logo) => {
+    setModalLogo(logo);
+    setModalLogoShow(true);
   };
 
-  const handleDetailsModal = (category) => {
-    
+  const handleDetailsModal = (supplier) => {
+    setSupplier(supplier);
+    setModalShow(true);
   };
 
-  const handleCategoryDelete = (id) => {
-    
+  const handleSupplierDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Supplier will be deleted",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${Constants.BASE_URL}/supplier/${id}`).then(res => {
+          Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
+          getSuppliers(activePage);
+        });
+      }
+    });
   };
 
   useEffect(() => {
-    getCategories();
+    getSuppliers();
   }, []);
 
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Suplier List" breadcrumb="suplier" />
+        <Breadcrumb title="Supplier List" breadcrumb="supplier" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -96,7 +136,8 @@ const ListSupplier = () => {
                             <option value={'name'}>Name</option>
                             <option value={'created_at'}>Created At</option>
                             <option value={'updated_at'}>Updated At</option>
-                            <option value={'serial'}>Serial</option>
+                            <option value={'phone'}>Phone</option>
+                            <option value={'email'}>Email</option>
                           </select>
                         </label>
                       </div>
@@ -132,7 +173,7 @@ const ListSupplier = () => {
                       </div>
                       <div className='col-md-2'>
                         <div className='d-grid mt-4'>
-                          <button className='btn btn-warning w-100' onClick={() => getCategories(1)}>
+                          <button className='btn btn-warning w-100' onClick={() => getSuppliers(1)}>
                             <i className="fas fa-search"></i> Search
                           </button>
                         </div>
@@ -146,8 +187,9 @@ const ListSupplier = () => {
                         <thead>
                           <tr>
                             <th>SL</th>
-                            <th>Name / Slug</th>
-                            <th>Serial / Status</th>
+                            <th>Name</th>
+                            <th>Phone / Email</th>
+                            <th>Status</th>
                             <th>Photo</th>
                             <th>Created By</th>
                             <th>Date Time</th>
@@ -156,40 +198,40 @@ const ListSupplier = () => {
                         </thead>
                         {/* Table Body */}
                         <tbody>
-                          {categories.length > 0 ? categories.map((category, index) => (
+                          {suppliers.length > 0 ? suppliers.map((supplier, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
+                              <td>{supplier.name} {supplier.id}</td>
                               <td>
-                                <p className="mb-0">Name : {category.name}</p>
-                                <p className="text-success">Slug : {category.slug}</p>
+                                <p className="mb-0">Email : {supplier.email}</p>
+                                <p className="text-success">Phone : {supplier.phone}</p>
                               </td>
-                              <td>
-                                <p className="mb-0">Serial : {category.serial}</p>
-                                <p className="text-success">Status : {category.status}</p>
-                              </td>
+                              <td>{supplier.status}</td>
                               <td>
                                 <img
-                                  src={category.photo}
-                                  alt={category.name}
+                                  src={supplier.logo}
+                                  alt={supplier.name}
                                   className="img-thumbnail table-image"
                                   width={75}
                                   style={{ cursor: 'pointer' }}
-                                  onClick={() => handlePhotoModal(category.photo_full)}
+                                  onClick={() => handleLogoModal(supplier.logo_full)}
                                 />
                               </td>
-                              <td>{category.created_by}</td>
+                              <td>{supplier.created_by}</td>
                               <td>
                                 <p className="mb-0">
-                                  <small>Created : {category.created_at}</small>
+                                  <small>Created : {supplier.created_at}</small>
                                 </p>
                                 <p className="text-success">
-                                  <small>Updated : {category.updated_at}</small>
+                                  <small>Updated : {supplier.updated_at}</small>
                                 </p>
                               </td>
                               <td className='m-1'>
-                                <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
-                                <Link to={`/category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                                <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+                                
+                                <Link to={`/supplier/edit/${supplier.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                
+                                <button onClick={() => handleSupplierDelete(supplier.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                               </td>
                             </tr>
                           )) : <NoDataFound/> }
@@ -207,22 +249,22 @@ const ListSupplier = () => {
                           </tr>
                         </tfoot>
                       </table>
-                      {/* Category Photo Modal */}
+                      {/* Supplier Photo Modal */}
                       <CategoryPhotoModal
-                        show={modalPhotoShow}
-                        onHide={() => setModalPhotoShow(false)}
-                        title={'Category Photo'}
-                        size={''}
-                        photo={modalPhoto}
+                        show={modalLogoShow}
+                        onHide={() => setModalLogoShow(false)}
+                        title={'Supplier Logo'}
+                        size={'800'}
+                        photo={modalLogo}
                       />
 
                       {/* Category Details Modal */}
-                      <CategoryDetailsModal
+                      <DetailsSupplier
                         show={modalShow}
                         onHide={() => setModalShow(false)}
-                        title={'Category Details'}
+                        title={'Supplier Details'}
                         size={''}
-                        category={category}
+                        supplier={supplier}
                       />
                     </div>
                   }
@@ -230,7 +272,7 @@ const ListSupplier = () => {
                 {/* Pagination */}
                 <div className="card-footer d-flex justify-content-between align-items-center">
                   <div className="data_tables_info">
-                      Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
+                      Showing {startFrom} to {startFrom + suppliers.length - 1} of {totalItemsCount} entries
                   </div>
                   <nav className="pagination-sm ml-auto">
                       <Pagination
@@ -238,7 +280,7 @@ const ListSupplier = () => {
                       itemsCountPerPage={itemsCountPerPage}
                       totalItemsCount={totalItemsCount}
                       pageRangeDisplayed={10}
-                      onChange={getCategories}
+                      onChange={getSuppliers}
                       nextPageText={'Next'}
                       prevPageText={'Previous'}
                       itemClass="page-item"
@@ -252,7 +294,7 @@ const ListSupplier = () => {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-export default ListSupplier
+export default ListSupplier;

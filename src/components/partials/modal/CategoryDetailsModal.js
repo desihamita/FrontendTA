@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 const CategoryDetailsModal = (props) => {
@@ -11,10 +10,13 @@ const CategoryDetailsModal = (props) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="category_details_modal">
                     {props.title}
                 </Modal.Title>
+                <button className="close" onClick={props.onHide}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </Modal.Header>
             <Modal.Body>
                 <table className='table table-hover table-striped table-bordered'>

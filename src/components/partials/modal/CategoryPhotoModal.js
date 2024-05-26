@@ -10,11 +10,13 @@ const CategoryPhotoModal = (props) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             >
-            <Modal.Header closeButton>
-                
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
                     {props.title}
                 </Modal.Title>
+                <button className="close" onClick={props.onHide}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </Modal.Header>
             <Modal.Body>
                 <img src={props.photo} className='img-thumbnail' alt='Photo' />

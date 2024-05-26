@@ -71,7 +71,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/suplier' className="nav-link">
+                                <Link to='/supplier' className="nav-link">
                                     <i className="far fa-circle nav-icon"></i>
                                     <p>Data Supplier</p>
                                 </Link>
