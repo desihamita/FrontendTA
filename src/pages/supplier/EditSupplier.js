@@ -276,7 +276,7 @@ const EditSupplier = () => {
                                   >
                                     <option value={""} disabled selected>Select Province</option>
                                     {divisions.map((division,index) => (
-                                      <option key={index} value={index}>{division.name}</option>
+                                      <option key={index} value={division.id}>{division.name}</option>
                                     ))}
                                   </select>
                                   {errors.division_id && <div className="invalid-feedback">{errors.division_id[0]}</div>}
@@ -294,7 +294,7 @@ const EditSupplier = () => {
                                   >
                                     <option value={""} disabled selected>Select city/district</option>
                                     {districts.map((district, index) => (
-                                      <option key={index} value={index}>{district.name}</option>
+                                      <option key={index} value={district.id}>{district.name}</option>
                                     ))}
                                   </select>
                                   {errors.district_id && <div className="invalid-feedback">{errors.district_id[0]}</div>}
@@ -313,8 +313,8 @@ const EditSupplier = () => {
                                     disabled={subDistricts.length < 1}
                                   >
                                     <option disabled>Select sub district</option>
-                                    {subDistricts.map((subDistrict) => (
-                                      <option key={subDistrict.id} value={subDistrict.id}>{subDistrict.name}</option>
+                                    {subDistricts.map((subDistrict, index) => (
+                                      <option key={index} value={subDistrict.id}>{subDistrict.name}</option>
                                     ))}
                                   </select>
                                   {errors.sub_district_id && <div className="invalid-feedback">{errors.sub_district_id[0]}</div>}
@@ -331,8 +331,8 @@ const EditSupplier = () => {
                                     disabled={areas.length < 1}
                                   >
                                     <option disabled>Select Postal Code</option>
-                                    {areas.map((area) => (
-                                      <option key={area.id} value={area.id}>{area.name}</option>
+                                    {areas.map((area, index) => (
+                                      <option key={index} value={area.id}>{area.name}</option>
                                     ))}
                                   </select>
                                   {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}

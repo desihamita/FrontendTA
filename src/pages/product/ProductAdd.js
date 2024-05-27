@@ -16,8 +16,21 @@ const ProductAdd = () => {
   const [subCategories, setSubCategories] = useState([])
   const [brands, setBrands] = useState([])
   const [countries, setCountries] = useState([])
-  const [providers, setProviders] = useState([])
+  const [suppliers, setSuppliers] = useState([])
   const [attributes, setAttributes] = useState([])
+
+
+  const getAttributes = () => {
+    axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
+        setAttributes(res.data)
+    })
+  }
+
+  const getSuppliers = () => {
+    axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
+        setSuppliers(res.data)
+    })
+  }
 
   const getCategories = () => {
     axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
@@ -94,6 +107,8 @@ const ProductAdd = () => {
     getCategories()
     getBrands()
     getCountries()
+    getSuppliers()
+    getAttributes()
   }, [])
 
   return (
@@ -218,6 +233,25 @@ const ProductAdd = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
+                                        <label>Select Supplier</label>
+                                        <select 
+                                            name={'supplier_id'}
+                                            value={input.supplier_id}
+                                            onChange={handleInput} 
+                                            className={errors.supplier_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
+                                        >
+                                            <option disabled selected>Select Product Origin</option>
+                                            {suppliers.map((supplier, index) => (
+                                                <option value={supplier.id} key={index}>{supplier.name}</option>
+                                            ))}
+                                        </select>
+                                        {errors.country_id !== undefined && (
+                                            <div className="invalid-feedback">
+                                            {errors.country_id[0]}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="form-group col-md-6 ">
                                         <label>Status</label>
                                         <select
                                             name='status'
@@ -234,6 +268,47 @@ const ProductAdd = () => {
                                             {errors.status[0]}
                                             </div>
                                         )}
+                                    </div>
+                                    <div className='form-group col-md-12'>
+                                        <div className='card my-4'>
+                                            <div className='card-header'>
+                                                <h4>Select Product Attribute</h4>
+                                            </div>
+                                            <div className='card-body'>
+                                                    <div className='row my-2'>
+                                                        <div className='col-md-5'>
+                                                            <label>Select Attribute</label>
+                                                            <select
+                                                                name='attribute_id[]'
+                                                                value={input.attribute_id}
+                                                                onChange={handleInput}
+                                                                className={errors.attribute_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
+                                                            >
+                                                                <option disabled selected>Select Attribute</option>
+                                                                {attributes.map((attribute, index) => (
+                                                                    <option value={attribute.id} key={index}>{attribute.name}</option>
+                                                                ))}
+                                                            </select>
+                                                            {errors.attribute_id !== undefined && (
+                                                                <div className="invalid-feedback">
+                                                                {errors.attribute_id[0]}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className='col-md-5'>
+                                                            
+                                                        </div>
+                                                        <div className='col-md-2'>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-12 text-center'>
+                                                            <button type="" className='btn btn-warning'>+</button>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="form-group col-md-6 ">
                                         <label>Description</label>
