@@ -2,7 +2,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <nav className="main-header navbar navbar-expand navbar-light bg-orange">
+    <nav className="main-header navbar navbar-expand bg-warning navbar-light bg-orange">
       <ul className="navbar-nav">
         <li className="nav-item">
           <a className="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars" /></a>

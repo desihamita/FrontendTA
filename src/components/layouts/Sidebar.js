@@ -28,16 +28,16 @@ const Sidebar = () => {
         });
     }
   return (
-    <aside className="main-sidebar sidebar-dark-primary elevation-4">
-        <Link to={'/'} className="brand-link">
-            <img src={Logo} alt="Logo" className="brand-image img-circle " style={{opacity: '.8'}} />
-            <span className="brand-text font-weight-light"> Inventory App</span>
+    <aside className="main-sidebar elevation-4 sidebar-light-warning">
+        <Link to={'/'} className="brand-link bg-orange">
+            <img src={Logo} alt="Logo" className="brand-image mt-1" />
+            <span className="brand-text font-weight-200"> Inventory App</span>
         </Link>
         <div className="sidebar">
-            <nav className="mt-2">
+            <nav className="mt-4">
                 <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li className="nav-item menu-open">
-                        <Link to="/" className="nav-link">
+                        <Link to="/" className="nav-link active">
                             <i className="nav-icon fas fa-tachometer-alt" />
                             <p>Dashboard</p>
                         </Link>
@@ -45,7 +45,7 @@ const Sidebar = () => {
                     <li className="nav-header">MASTER DATA</li>
                     <li className="nav-item">
                         <Link to="#" className="nav-link">
-                            <i className="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="fas fa-solid fa-database nav-icon"></i>
                             <p>
                                 Master Data
                                 <i className="right fas fa-angle-left"></i>
@@ -81,7 +81,7 @@ const Sidebar = () => {
                     <li className="nav-header">MASTER BARANG</li>
                     <li className="nav-item">
                         <Link to="#" className="nav-link">
-                            <i className="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="fas fa-solid fa-cube nav-icon"></i>
                             <p>
                                 Master Barang
                                 <i className="right fas fa-angle-left"></i>
@@ -105,29 +105,48 @@ const Sidebar = () => {
                     <li className="nav-header">TRANSAKSI</li>
                     <li className="nav-item">
                         <Link to='#' className="nav-link">
-                            <i className="nav-icon fas fa-ellipsis-h" />
-                            <p>Barang Masuk</p>
+                            <i class="fas fa-solid fa-file-invoice nav-icon"></i>
+                            <p>Pemesanan Barang</p>
                         </Link>
                     </li>
                     <li className="nav-item">
                         <Link to='#' className="nav-link">
-                            <i className="nav-icon fas fa-file" />
-                            <p>Barang Keluar</p>
+                            <i className="fas fa-file nav-icon " />
+                            <p>Pengeluaran Barang</p>
                         </Link>
                     </li>
-                    <li className="nav-header">MANAGEMENT</li>
+                    <li className="nav-header">LAPORAN TRANSAKSI</li>
                     <li className="nav-item">
                         <Link to='#' className="nav-link">
-                            <i className="fas fa-circle nav-icon" />
-                            <p>Prediksi Stok</p>
+                        <i class="fas fa-solid fa-book nav-icon"></i>
+                            <p>Lap. Barang Masuk</p>
                         </Link>
                     </li>
-                    <li className="nav-item active mt-3 ">
-                        <button onClick={handleLogout} className="nav-link btn-warning">
+                    <li className="nav-item">
+                        <Link to='#' className="nav-link">
+                            <i class="fas fa-solid fa-book nav-icon"></i>
+                            <p>Lap. Barang Keluar</p>
+                        </Link>
+                    </li>
+                    <li className="nav-header">SETTING</li>
+                    <li className="nav-item">
+                        <Link to='#' className="nav-link">
+                            <i class="fas fa-solid fa-user nav-icon"></i>
+                            <p>Profile</p>
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to={handleLogout} className="nav-link">
+                        <i class="fas fa-sign-out-alt nav-icon"></i>
+                            <p>Logout</p>
+                        </Link>
+                    </li>
+                    {/* <li className="nav-item active mt-3 ">
+                        <button onClick={handleLogout} className="btn btn-warning nav-link ">
                             <i className="nav-icon fas fa-tachometer-alt" />    
                             <p>Logout</p>
                         </button>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </div>

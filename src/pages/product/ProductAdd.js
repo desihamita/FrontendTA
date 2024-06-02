@@ -1,372 +1,608 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useEffect, useState } from 'react'
-import Breadcrumb from '../../components/partials/Breadcrumb'
+import React, { useEffect, useState } from 'react';
+import Breadcrumb from '../../components/partials/Breadcrumb';
 import Swal from 'sweetalert2';
 import Constants from '../../Constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ProductAdd = () => {
-  const navigate = useNavigate()
-  const [input, setInput] = useState({status: 1, })
-  const [errors, setErrors] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+    const [input, setInput] = useState({status: 1})
+    const [attribute_input, setAttribute_input] = useState({})
+    const [specification_input, setSpecification_input] = useState({})
+    const [errors, setErrors] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [subCategories, setSubCategories] = useState([])
+    const [brands, setBrands] = useState([])
+    const [countries, setCountries] = useState([])
+    const [suppliers, setSuppliers] = useState([])
+    const [attributes, setAttributes] = useState([])
+    const [attributeFiled, setAttributeField] = useState([])
+    const [attributeFieldId, setAttributeFieldId] = useState(1)
+    const [specificationFiled, setSpecificationFiled] = useState([])
+    const [specificationFiledId, setSpecificationFiledId] = useState(1)
 
-  const [categories, setCategories] = useState([])
-  const [subCategories, setSubCategories] = useState([])
-  const [brands, setBrands] = useState([])
-  const [countries, setCountries] = useState([])
-  const [suppliers, setSuppliers] = useState([])
-  const [attributes, setAttributes] = useState([])
+    const handleSpecificationFieldRemove = (id) => {
+        setSpecificationFiled(oldValues => {
+            return oldValues.filter(specificationFiled => specificationFiled !== id)
+        })
+        setSpecification_input(current => {
+            const copy = {...current};
+            delete copy[id];
+            return copy;
+        })
+        setSpecificationFiledId(specificationFiledId-1)
+    }
+    const handleSpecificationFields = (id) => {
+        setSpecificationFiledId(specificationFiledId+1)
+        setSpecificationFiled(prevState => [...prevState, specificationFiledId])
+    }
 
-
-  const getAttributes = () => {
-    axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
-        setAttributes(res.data)
-    })
-  }
-
-  const getSuppliers = () => {
-    axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
-        setSuppliers(res.data)
-    })
-  }
-
-  const getCategories = () => {
-    axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-        setCategories(res.data)
-    })
-  }
-
-  const getBrands = () => {
-    axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
-        setBrands(res.data)
-    })
-  }
-
-  const getSubCategories = (category_id) => {
-    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-        setSubCategories(res.data)
-    })
-  }
-  
-  const getCountries = () => {
-    axios.get(`${Constants.BASE_URL}/get-country-list`).then(res => {
-        setCountries(res.data)
-    })
-  }
-  
-  const handleInput = (e) => {
-    if (e.target.name === 'name') {
-        let slug = e.target.value
-        slug = slug.toLowerCase()
-        slug = slug.replaceAll(' ','-')
-        setInput(prevState =>  ({...prevState, slug: slug}))
-    } else if (e.target.name === 'category_id') {
-        let category_id = parseInt(e.target.value)
-        if(!Number.isNaN(category_id)) {
-            getSubCategories(e.target.value)
+    const handleAttributeFieldsRemove = (id) => {
+      setAttributeField(oldValues => {
+          return oldValues.filter(attributeFiled => attributeFiled !== id)
+      })
+        setAttribute_input(current => {
+            const copy = {...current};
+            delete copy[id];
+            return copy;
+        })
+        setAttributeFieldId(attributeFieldId-1)
+    }
+    const handleAttributeFields = (id) => {
+        if (attributes.length >= attributeFieldId){
+            setAttributeFieldId(attributeFieldId+1)
+            setAttributeField(prevState => [...prevState, attributeFieldId])
         }
     }
-    setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
-  }
+    const handleSpecificationInput = (e, id) => {
+        setSpecification_input(prevState => ({
+            ...prevState,
+            [id]:{
+                ...prevState[id], [e.target.name]: e.target.value
+            }
+        }))
+    }
+    const handleAttributeInput = (e, id) => {
+        setAttribute_input(prevState => ({
+            ...prevState,
+            [id]:{
+                ...prevState[id], [e.target.name]: e.target.value
+            }
+        }))
+    }
+    const getAttributes = () => {
+        axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
+            setAttributes(res.data)
+        })
+    }
+    const getSuppliers = () => {
+        axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
+            setSuppliers(res.data)
+        })
+    }
+    const getCountries = () => {
+        axios.get(`${Constants.BASE_URL}/get-country-list`).then(res => {
+            setCountries(res.data)
+        })
+    }
+    const getCategories = () => {
+        axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
+            setCategories(res.data)
+        })
+    }
+    const getBrands = () => {
+        axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
+            setBrands(res.data)
+        })
+    }
 
-  const handlePhoto = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.onloadend = () => {
-        setInput(prevState => ({...prevState, logo: reader.result}));
-        document.getElementById('fileLabel').innerText = file.name;
-    };
-    reader.readAsDataURL(file);
-  };
-  
-  const handleProductCreate = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
-        setIsLoading(false);
-        Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
-        });
-        navigate('/product');
-    }).catch(errors => {
-        setIsLoading(false);
-        if(errors.response.status === 422) {
-          setErrors(errors.response.data.errors);
+    const getSubCategories = (category_id) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
+            setSubCategories(res.data)
+        })
+    }
+
+    const handleInput = (e) => {
+        if (e.target.name == 'name') {
+            let slug = e.target.value
+            slug = slug.toLowerCase()
+            slug = slug.replaceAll(' ', '-')
+            setInput(prevState => ({...prevState, slug: slug}))
+        } else if (e.target.name == 'category_id') {
+            let category_id = parseInt(e.target.value);
+            if (!Number.isNaN(category_id)) {
+                getSubCategories(e.target.value)
+            }
         }
-    });
-  };
-  
+
+        setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
+    }
+
+    const handlePhoto = (e) => {
+        let file = e.target.files[0]
+        let reader = new FileReader()
+        reader.onloadend = () => {
+            setInput(prevState => ({...prevState, photo: reader.result}))
+        }
+        reader.readAsDataURL(file)
+    }
+
+    const handleProductCreate = (e) => {
+      e.preventDefault(e)
+        setIsLoading(true)
+        axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
+            setIsLoading(false)
+            Swal.fire({
+                position: 'top-end',
+                icon: res.data.cls,
+                title: res.data.msg,
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500
+            })
+            navigate('/product')
+        }).catch(errors => {
+            setIsLoading(false)
+            if (errors.response.status == 422) {
+                setErrors(errors.response.data.errors)
+            }
+        })
+    }
+
   useEffect(() => {
     getCategories()
     getBrands()
     getCountries()
     getSuppliers()
     getAttributes()
-  }, [])
+  }, []);
+
+  useEffect(()=>{
+      setInput(prevState => ({...prevState, attributes: attribute_input}))
+  }, [attribute_input])
+
+  useEffect(()=>{
+      setInput(prevState => ({...prevState, specifications: specification_input}))
+  }, [specification_input])
 
   return (
     <div className="content-wrapper">
-        <section className="content-header">
-            <Breadcrumb title="Add Product" breadcrumb="Form Data" />
-        </section>
-        <section className="content">
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card card-warning card-outline">
-                            <form id="quickForm">
-                                <div className="card-body row">
-                                    <div className="form-group col-md-6">
-                                        <label>Name</label>
-                                        <input 
-                                            type="text" 
-                                            name="name"
-                                            value={input.name}
-                                            onChange={handleInput} 
-                                            className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Product Name" 
-                                        />
-                                        {errors.name !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.name[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Slug</label>
-                                        <input 
-                                            type="text" 
-                                            name="slug"
-                                            value={input.slug}
-                                            onChange={handleInput} 
-                                            className={errors.slug !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Product Name" 
-                                        />
-                                        {errors.slug !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.slug[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Select Category</label>
-                                        <select 
-                                            name={'category_id'}
-                                            value={input.category_id}
-                                            onChange={handleInput} 
-                                            className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                        >
-                                            <option disabled selected>Select Category Name</option>
-                                            {categories.map((category, index) => (
-                                                <option value={category.id} key={index}>{category.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.category_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.category_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Select Sub Category</label>
-                                        <select 
-                                            name={'sub_category_id'}
-                                            value={input.sub_category_id}
-                                            onChange={handleInput} 
-                                            className={errors.sub_category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            disabled={input.category_id === undefined}
-                                        >
-                                            <option disabled selected>Select Sub Category</option>
-                                            {subCategories.map((subCategory, index) => (
-                                                <option value={subCategory.id} key={index}>{subCategory.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.sub_category_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.sub_category_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Select Brands</label>
-                                        <select 
-                                            name={'brand_id'}
-                                            value={input.brand_id}
-                                            onChange={handleInput} 
-                                            className={errors.brand_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                        >
-                                            <option disabled selected>Select Brand Name</option>
-                                            {brands.map((brand, index) => (
-                                                <option value={brand.id} key={index}>{brand.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.brand_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.brand_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Select Product Origin</label>
-                                        <select 
-                                            name={'country_id'}
-                                            value={input.country_id}
-                                            onChange={handleInput} 
-                                            className={errors.country_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                        >
-                                            <option disabled selected>Select Product Origin</option>
-                                            {countries.map((country, index) => (
-                                                <option value={country.id} key={index}>{country.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.country_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.country_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Select Supplier</label>
-                                        <select 
-                                            name={'supplier_id'}
-                                            value={input.supplier_id}
-                                            onChange={handleInput} 
-                                            className={errors.supplier_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                        >
-                                            <option disabled selected>Select Product Origin</option>
-                                            {suppliers.map((supplier, index) => (
-                                                <option value={supplier.id} key={index}>{supplier.name}</option>
-                                            ))}
-                                        </select>
-                                        {errors.country_id !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.country_id[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Status</label>
-                                        <select
-                                            name='status'
-                                            value={input.status}
-                                            onChange={handleInput}
-                                            className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                        >
-                                            <option disabled={true}>Select Product Status</option>
-                                            <option value={1}>Active</option>
-                                            <option value={2}>Inactive</option>
-                                        </select>
-                                        {errors.status !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.status[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className='form-group col-md-12'>
-                                        <div className='card my-4'>
-                                            <div className='card-header'>
-                                                <h4>Select Product Attribute</h4>
-                                            </div>
-                                            <div className='card-body'>
-                                                    <div className='row my-2'>
-                                                        <div className='col-md-5'>
-                                                            <label>Select Attribute</label>
-                                                            <select
-                                                                name='attribute_id[]'
-                                                                value={input.attribute_id}
-                                                                onChange={handleInput}
-                                                                className={errors.attribute_id !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                                            >
-                                                                <option disabled selected>Select Attribute</option>
-                                                                {attributes.map((attribute, index) => (
-                                                                    <option value={attribute.id} key={index}>{attribute.name}</option>
-                                                                ))}
-                                                            </select>
-                                                            {errors.attribute_id !== undefined && (
-                                                                <div className="invalid-feedback">
-                                                                {errors.attribute_id[0]}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className='col-md-5'>
-                                                            
-                                                        </div>
-                                                        <div className='col-md-2'>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                    <div className='row'>
-                                                        <div className='col-md-12 text-center'>
-                                                            <button type="" className='btn btn-warning'>+</button>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group col-md-6 ">
-                                        <label>Description</label>
-                                        <textarea 
-                                            name="description"
-                                            value={input.description}
-                                            onChange={handleInput} 
-                                            className={errors.description !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Product Description" 
-                                        />
-                                        {errors.description !== undefined && (
-                                            <div className="invalid-feedback">
-                                            {errors.description[0]}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">Photo</label>
-                                        <div className="input-group">
-                                            <div className="custom-file">
-                                                <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
-                                                <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                                            </div>
-                                            {errors.photo !== undefined && (
-                                                <div className="invalid-feedback">
-                                                    {errors.photo[0]}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {input.photo && (
-                                            <div className="card-body">
-                                                <img className="img-fluid w-50 h-50" src={input.photo} alt="Photo" />
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="card-footer">
-                                    <button className="btn btn-warning w-30" onClick={handleProductCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Product'}} />
-                                </div>
-                            </form>
+      <section className="content-header">
+        <Breadcrumb title="Add Product" breadcrumb="Form Data" />
+      </section>
+      <section className="content">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card card-warning card-outline">
+                <form id="quickForm">
+                  <div className="card-body row">
+                    <div className="form-group col-md-6">
+                      <label>Name</label>
+                      <input
+                        className={errors.name !== undefined ? 'form-control  is-invalid' : 'form-control '}
+                        type={'text'}
+                        name={'name'}
+                        value={input.name}
+                        onChange={handleInput}
+                        placeholder={'Enter Product name'}
+                      />
+                      {errors.name && (
+                        <div className="invalid-feedback">
+                          {errors.name[0]}
                         </div>
+                      )}
                     </div>
-                </div>
+                    <div className="form-group col-md-6">
+                      <label>Slug</label>
+                      <input
+                        className={errors.slug !== undefined ? 'form-control  is-invalid' : 'form-control '}
+                        type={'text'}
+                        name={'slug'}
+                        value={input.slug}
+                        onChange={handleInput}
+                        placeholder={'Enter Product slug'}
+                      />
+                      {errors.slug && (
+                        <div className="invalid-feedback">
+                          {errors.slug[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Select Category</label>
+                      <select
+                        className={errors.category_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
+                        name={'category_id'}
+                        value={input.category_id}
+                        onChange={handleInput}
+                        placeholder={'Select product category'}
+                      >
+                        <option>Select Category</option>
+                        {categories.map((category, index) => (
+                            <option value={category.id} key={index}>{category.name}</option>
+                        ))}
+
+                      </select>
+                      {errors.category_id && (
+                        <div className="invalid-feedback">
+                          {errors.category_id[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Select Sub Category</label>
+                      <select
+                        className={errors.sub_category_id !== undefined ? 'form-control is-invalid' : 'form-control '}
+                        name={'sub_category_id'}
+                        value={input.sub_category_id}
+                        onChange={handleInput}
+                        placeholder={'Select product sub category'}
+                        disabled={input.category_id === undefined}
+                      >
+                        <option>Select Sub Category</option>
+                        {subCategories.map((sub_category, index) => (
+                            <option value={sub_category.id} key={index}>{sub_category.name}</option>
+                        ))}
+                      </select>
+                      {errors.sub_category_id && (
+                        <div className="invalid-feedback">
+                          {errors.sub_category_id[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Select Brands</label>
+                      <select
+                        className={errors.brand_id !== undefined ? 'form-control is-invalid' : 'form-control'}
+                        name={'brand_id'}
+                        value={input.brand_id}
+                        onChange={handleInput}
+                        placeholder={'Select product brand'}
+                      >
+                        <option>Select Brand</option>
+                        {brands.map((brand, index) => (
+                            <option value={brand.id} key={index}>{brand.name}</option>
+                        ))}
+                      </select>
+                      {errors.brand_id && (
+                        <div className="invalid-feedback">
+                          {errors.brand_id[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Country</label>
+                      <select
+                        className={errors.country_id !== undefined ? 'form-control is-invalid' : 'form-control '}
+                        name={'country_id'}
+                        value={input.country_id}
+                        onChange={handleInput}
+                        placeholder={'Select product origin'}
+                      >
+                        <option>Select Product Origin</option>
+                        {countries.map((country, index) => (
+                            <option value={country.id} key={index}>{country.name}</option>
+                        ))}
+                      </select>
+                      {errors.country && (
+                        <div className="invalid-feedback">
+                          {errors.country[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Supplier</label>
+                      <select
+                        className={errors.supplier_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
+                        name={'supplier_id'}
+                        value={input.supplier_id}
+                        onChange={handleInput}
+                        placeholder={'Select product supplier'}
+                      >
+                        <option>Select Product Supplier</option>
+                        {suppliers.map((supplier, index) => (
+                            <option value={supplier.id}
+                                    key={index}>{supplier.name} - {supplier.phone}</option>
+                        ))}
+                      </select>
+                      {errors.supplier_id && (
+                        <div className="invalid-feedback">
+                          {errors.supplier_id[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Status</label>
+                      <select
+                        className={errors.status !== undefined ? 'form-control is-invalid' : 'form-control'}
+                        name={'status'}
+                        value={input.status}
+                        onChange={handleInput}
+                        placeholder={'Select product status'}
+                      >
+                        <option value={1}>Active</option>
+                        <option value={0}>Inactive</option>
+                      </select>
+                      {errors.status && (
+                        <div className="invalid-feedback">
+                          {errors.status[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Attribute </label>
+                      <button 
+                        type="button"
+                        className="btn btn-primary btn-sm ml-2"
+                        onClick={handleAttributeFields}
+                      >
+                        <i className="fas fa-solid fa-plus"/>
+                      </button>
+                      {attributeFiled.map((id, ind)=>(
+                        <div key={ind} className="row my-2 align-items-baseline">
+                          <div className="col-md-5">
+                            <select
+                              className='form-control'
+                              name={'attribute_id'}
+                              value={attribute_input[id] !== undefined ? attribute_input[id].attribute_id : null}
+                              onChange={(e)=>handleAttributeInput(e, id)}
+                              placeholder={'Select product attribute'}
+                            >
+                              <option>Select Attribute</option>
+                              {attributes.map((value, index)=>(
+                                  <option value={value.id}>{value.name}</option>
+                              ))}
+                            </select>
+                            {errors.attribute_id && (
+                              <div className="invalid-feedback">
+                                {errors.attribute_id != undefined ? errors.attribute_id[0] : null}
+                              </div>
+                            )}
+                          </div>
+                          <div className="col-md-5">
+                            <select
+                                className={'form-control'}
+                                name={'value_id'}
+                                value={attribute_input[id] != undefined ? attribute_input[id].value_id : null}
+                                onChange={(e)=>handleAttributeInput(e, id)}
+                                placeholder={'Select product attribute value'}
+                            >
+                              <option>Select Attribute Value</option>
+                              {attributes.map((value, index)=>(
+                                <>
+                                  {attribute_input[id] != undefined && value.id == attribute_input[id].attribute_id ? value.value.map((atr_value, value_ind)=>(
+                                      <option value={atr_value.id}>{atr_value.name}</option>
+                                  )):null}
+                                </>
+                              ))}
+                            </select>
+                            {errors.attribute_id && (
+                              <div className="invalid-feedback">
+                                {errors.attribute_id != undefined ? errors.attribute_id[0] : null}
+                              </div>
+                            )}
+                          </div>
+                          <div className="col-md-2">
+                            {attributeFiled.length -1 == ind ?
+                              <button className={'btn btn-danger'} onClick={()=>handleAttributeFieldsRemove(id)}>
+                                  <i className="fas fa-solid fa-minus"/>
+                              </button>:null
+                            }
+                          </div>
+                      </div>
+                    ))}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Specification </label>
+                      <button 
+                        type="button"
+                        className="btn btn-primary btn-sm ml-2"
+                        onClick={handleSpecificationFields}
+                      >
+                        <i className="fas fa-solid fa-plus"/>
+                      </button>
+                      {specificationFiled.map((id, ind)=> (
+                        <div key={ind} className="row my-2 align-items-baseline">
+                          <div className="col-md-5">
+                            <input
+                              className={'form-control'}
+                              type={'text'}
+                              name={'name'}
+                              value={specification_input[id] !== undefined ? specification_input[id].name : null}
+                              onChange={(e)=>handleSpecificationInput(e, id)}
+                              placeholder={'Enter Name'}
+                            />
+                            {errors.name && (
+                              <div className="invalid-feedback">
+                                {errors.name[0]}
+                              </div>
+                            )}
+                          </div>
+                          <div className='col-md-5'>
+                            <input
+                              className='form-control'
+                              type={'text'}
+                              name={'value'}
+                              value={specification_input[id] !== undefined ? specification_input[id].value : null}
+                              onChange={(e)=>handleSpecificationInput(e, id)}
+                              placeholder={'Enter value'}
+                            />
+                            {errors.name && (
+                              <div className="invalid-feedback">
+                                {errors.name[0]}
+                              </div>
+                            )}
+                          </div>
+                          <div className="col-md-2">
+                            {specificationFiled.length -1 === ind ?
+                                <button className={'btn btn-danger mt-0'} onClick={()=>handleSpecificationFieldRemove(id)}>
+                                    <i className="fas fa-solid fa-minus"/>
+                                </button> : null
+                            }
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Cost</label>
+                      <input
+                        className={errors.cost !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'cost'}
+                        value={input.cost}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Cost'}
+                      />
+                      {errors.cost && (
+                        <div className="invalid-feedback">
+                          {errors.cost[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Price</label>
+                      <input
+                        className={errors.price !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'price'}
+                        value={input.price}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Price'}
+                      />
+                      {errors.price && (
+                        <div className="invalid-feedback">
+                          {errors.price[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Discount %</label>
+                      <input
+                        className={errors.discount_percent !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'discount_percent'}
+                        value={input.discount_percent}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Discount (%)'}
+                      />
+                      {errors.discount_percent && (
+                        <div className="invalid-feedback">
+                          {errors.discount_percent[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Discount Fixed Amount</label>
+                      <input
+                        className={errors.discount_fixed !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'discount_fixed'}
+                        value={input.discount_fixed}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Discount Fixed'}
+                      />
+                      {errors.discount_fixed && (
+                        <div className="invalid-feedback">
+                          {errors.discount_fixed[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Discount Start Date</label>
+                      <input
+                        className={errors.discount_start !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'datetime-local'}
+                        name={'discount_start'}
+                        value={input.discount_start}
+                        onChange={handleInput}
+                        placeholder={'Enter Discount Start Date'}
+                      />
+                      {errors.discount_start && (
+                        <div className="invalid-feedback">
+                          {errors.discount_start[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Discount End Date</label>
+                      <input
+                        className={errors.discount_end !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'datetime-local'}
+                        name={'discount_end'}
+                        value={input.discount_end}
+                        onChange={handleInput}
+                        placeholder={'Enter Discount End Date'}
+                      />
+                      {errors.discount_end && (
+                        <div className="invalid-feedback">
+                          {errors.discount_end[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Product Stock</label>
+                      <input
+                        className={errors.stock !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'stock'}
+                        value={input.stock}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Stock'}
+                      />
+                      {errors.stock && (
+                        <div className="invalid-feedback">
+                          {errors.stock[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>SKU</label>
+                      <input
+                        className={errors.sku !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'text'}
+                        name={'sku'}
+                        value={input.sku}
+                        onChange={handleInput}
+                        placeholder={'Enter Product SKU'}
+                      />
+                      {errors.sku && (
+                        <div className="invalid-feedback">
+                          {errors.sku[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label>Description</label>
+                      <textarea
+                        className={errors.description !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        name={'description'}
+                        value={input.description}
+                        onChange={handleInput}
+                        placeholder={'Enter product description'}
+                      />
+                      {errors.description && (
+                        <div className="invalid-feedback">
+                          {errors.description[0]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                    <button className={'btn btn-warning'} onClick={handleProductCreate}
+                      dangerouslySetInnerHTML={{__html: isLoading ? '<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Loading...' : 'Add Product'}}
+                    />
+                  </div>
+                </form>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
     </div>
-  )
-}
-/*
-  1. title
-  2. slug
-  3. description
-  4. category_id
-  5. sub_category_id
-  6. status
-  7. buying_price
-  8. selling_price
-  8. stock
-  
-*/
-export default ProductAdd
+  );
+};
+
+export default ProductAdd;
