@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
 import Pagination from 'react-js-pagination'
-import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal'
-import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal'
 import { Link } from 'react-router-dom'
 import Loader from '../../components/partials/miniComponent/Loader'
 import CardHeader from '../../components/partials/miniComponent/CardHeader'
@@ -13,33 +11,28 @@ import axios from 'axios'
 
 const ProductList = () => {
     const [input, setInput] = useState({
-        order_by: 'serial',
+        order_by: 'created_at',
         per_page: 10,
         direction: 'asc',
         search: ''
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [brand, setBrand] = useState([]);
-    const [brands, setBrands] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(1);
     const [startFrom, setStartFrom] = useState(1);
     const [activePage, setActivePage] = useState(1);
-
-    const [modalShow, setModalShow] = useState(false);
-    const [modalPhotoShow, setModalPhotoShow] = useState(false);
-    const [modalPhoto, setModalPhoto] = useState('');
     
     const handleInput = (e) => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
     
-    const getCategories = (pageNumber = 1) => {
+    const getProducts = (pageNumber = 1) => {
         setIsLoading(true);
-        axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+        axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
         .then(res => {
-            setBrands(res.data.data);
+            setProducts(res.data.data);
             setItemsCountPerPage(res.data.meta.per_page);
             setStartFrom(res.data.meta.from);
             setTotalItemsCount(res.data.meta.total);
@@ -47,21 +40,11 @@ const ProductList = () => {
             setIsLoading(false);
         });
     };
-    
-    const handlePhotoModal = (photo) => {
-        setModalPhoto(photo);
-        setModalPhotoShow(true);
-    };
-    
-    const handleDetailsModal = (brand) => {
-        setBrand(brand);
-        setModalShow(true);
-    };
-    
-    const handleBrandDelete = (id) => {
+
+    const handleProductDelete = (id) => {
         Swal.fire({
           title: "Are you sure?",
-          text: "Brand will be deleted",
+          text: "Product will be deleted",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -69,7 +52,7 @@ const ProductList = () => {
           confirmButtonText: "Yes, Delete it!"
         }).then((result) => {
           if (result.isConfirmed) {
-            axios.delete(`${Constants.BASE_URL}/brand/${id}`).then(res => {
+            axios.delete(`${Constants.BASE_URL}/product/${id}`).then(res => {
               Swal.fire({
                 position: "top-end",
                 icon: res.data.cls,
@@ -78,15 +61,16 @@ const ProductList = () => {
                 toast: true,
                 timer: 1500
               });
-              getCategories(activePage);
+              getProducts(activePage);
             });
           }
         });
     };
     
     useEffect(() => {
-        getCategories();
+        getProducts();
     }, []);
+
     return (
     <div className="content-wrapper">
         <section className="content-header">
@@ -130,7 +114,7 @@ const ProductList = () => {
                                                 <option value={'name'}>Name</option>
                                                 <option value={'created_at'}>Created At</option>
                                                 <option value={'updated_at'}>Updated At</option>
-                                                <option value={'serial'}>Serial</option>
+                                                <option value={'phone'}>Phone</option>
                                                 </select>
                                             </label>
                                         </div>
@@ -166,7 +150,7 @@ const ProductList = () => {
                                         </div>
                                         <div className='col-md-2'>
                                             <div className='d-grid mt-4'>
-                                                <button className='btn btn-warning w-100' onClick={() => getCategories(1)}>
+                                                <button className='btn btn-warning w-100' onClick={() => getProducts(1)}>
                                                 <i className="fas fa-search"></i> Search
                                                 </button>
                                             </div>
@@ -179,53 +163,72 @@ const ProductList = () => {
                                         {/* Table Header */}
                                         <thead>
                                             <tr>
-                                            <th>SL</th>
-                                            <th>Name / Slug</th>
-                                            <th>Serial / Status</th>
-                                            <th>Photo</th>
-                                            <th>Created By</th>
-                                            <th>Date Time</th>
-                                            <th>Action</th>
+                                                <th>SL</th>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                                <th>Category</th>
+                                                <th>Photo</th>
+                                                <th>Date Time</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         {/* Table Body */}
                                         <tbody>
-                                            {brands.length > 0 ? brands.map((brand, index) => (
+                                            {products.length > 0 ? products.map((product, index) => (
                                             <tr key={index}>
                                                 <td>{startFrom + index}</td>
                                                 <td>
-                                                    <p className="mb-0">Name : {brand.name}</p>
-                                                    <p className="text-success">Slug : {brand.slug}</p>
-                                                </td>
-                                                <td>
-                                                    <p className="mb-0">Serial : {brand.serial}</p>
-                                                    <p className="text-success">Status : {brand.status}</p>
-                                                </td>
-                                                <td>
-                                                <img
-                                                    src={brand.photo}
-                                                    alt={brand.name}
-                                                    className="img-thumbnail table-image"
-                                                    width={75}
-                                                    style={{ cursor: 'pointer' }}
-                                                    onClick={() => handlePhotoModal(brand.photo_full)}
-                                                />
-                                                </td>
-                                                <td>{brand.created_by}</td>
-                                                <td>
+                                                    <p className="mb-0">Name : {product.name}</p>
+                                                    <p className="text-success mb-0">Slug : {product.slug}</p>
                                                     <p className="mb-0">
-                                                    <small>Created : {brand.created_at}</small>
-                                                </p>
-                                                    <p className="text-success">
-                                                    <small>Updated : {brand.updated_at}</small>
-                                                </p>
+                                                        {product && product.attributes && Object.keys(product.attributes).length > 0 ? 
+                                                            product.attributes.map((attribute, index) => (
+                                                                <p key={index}><small>{attribute.name} : {attribute.value}</small></p>
+                                                            )) : null
+                                                        }
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Price : {product.price}</p>
+                                                    <p className="text-success mb-0">Discount : {product.discount_percent} + {product.discount_fixed}</p>
+                                                    <p className="mb-0">Cost : {product.cost}</p>
+                                                    <p className="text-success mb-0">Discount Start : {product.discount_start}</p>
+                                                    <p className="mb-0">Discount End : {product.discount_end}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Status : {product.status}</p>
+                                                    <p className="text-success mb-0">SKU : {product.sku}</p>
+                                                    <p className="mb-0">Stock : {product.stock}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Category : {product.category}</p>
+                                                    <p className="text-success mb-0">Sub Category : {product.sub_category}</p>
+                                                    <p className="mb-0">Brand : {product.brand}</p>
+                                                    <p className="text-success mb-0">Origin : {product.country}</p>
+                                                    <p className="mb-0">Supplier : {product.supplier}</p>
+                                                </td>
+                                                <td>
+                                                    <img
+                                                        src={product.primary_photo}
+                                                        alt={product.primary_photo}
+                                                        className="img-thumbnail table-image"
+                                                        width={75}
+                                                        style={{ cursor: 'pointer' }}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0"><small>Created : {product.created_at}</small></p>
+                                                    <p className="text-success mb-0"><small>Updated : {product.updated_at}</small></p>
+                                                    <p className="mb-0"><small>Created By : {product.created_by}</small></p>
+                                                    <p className="text-success mb-0"><small>Updated By : {product.updated_by}</small></p>
                                                 </td>
                                                 <td className='m-1'>
-                                                    <button onClick={() => handleDetailsModal(brand)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+                                                    <button className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                                                     
-                                                    <Link to={`/brand/edit/${brand.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                                    <Link to={`/product/edit/${product.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
                                                     
-                                                    <button onClick={() => handleBrandDelete(brand.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                                    <button onClick={() => handleProductDelete(product.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             )) : <NoDataFound/> }
@@ -234,39 +237,23 @@ const ProductList = () => {
                                         <tfoot>
                                             <tr>
                                                 <th>SL</th>
-                                                <th>Name / Slug</th>
-                                                <th>Serial</th>
+                                                <th>Name</th>
+                                                <th>Price</th>
                                                 <th>Status</th>
-                                                <th>Created By</th>
+                                                <th>Category</th>
+                                                <th>Photo</th>
                                                 <th>Date Time</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
-                                    {/* brand logo Modal */}
-                                    <CategoryPhotoModal
-                                    show={modalPhotoShow}
-                                    onHide={() => setModalPhotoShow(false)}
-                                    title={'Brand Logo'}
-                                    size={''}
-                                    photo={modalPhoto}
-                                    />
-
-                                    {/* brand Details Modal */}
-                                    <CategoryDetailsModal
-                                    show={modalShow}
-                                    onHide={() => setModalShow(false)}
-                                    title={'Brand Details'}
-                                    size={''}
-                                    category={brand}
-                                    />
                                 </div>
                                 }
                             </div>
                             {/* Pagination */}
                             <div className="card-footer d-flex justify-content-between align-items-center">
                                 <div className="data_tables_info">
-                                    Showing {startFrom} to {startFrom + brands.length - 1} of {totalItemsCount} entries
+                                    Showing {startFrom} to {startFrom + products.length - 1} of {totalItemsCount} entries
                                 </div>
                                 <nav className="pagination-sm ml-auto">
                                     <Pagination
@@ -274,7 +261,7 @@ const ProductList = () => {
                                         itemsCountPerPage={itemsCountPerPage}
                                         totalItemsCount={totalItemsCount}
                                         pageRangeDisplayed={10}
-                                        onChange={getCategories}
+                                        onChange={getProducts}
                                         nextPageText={'Next'}
                                         prevPageText={'Previous'}
                                         itemClass="page-item"

@@ -59,7 +59,7 @@ const AddBrand = () => {
           }
       });
     };
-  return (
+    return (
     <div className="content-wrapper">
         <section className="content-header">
             <Breadcrumb title="Add Brand" breadcrumb="Form Data" />

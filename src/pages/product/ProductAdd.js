@@ -24,131 +24,125 @@ const ProductAdd = () => {
     const [specificationFiledId, setSpecificationFiledId] = useState(1)
 
     const handleSpecificationFieldRemove = (id) => {
-        setSpecificationFiled(oldValues => {
-            return oldValues.filter(specificationFiled => specificationFiled !== id)
-        })
-        setSpecification_input(current => {
-            const copy = {...current};
-            delete copy[id];
-            return copy;
-        })
-        setSpecificationFiledId(specificationFiledId-1)
+      setSpecificationFiled(oldValues => {
+        return oldValues.filter(specificationFiled => specificationFiled !== id)
+      })
+      setSpecification_input(current => {
+        const copy = {...current};
+        delete copy[id];
+        return copy;
+      })
+      setSpecificationFiledId(specificationFiledId-1)
     }
+
     const handleSpecificationFields = (id) => {
-        setSpecificationFiledId(specificationFiledId+1)
-        setSpecificationFiled(prevState => [...prevState, specificationFiledId])
+      setSpecificationFiledId(specificationFiledId+1)
+      setSpecificationFiled(prevState => [...prevState, specificationFiledId])
     }
 
     const handleAttributeFieldsRemove = (id) => {
       setAttributeField(oldValues => {
-          return oldValues.filter(attributeFiled => attributeFiled !== id)
+        return oldValues.filter(attributeFiled => attributeFiled !== id)
       })
-        setAttribute_input(current => {
-            const copy = {...current};
-            delete copy[id];
-            return copy;
-        })
-        setAttributeFieldId(attributeFieldId-1)
+      setAttribute_input(current => {
+        const copy = {...current};
+        delete copy[id];
+        return copy;
+      })
+      setAttributeFieldId(attributeFieldId-1)
     }
     const handleAttributeFields = (id) => {
-        if (attributes.length >= attributeFieldId){
-            setAttributeFieldId(attributeFieldId+1)
-            setAttributeField(prevState => [...prevState, attributeFieldId])
-        }
+      if (attributes.length >= attributeFieldId){
+        setAttributeFieldId(attributeFieldId+1)
+        setAttributeField(prevState => [...prevState, attributeFieldId])
+      }
     }
     const handleSpecificationInput = (e, id) => {
-        setSpecification_input(prevState => ({
-            ...prevState,
-            [id]:{
-                ...prevState[id], [e.target.name]: e.target.value
-            }
-        }))
+      setSpecification_input(prevState => ({
+        ...prevState,
+        [id]:{
+            ...prevState[id], [e.target.name]: e.target.value
+        }
+      }))
     }
     const handleAttributeInput = (e, id) => {
-        setAttribute_input(prevState => ({
-            ...prevState,
-            [id]:{
-                ...prevState[id], [e.target.name]: e.target.value
-            }
-        }))
+      setAttribute_input(prevState => ({
+        ...prevState,
+        [id]:{
+            ...prevState[id], [e.target.name]: e.target.value
+        }
+      }))
     }
     const getAttributes = () => {
-        axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
-            setAttributes(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
+        setAttributes(res.data)
+      })
     }
     const getSuppliers = () => {
-        axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
-            setSuppliers(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
+        setSuppliers(res.data)
+      })
     }
     const getCountries = () => {
-        axios.get(`${Constants.BASE_URL}/get-country-list`).then(res => {
-            setCountries(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-country-list`).then(res => {
+        setCountries(res.data)
+      })
     }
     const getCategories = () => {
-        axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-            setCategories(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
+        setCategories(res.data)
+      })
     }
     const getBrands = () => {
-        axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
-            setBrands(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
+        setBrands(res.data)
+      })
     }
 
     const getSubCategories = (category_id) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-            setSubCategories(res.data)
-        })
+      axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
+        setSubCategories(res.data)
+      })
     }
 
     const handleInput = (e) => {
-        if (e.target.name == 'name') {
-            let slug = e.target.value
-            slug = slug.toLowerCase()
-            slug = slug.replaceAll(' ', '-')
-            setInput(prevState => ({...prevState, slug: slug}))
-        } else if (e.target.name == 'category_id') {
-            let category_id = parseInt(e.target.value);
-            if (!Number.isNaN(category_id)) {
-                getSubCategories(e.target.value)
-            }
+      if (e.target.name === 'name') {
+        let slug = e.target.value
+        slug = slug.toLowerCase()
+        slug = slug.replaceAll(' ', '-')
+        setInput(prevState => ({...prevState, slug: slug}))
+      } else if (e.target.name === 'category_id') {
+        let category_id = parseInt(e.target.value);
+        if (!Number.isNaN(category_id)) {
+          getSubCategories(e.target.value)
         }
+      }
 
-        setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
+      setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
     }
-
-    const handlePhoto = (e) => {
-        let file = e.target.files[0]
-        let reader = new FileReader()
-        reader.onloadend = () => {
-            setInput(prevState => ({...prevState, photo: reader.result}))
-        }
-        reader.readAsDataURL(file)
-    }
-
+    
     const handleProductCreate = (e) => {
       e.preventDefault(e)
-        setIsLoading(true)
-        axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
-            setIsLoading(false)
-            Swal.fire({
-                position: 'top-end',
-                icon: res.data.cls,
-                title: res.data.msg,
-                showConfirmButton: false,
-                toast: true,
-                timer: 1500
-            })
-            navigate('/product')
-        }).catch(errors => {
-            setIsLoading(false)
-            if (errors.response.status == 422) {
-                setErrors(errors.response.data.errors)
-            }
+      setIsLoading(true)
+      axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
+        setIsLoading(false)
+        Swal.fire({
+          position: 'top-end',
+          icon: res.data.cls,
+          title: res.data.msg,
+          showConfirmButton: false,
+          toast: true,
+          timer: 1500
         })
+        if (res.data.product_id !== 'undefined') {
+          navigate('/product/photo/'+res.data.product_id);
+        }
+      }).catch(errors => {
+        setIsLoading(false)
+        if (errors.response.status === 422) {
+          setErrors(errors.response.data.errors)
+        }
+      })
     }
 
   useEffect(() => {
@@ -160,11 +154,11 @@ const ProductAdd = () => {
   }, []);
 
   useEffect(()=>{
-      setInput(prevState => ({...prevState, attributes: attribute_input}))
+    setInput(prevState => ({...prevState, attributes: attribute_input}))
   }, [attribute_input])
 
   useEffect(()=>{
-      setInput(prevState => ({...prevState, specifications: specification_input}))
+    setInput(prevState => ({...prevState, specifications: specification_input}))
   }, [specification_input])
 
   return (
@@ -449,12 +443,12 @@ const ProductAdd = () => {
                     <div className="form-group col-md-6">
                       <label>Cost</label>
                       <input
-                        className={errors.cost !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
-                        type={'number'}
-                        name={'cost'}
-                        value={input.cost}
-                        onChange={handleInput}
-                        placeholder={'Enter Product Cost'}
+                          className={errors.cost !== undefined ? 'form-control is-invalid' : 'form-control'}
+                          type={'number'}
+                          name={'cost'}
+                          value={input.cost}
+                          onChange={handleInput}
+                          placeholder={'Enter Product cost'}
                       />
                       {errors.cost && (
                         <div className="invalid-feedback">
@@ -465,7 +459,7 @@ const ProductAdd = () => {
                     <div className="form-group col-md-6">
                       <label>Price</label>
                       <input
-                        className={errors.price !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.price !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'number'}
                         name={'price'}
                         value={input.price}
@@ -481,7 +475,7 @@ const ProductAdd = () => {
                     <div className="form-group col-md-6">
                       <label>Discount %</label>
                       <input
-                        className={errors.discount_percent !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.discount_percent !== undefined ? 'form-control is-invalid' : 'form-control mt-2'}
                         type={'number'}
                         name={'discount_percent'}
                         value={input.discount_percent}
@@ -574,7 +568,7 @@ const ProductAdd = () => {
                         </div>
                       )}
                     </div>
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-12">
                       <label>Description</label>
                       <textarea
                         className={errors.description !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
@@ -592,7 +586,7 @@ const ProductAdd = () => {
                   </div>
                   <div className="card-footer">
                     <button className={'btn btn-warning'} onClick={handleProductCreate}
-                      dangerouslySetInnerHTML={{__html: isLoading ? '<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Loading...' : 'Add Product'}}
+                      dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Next'}}
                     />
                   </div>
                 </form>

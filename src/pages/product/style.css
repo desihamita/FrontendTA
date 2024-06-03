@@ -1,0 +1,34 @@
+.product_photo_container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 1px solid silver;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+.product_photo_container .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: silver;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.product_photo_container .icon .fa-camera {
+    transition: transform 0.3s ease;
+}
+.product_photo_container .icon:hover .fa-camera {
+    transform: scale(1.3);
+}
+.primary-photo {
+    border: 2px solid orange !important;
+    border-radius: 5px;
+}
+.primary-photo:after {
+    content: 'primary';
+}
+.preview-photo{
+    cursor: pointer;
+}
+

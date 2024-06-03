@@ -20,6 +20,7 @@ import ProductAttributes from '../../pages/productAttribute/ProductAttributes'
 import ProductList from '../../pages/product/ProductList'
 import ProductAdd from '../../pages/product/ProductAdd'
 import ProductEdit from '../../pages/product/ProductEdit'
+import AddProductPhoto from '../../pages/product/AddProductPhoto'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -75,6 +76,9 @@ const ProjectRouter = createBrowserRouter([
                 path: '/product/create',
                 element: <ProductAdd/>
             }, {
+                path: '/product/photo/:id',
+                element: <AddProductPhoto/>
+            },{
                 path: '/product/edit/:id',
                 element: <ProductEdit/>
             },{
