@@ -21,6 +21,9 @@ import ProductList from '../../pages/product/ProductList'
 import ProductAdd from '../../pages/product/ProductAdd'
 import ProductEdit from '../../pages/product/ProductEdit'
 import AddProductPhoto from '../../pages/product/AddProductPhoto'
+import ListShop from '../../pages/shop/ListShop'
+import AddShop from '../../pages/shop/AddShop'
+import EditShop from '../../pages/shop/EditShop'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -78,10 +81,19 @@ const ProjectRouter = createBrowserRouter([
             }, {
                 path: '/product/photo/:id',
                 element: <AddProductPhoto/>
-            },{
+            }, {
                 path: '/product/edit/:id',
                 element: <ProductEdit/>
-            },{
+            }, {
+                path: '/shop',
+                element: <ListShop/>
+            }, {
+                path: '/shop/create',
+                element: <AddShop/>
+            }, {
+                path: '/shop/edit/:id',
+                element: <EditShop/>
+            }, {
                 path: '/error500',
                 element: <Error500/>
             }

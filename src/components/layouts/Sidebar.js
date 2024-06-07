@@ -104,7 +104,7 @@ const Sidebar = () => {
                     </li>
                     <li className="nav-header">TRANSAKSI</li>
                     <li className="nav-item">
-                        <Link to='#' className="nav-link">
+                        <Link to='/shop' className="nav-link">
                             <i class="fas fa-solid fa-file-invoice nav-icon"></i>
                             <p>Pemesanan Barang</p>
                         </Link>
