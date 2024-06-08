@@ -18,6 +18,7 @@ const Login = () => {
       localStorage.photo = res.data.photo
       localStorage.phone = res.data.phone
       localStorage.token = res.data.token
+      localStorage.role = res.data.role
       setIsLoading(false)
       window.location.reload()
     }).catch(errors => {
@@ -73,6 +74,29 @@ const Login = () => {
               {errors.password !== undefined && (
                 <div className="invalid-feedback">
                   {errors.password[0]}
+                </div>
+              )}
+            </div>
+            <div className="input-group mb-3">
+              <select 
+                name={'user_type'}
+                value={input.user_type}
+                onChange={handleInput}
+                className={errors.user_type !== undefined ? 'form-control is-invalid' : 'form-control'}
+                placeholder="Login As" 
+              >
+                <option value="" disabled={true} selected>Select Role</option>
+                <option value={1}>Admin</option>
+                <option value={2}>Sales Manager</option>
+              </select>
+              <div className="input-group-append">
+                <div className="input-group-text">
+                  <span className="fas fa-user" />
+                </div>
+              </div>
+              {errors.user_type !== undefined && (
+                <div className="invalid-feedback">
+                  {errors.user_type[0]}
                 </div>
               )}
             </div>
