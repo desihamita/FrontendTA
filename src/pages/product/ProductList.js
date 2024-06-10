@@ -91,7 +91,7 @@ const ProductList = () => {
                                     <div className='row'>
                                         <div className='col-md-3'>
                                             <label className='w-100'>
-                                                <p className='mb-0'>Search :</p>
+                                                <p className='mb-0'>Search</p>
                                                 <input 
                                                 className='form-control'
                                                 type='search'
@@ -104,7 +104,7 @@ const ProductList = () => {
                                         </div>
                                         <div className='col-md-3'>
                                             <label className='w-100'>
-                                                <p className='mb-0'>Order By :</p>
+                                                <p className='mb-0'>Order By</p>
                                                 <select 
                                                 className='form-control select2'
                                                 name='order_by'
@@ -120,7 +120,7 @@ const ProductList = () => {
                                         </div>
                                         <div className='col-md-2'>
                                             <label className='w-100'>
-                                                <p className='mb-0'>Order Direction :</p>
+                                                <p className='mb-0'>Order Direction</p>
                                                 <select 
                                                 className='form-control select2'
                                                 name='direction'
@@ -134,7 +134,7 @@ const ProductList = () => {
                                         </div>
                                         <div className='col-md-2'>
                                             <label className='w-100'>
-                                                <p className='mb-0'>Per Page :</p>
+                                                <p className='mb-0'>Per Page</p>
                                                 <select 
                                                 className='form-control select2'
                                                 name='per_page'
@@ -180,21 +180,14 @@ const ProductList = () => {
                                                 <td>{startFrom + index}</td>
                                                 <td>
                                                     <p className="mb-0">Name : {product.name}</p>
-                                                    <p className="text-success mb-0">Slug : {product.slug}</p>
-                                                    <p className="mb-0">
-                                                        {product && product.attributes && Object.keys(product.attributes).length > 0 ? 
-                                                            product.attributes.map((attribute, index) => (
-                                                                <p key={index}><small>{attribute.name} : {attribute.value}</small></p>
-                                                            )) : null
-                                                        }
-                                                    </p>
                                                 </td>
                                                 <td>
+                                                    <p className="mb-0">Sell Price : <strong>{product.sell_price.symbol} {product.sell_price.price} || Discount : {product.sell_price.symbol} {product.sell_price.discount}</strong></p>
                                                     <p className="mb-0">Price : {product.price}</p>
-                                                    <p className="text-success mb-0">Discount : {product.discount_percent} + {product.discount_fixed}</p>
-                                                    <p className="mb-0">Cost : {product.cost}</p>
-                                                    <p className="text-success mb-0">Discount Start : {product.discount_start}</p>
-                                                    <p className="mb-0">Discount End : {product.discount_end}</p>
+                                                    <p className="mb-0">Price : {product.discount_fixed}</p>
+                                                    <p className="mb-0">Price : {product.discount_percent}</p>
+                                                    <p className="mb-0">Price : {product.discount_start}</p>
+                                                    <p className="mb-0">Price : {product.discount_end}</p>
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Status : {product.status}</p>
@@ -203,10 +196,6 @@ const ProductList = () => {
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Category : {product.category}</p>
-                                                    <p className="text-success mb-0">Sub Category : {product.sub_category}</p>
-                                                    <p className="mb-0">Brand : {product.brand}</p>
-                                                    <p className="text-success mb-0">Origin : {product.country}</p>
-                                                    <p className="mb-0">Supplier : {product.supplier}</p>
                                                 </td>
                                                 <td>
                                                     <img
