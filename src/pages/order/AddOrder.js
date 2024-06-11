@@ -3,7 +3,8 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import AddCustomer from '../../components/partials/modal/AddCustomer';
 
 const AddOrder = () => {
   const [input, setInput] = useState({
@@ -13,33 +14,96 @@ const AddOrder = () => {
     search: ''
   });
 
+  const [customerInput, setCustomerInput] = useState('');
+  const [customers, setCustomers] = useState([]);
+  const [orders, setOrders] = useState({});
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
+  const [carts, setCarts] = useState({});
+  const [modalShow, setModalShow] = useState(false);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
   const [startFrom, setStartFrom] = useState(1);
   const [activePage, setActivePage] = useState(1);
-  const [carts, setCarts] = useState({});
+
   const [orderSummary, setOrderSummary] = useState({
-    items : 0,
-    amount : 0,
-    discount : 0,
-    pay_able : 0,
+    items: 0,
+    amount: 0,
+    discount: 0,
+    pay_able: 0,
+    customer: '',
+    customer_id: 0,
   });
+
+  const handleSelectCustomer = (customer) => () => {
+    setOrders(prevState => ({ ...prevState, customer_id: customer.id }));
+    setOrderSummary(prevState => ({ ...prevState, customer: `${customer.name} - ${customer.phone}` }));
+    setOrderSummary(prevState => ({ ...prevState, customer_id: customer.id }));
+  }
+
+  const handleCustomerSearch = (e) => {
+    setCustomerInput(e.target.value);
+  }
+
+  const handleIncrease = (id) => {
+    if(carts[id].stock > carts[id].quantity) {
+      setCarts(prevState => ({
+        ...prevState,
+        [id]:{
+          ...prevState[id], quantity: carts[id].quantity + 1
+        }
+      }))
+    }
+  }
+
+  const handleDecrease = (id) => {
+    if(carts[id].quantity > 1) {
+      setCarts(prevState => ({
+        ...prevState,
+        [id]:{
+          ...prevState[id], quantity: carts[id].quantity - 1
+        }
+      }))
+    }
+  }
+
+  const handleCart = (id) => {
+    products.map((product, index) => {
+      if(product.id == id) {
+        if (carts[id] == undefined) {
+          setCarts(prevState => ({...prevState, [id] : product}))
+          setCarts(prevState => ({
+            ...prevState,
+            [id]:{
+              ...prevState[id], quantity: 1
+            }
+          }))
+        } else {
+          if(carts[id].stock > carts[id].quantity) {
+            setCarts(prevState => ({
+              ...prevState,
+              [id]:{
+                ...prevState[id], quantity: carts[id].quantity + 1
+              }
+            }))
+          }
+        }
+      }
+    })
+  };
+
+  const getCustomers = () => {
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/customer?&search=${customerInput}`).then((res) => {
+      setCustomers(res.data);
+      setIsLoading(false);
+    });
+  }
 
   const handleInput = (e) => {
     setInput((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
-
-  const handleCart = (id) => {
-    setCarts(prevCarts => {
-      const product = products.find(product => product.id === id);
-      const currentQuantity = prevCarts[id]?.quantity || 0;
-      const newQuantity = currentQuantity + 1;
-      return { ...prevCarts, [id]: { ...product, quantity: newQuantity } };
-    });
   };
 
   const handleRemoveCart = (id) => {
@@ -78,27 +142,32 @@ const AddOrder = () => {
       });
   };
 
+  const calculateOrderSummary = () => {
+    let items = 0;
+    let amount = 0;
+    let discount = 0;
+    let pay_able = 0;
+    Object.keys(carts).map((key) => {
+      items += carts[key].quantity;
+      amount += carts[key].original_price * carts[key].quantity;
+      discount += carts[key].sell_price.discount * carts[key].quantity;
+      pay_able += carts[key].sell_price.price * carts[key].quantity;
+    });
+    setOrderSummary(prevState => ({
+      ...prevState,
+      items,
+      amount,
+      discount,
+      pay_able,
+    }));
+  }
+
   useEffect(() => {
     getProducts();
   }, []);
 
   useEffect(() => {
-    let items = 0;
-    let amount = 0;
-    let discount = 0;
-    let pay_able = 0;
-    Object.values(carts).forEach(cartItem => {
-      items += cartItem.quantity;
-      amount += cartItem.original_price * cartItem.quantity;
-      discount += cartItem.sell_price.discount * cartItem.quantity;
-      pay_able += cartItem.sell_price.price * cartItem.quantity;
-    });
-    setOrderSummary({
-      items,
-      amount,
-      discount,
-      pay_able,
-    });
+    calculateOrderSummary();
   }, [carts]);
 
   return (
@@ -113,15 +182,15 @@ const AddOrder = () => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-4">
-                    <div className="card card-orange card-outline" >
+                    <div className="card card-orange card-outline">
                       <div className="card-header">
                         <h5>Product List</h5>
                       </div>
                       <div className="card-body">
                         <div className="form-group">
                           <div className="input-group input-group-lg">
-                            <input 
-                              className="form-control form-control-lg" 
+                            <input
+                              className="form-control form-control-lg"
                               type='search'
                               name='search'
                               value={input.search}
@@ -129,17 +198,17 @@ const AddOrder = () => {
                               placeholder='Search'
                             />
                             <div className="input-group-append">
-                              <button onClick={getProducts} className="btn btn-lg btn-default">
+                              <button onClick={() => getProducts()} className="btn btn-lg btn-warning">
                                 <i className="fa fa-search" />
                               </button>
                             </div>
                           </div>
                         </div>
                         {products.map((product, index) => (
-                          <div 
-                            key={index} 
-                            className="attachment-block border-bottom align-items-center py-2" 
-                            style={{backgroundColor : 'transparent', border: 'none'}}
+                          <div
+                            key={index}
+                            className="attachment-block border-bottom align-items-center py-2"
+                            style={{ backgroundColor: 'transparent', border: 'none' }}
                           >
                             <div className='py-2'>
                               <button className='btn btn-xs btn-success m-1'><i className='fas fa-solid fa-eye'></i></button>
@@ -168,6 +237,7 @@ const AddOrder = () => {
                       </div>
                       <div className="card-body">
                         <div className='order-summary'>
+                          <p className='pb-2'><strong className='pr-2'>Customer :</strong><span className='text-orange text-bold'>{orderSummary.customer}</span></p>
                           <table className='table table-sm table-hover table-striped table-bordered'>
                             <tbody>
                               <tr>
@@ -190,28 +260,54 @@ const AddOrder = () => {
                           </table>
                         </div>
                         {Object.keys(carts).map((key) => (
-                          <div 
-                          key={key} 
-                          className="attachment-block border-bottom align-items-center py-2" 
-                          style={{backgroundColor : 'transparent', border: 'none'}}
-                        >
-                          <div className='py-2'>
-                            <button className='btn btn-xs btn-info m-1'><i className='fas fa-solid fa-eye'></i></button>
-                            <button className='btn btn-xs btn-danger m-1' onClick={() => handleRemoveCart(key)}><i class="fas fa-solid fa-times"></i></button>
-                          </div>
-                          <img className="attachment-img" src={carts[key].primary_photo} alt={carts[key].name} />
-                          <div className="attachment-pushed">
-                            <h4 className="attachment-heading text-orange">{carts[key].name}</h4>
-                            <div className="attachment-text">
-                              <p className="mb-0">Original Price : <small>{carts[key].price}</small></p>
+                          <div
+                            key={key}
+                            className="attachment-block border-bottom align-items-center py-2"
+                            style={{ backgroundColor: 'transparent', border: 'none' }}
+                          >
+                            <div className='py-2'>
+                              <button className='btn btn-xs btn-info m-1'><i className='fas fa-solid fa-eye'></i></button>
+                              <button className='btn btn-xs btn-danger m-1' onClick={() => handleRemoveCart(key)}><i className="fas fa-solid fa-times"></i></button>
+                            </div>
+                            <img className="attachment-img" src={carts[key].primary_photo} alt={carts[key].name} />
+                            <div className="attachment-pushed">
+                              <h4 className="attachment-heading text-orange">{carts[key].name}</h4>
+                              <div className="attachment-text">
+                                <p className="mb-0">Original Price : <small>{carts[key].price}</small></p>
 
-                              <p className="mb-0">Sell Price : <small>{carts[key].sell_price.symbol} {carts[key].sell_price.price} | Discount : {carts[key].sell_price.symbol} {carts[key].sell_price.discount}</small></p>
+                                <p className="mb-0">Sell Price : <small>{carts[key].sell_price.symbol} {carts[key].sell_price.price} | Discount : {carts[key].sell_price.symbol} {carts[key].sell_price.discount}</small></p>
 
-                              <p className="mb-0"><small>SKU : {carts[key].sku} | Stock : {carts[key].stock}</small></p>
-                              <p className="mb-0"><small>Quantity : {carts[key].quantity}</small></p>
+                                <p className="mb-0"><small>SKU : {carts[key].sku} | Stock : {carts[key].stock}</small></p>
+                                <p className="pt-3"><span className='pr-2'> Quantity :</span>
+                                  <div class="btn-group">
+                                    <button 
+                                      onClick={() => handleDecrease(carts[key].id)} 
+                                      className={ 
+                                        carts[key].quantity <= 1
+                                        ? "btn btn-primary btn-sm disabled"
+                                        : "btn btn-primary btn-sm"
+                                      }
+                                    >
+                                      <i className="fas fa-solid fa-minus"></i>
+                                    </button>
+                                    
+                                    <span className='pr-2 pl-2'>{carts[key].quantity}</span>
+
+                                    <button 
+                                      onClick={() => handleIncrease(carts[key].id)} 
+                                      className={ 
+                                        carts[key].stock <= carts[key].quantity
+                                        ? "btn btn-primary btn-sm disabled"
+                                        : "btn btn-primary btn-sm"
+                                      }
+                                    >
+                                      <i className="fas fa-solid fa-plus"></i>
+                                    </button>
+                                  </div>
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
                         ))}
                       </div>
                     </div>
@@ -219,9 +315,38 @@ const AddOrder = () => {
                   <div className="col-md-4">
                     <div className="card card-orange card-outline">
                       <div className="card-header">
-                        <h5>User List</h5>
+                        <div className='d-flex justify-content-between'>
+                          <h5>Customer List</h5>
+                          <button onClick={() => setModalShow(true)} className='btn btn-sm btn-success'><i className='fas fa-solid fa-plus'></i></button>
+                        </div>
                       </div>
-                      <div className="card-body"></div>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <div className="input-group input-group-lg">
+                            <input
+                              className="form-control form-control-lg"
+                              type='search'
+                              name='search'
+                              value={customerInput}
+                              onChange={handleCustomerSearch}
+                              placeholder='Search'
+                            />
+                            <div className="input-group-append">
+                              <button onClick={getCustomers} className="btn btn-lg btn-warning">
+                                <i className="fa fa-search" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <ul className='list-unstyled ml-2'>
+                          {customers.map((customer, index) => (
+                            <li className={orderSummary.customer != '' ? 'text-success' : ''} key={index} onClick={handleSelectCustomer(customer)}>{customer.name} - {customer.phone}</li>
+                          ))}
+                        </ul>
+                        <div className='d-grid mt-4'>
+                          <button className='btn btn-warning w-100'>Place Order</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -230,6 +355,11 @@ const AddOrder = () => {
           </div>
         </section>
       </div>
+      <AddCustomer
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        setModalShow={setModalShow}
+      />
     </>
   );
 };

@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 
 const CategoryDetailsModal = (props) => {
     return (
-        <>
+    <>
         <Modal
             {...props}
             size={props.size}
