@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Header = () => {
+  const [branch, setBranch] = useState({})
+  
+  useEffect(() => {
+    if(localStorage.branch != undefined) {
+      console.log(branch)
+      setBranch(JSON.parse(localStorage.branch))
+    }
+  }, [])
+
   return (
     <nav className="main-header navbar navbar-expand bg-warning navbar-light bg-orange">
       <ul className="navbar-nav">
@@ -38,7 +47,9 @@ const Header = () => {
         <li className="nav-item dropdown">
             <div className="user-panel d-flex" >
                 <div className="nav-item d-none d-sm-inline-block">
-                    <a href="/profile" className="nav-link pr-1 text-white">{localStorage.name !== undefined ? localStorage.name : null} </a>
+                    <a href="/profile" className="nav-link pr-1 text-white">
+                      {localStorage.name !== undefined ? localStorage.name : null} 
+                    </a>
                 </div>
                 <div className="image mt-1 mr-3">
                     <img src="dist/img/user2-160x160.jpg" className="profile-user-img img-circle" alt="User Image"  style={{border: '1px solid white'}} />

@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AddCustomer from '../../components/partials/modal/AddCustomer';
+import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConfirmation';
+import { formatRupiah } from '../../components/partials/numberFormat';
 
 const AddOrder = () => {
   const [input, setInput] = useState({
@@ -22,6 +24,7 @@ const AddOrder = () => {
   const [products, setProducts] = useState([]);
   const [carts, setCarts] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [showOrderConfirmationModel, setShowOrderConfirmationModel] = useState(false);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
@@ -39,7 +42,7 @@ const AddOrder = () => {
 
   const handleSelectCustomer = (customer) => () => {
     setOrders(prevState => ({ ...prevState, customer_id: customer.id }));
-    setOrderSummary(prevState => ({ ...prevState, customer: `${customer.name} - ${customer.phone}` }));
+    setOrderSummary(prevState => ({ ...prevState, customer: `${customer.name}` }));
     setOrderSummary(prevState => ({ ...prevState, customer_id: customer.id }));
   }
 
@@ -147,18 +150,20 @@ const AddOrder = () => {
     let amount = 0;
     let discount = 0;
     let pay_able = 0;
+
     Object.keys(carts).map((key) => {
       items += carts[key].quantity;
       amount += carts[key].original_price * carts[key].quantity;
       discount += carts[key].sell_price.discount * carts[key].quantity;
       pay_able += carts[key].sell_price.price * carts[key].quantity;
     });
+
     setOrderSummary(prevState => ({
       ...prevState,
-      items,
-      amount,
-      discount,
-      pay_able,
+      items: items,
+      amount: amount,
+      discount: discount,
+      pay_able: pay_able,
     }));
   }
 
@@ -220,7 +225,7 @@ const AddOrder = () => {
                               <div className="attachment-text">
                                 <p className="mb-0">Original Price : <small>{product.price}</small></p>
 
-                                <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {product.sell_price.price} | Discount : {product.sell_price.symbol} {product.sell_price.discount}</small></p>
+                                <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {formatRupiah(product.sell_price.discount)}</small></p>
 
                                 <p className="mb-0"><small>SKU : {product.sku} | Stock : {product.stock}</small></p>
                               </div>
@@ -246,15 +251,15 @@ const AddOrder = () => {
                               </tr>
                               <tr>
                                 <th>Original Price</th>
-                                <td className='text-right'>Rp.{orderSummary.amount}</td>
+                                <td className='text-right'>{formatRupiah(orderSummary.amount)}</td>
                               </tr>
                               <tr>
                                 <th>Discount</th>
-                                <td className='text-right'>- Rp.{orderSummary.discount}</td>
+                                <td className='text-right'>{formatRupiah(orderSummary.discount)}</td>
                               </tr>
                               <tr>
                                 <th>Payable</th>
-                                <td className='text-right'>- Rp.{orderSummary.pay_able}</td>
+                                <td className='text-right'>{formatRupiah(orderSummary.pay_able)}</td>
                               </tr>
                             </tbody>
                           </table>
@@ -340,11 +345,17 @@ const AddOrder = () => {
                         </div>
                         <ul className='list-unstyled ml-2'>
                           {customers.map((customer, index) => (
-                            <li className={orderSummary.customer != '' ? 'text-success' : ''} key={index} onClick={handleSelectCustomer(customer)}>{customer.name} - {customer.phone}</li>
+                            <li className={orderSummary.customer_id == customer.id ? 'text-success text-bold px-2' : 'px-2'} key={index} onClick={handleSelectCustomer(customer)}>{customer.name}</li>
                           ))}
                         </ul>
                         <div className='d-grid mt-4'>
-                          <button className='btn btn-warning w-100'>Place Order</button>
+                          <button 
+                            disabled={orderSummary.items = 0 || orderSummary.customer_id == 0} 
+                            onClick={() => setShowOrderConfirmationModel(true)} 
+                            className='btn btn-warning w-100'
+                          >
+                              Place Order
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -359,6 +370,12 @@ const AddOrder = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         setModalShow={setModalShow}
+      />
+      <ShowOrderConfirmation
+        show={showOrderConfirmationModel}
+        onHide={() => setShowOrderConfirmationModel(false)}
+        orderSummary={orderSummary}
+        carts={carts}
       />
     </>
   );

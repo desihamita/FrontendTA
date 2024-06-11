@@ -19,8 +19,9 @@ const Login = () => {
       localStorage.phone = res.data.phone
       localStorage.token = res.data.token
       localStorage.role = res.data.role
+      localStorage.branch = JSON.stringify(res.data.branch)
       setIsLoading(false)
-      window.location.reload()
+      //window.location.reload()
     }).catch(errors => {
       setIsLoading(false)
       if(errors.response.status === 422) {

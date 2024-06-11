@@ -31,7 +31,7 @@ const Sidebar = () => {
 
   return (
     <aside className="main-sidebar sidebar-light-warning elevation-4">
-      <Link to={'/'} className="brand-link bg-orange">
+      <Link to="/" className="brand-link bg-orange">
         <img src={Logo} alt="Logo" className="brand-image mt-1" />
         <span className="brand-text font-weight-200"> Inventory App</span>
       </Link>
@@ -121,7 +121,7 @@ const Sidebar = () => {
                 </li>
                 <li className="nav-header">TRANSACTION</li>
                 <li className="nav-item">
-                  <Link to='/shop' className="nav-link">
+                  <Link to='/' className="nav-link">
                     <i className="fas fa-solid fa-file-invoice nav-icon"></i>
                     <p>Orders</p>
                   </Link>
@@ -150,9 +150,9 @@ const Sidebar = () => {
             
             <li className="nav-header">MASTER TRANSAKSI</li>
             <li className="nav-item">
-              <Link to='/order' className="nav-link">
+              <Link to='/order/create' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Order</p>
+                <p>Orders</p>
               </Link>
             </li>
             <li className="nav-header">SETTING</li>
