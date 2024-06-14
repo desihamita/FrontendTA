@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AddCustomer from '../../components/partials/modal/AddCustomer';
 import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConfirmation';
-import { formatRupiah } from '../../components/partials/numberFormat';
+import GlobalFunction from '../../GlobalFunction';
 
 const AddOrder = () => {
   const [input, setInput] = useState({
@@ -168,6 +168,10 @@ const AddOrder = () => {
   }
 
   useEffect(() => {
+    getCustomers()
+  }, [customerInput])
+
+  useEffect(() => {
     getProducts();
   }, []);
 
@@ -223,9 +227,9 @@ const AddOrder = () => {
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{product.name}</h4>
                               <div className="attachment-text">
-                                <p className="mb-0">Original Price : <small>{product.price}</small></p>
+                                <p className="mb-0">Original Price : <small>{GlobalFunction.formatRupiah(product.price)}</small></p>
 
-                                <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {formatRupiah(product.sell_price.discount)}</small></p>
+                                <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.discount)}</small></p>
 
                                 <p className="mb-0"><small>SKU : {product.sku} | Stock : {product.stock}</small></p>
                               </div>
@@ -251,15 +255,15 @@ const AddOrder = () => {
                               </tr>
                               <tr>
                                 <th>Original Price</th>
-                                <td className='text-right'>{formatRupiah(orderSummary.amount)}</td>
+                                <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.amount)}</td>
                               </tr>
                               <tr>
                                 <th>Discount</th>
-                                <td className='text-right'>{formatRupiah(orderSummary.discount)}</td>
+                                <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.discount)}</td>
                               </tr>
                               <tr>
                                 <th>Payable</th>
-                                <td className='text-right'>{formatRupiah(orderSummary.pay_able)}</td>
+                                <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.pay_able)}</td>
                               </tr>
                             </tbody>
                           </table>

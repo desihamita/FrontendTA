@@ -29,7 +29,7 @@ import AddSalesManager from '../../pages/salesManager/AddSalesManager'
 import EditSalesManager from '../../pages/salesManager/EditSalesManager'
 import ListOrder from '../../pages/order/ListOrder'
 import AddOrder from '../../pages/order/AddOrder'
-import EditOrder from '../../pages/order/EditOrder'
+import OrderDetails from '../../pages/order/OrderDetails'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -115,8 +115,8 @@ const ProjectRouter = createBrowserRouter([
                 path: '/order/create',
                 element: <AddOrder/>
             }, {
-                path: '/order/edit/:id',
-                element: <EditOrder/>
+                path: '/order/details/:id',
+                element: <OrderDetails/>
             },{
                 path: '/error500',
                 element: <Error500/>

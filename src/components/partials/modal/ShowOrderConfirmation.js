@@ -3,7 +3,7 @@ import { Card, Col, Container, Row, Table } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
 import Logo from '../../../assets/img/logo12.png'
 import Moment from 'react-moment'
-import { formatRupiah } from '../numberFormat'
+import GlobalFunction from '../../../GlobalFunction'
 
 const ShowOrderConfirmation = (props) => {
     const [branch, setBranch] = useState({})
@@ -73,21 +73,21 @@ const ShowOrderConfirmation = (props) => {
                                                     <td>{props.carts[key].quantity}</td>
                                                     <td>{props.carts[key].price}</td>
                                                     <td>
-                                                        {formatRupiah(props.carts[key].original_price * props.carts[key].quantity)}
+                                                        {GlobalFunction.formatRupiah(props.carts[key].original_price * props.carts[key].quantity)}
                                                     </td>
                                                 </tr>
                                             ))}
                                             <tr>
                                                 <td colSpan="4" className="text-right"><strong>Sub Total</strong></td>
-                                                <td>{formatRupiah(props.orderSummary.amount)}</td>
+                                                <td>{GlobalFunction.formatRupiah(props.orderSummary.amount)}</td>
                                             </tr>
                                             <tr>
                                                 <td colSpan="4" className="text-right"><strong>Discount</strong></td>
-                                                <td>{formatRupiah(props.orderSummary.discount)}</td>
+                                                <td>{GlobalFunction.formatRupiah(props.orderSummary.discount)}</td>
                                             </tr>
                                             <tr>
                                                 <td colSpan="4" className="text-right"><strong>Total</strong></td>
-                                                <td>{formatRupiah(props.orderSummary.pay_able)}</td>
+                                                <td>{GlobalFunction.formatRupiah(props.orderSummary.pay_able)}</td>
                                             </tr>
                                         </tbody>
                                     </Table>

@@ -1,10 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Constants from '../../../Constants';
 import Swal from 'sweetalert2';
-import { Navigate } from 'react-router-dom';
 
 const AddCustomer = ({setModalShow, ...props}) => {
     const [input, setInput] = useState({});

@@ -150,7 +150,7 @@ const Sidebar = () => {
             
             <li className="nav-header">MASTER TRANSAKSI</li>
             <li className="nav-item">
-              <Link to='/order/create' className="nav-link">
+              <Link to='/order' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
                 <p>Orders</p>
               </Link>
