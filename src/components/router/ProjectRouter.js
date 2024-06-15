@@ -30,7 +30,7 @@ import EditSalesManager from '../../pages/salesManager/EditSalesManager'
 import ListOrder from '../../pages/order/ListOrder'
 import AddOrder from '../../pages/order/AddOrder'
 import OrderDetails from '../../pages/order/OrderDetails'
-import Barcode from '../modules/barcode/Barcode'
+import BarcodeComponent from '../modules/barcode/BarcodeComponent'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -120,7 +120,7 @@ const ProjectRouter = createBrowserRouter([
                 element: <OrderDetails/>
             }, {
                 path: '/generate-barcode',
-                element: <Barcode/>
+                element: <BarcodeComponent/>
             }, {
                 path: '/error500',
                 element: <Error500/>
