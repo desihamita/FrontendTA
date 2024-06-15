@@ -5,7 +5,6 @@ const Header = () => {
   
   useEffect(() => {
     if(localStorage.branch != undefined) {
-      console.log(branch)
       setBranch(JSON.parse(localStorage.branch))
     }
   }, [])

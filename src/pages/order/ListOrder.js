@@ -9,6 +9,7 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 import Constants from '../../Constants';
 import GlobalFunction from '../../GlobalFunction';
 import { Link } from 'react-router-dom';
+import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 
 const ListOrder = () => {
   const [input, setInput] = useState({
@@ -182,7 +183,7 @@ const ListOrder = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {orders.map((order, index) => (
+                          {Object.keys(orders).length > 0 ? orders.map((order, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
@@ -218,7 +219,7 @@ const ListOrder = () => {
                                 <Link to={`/order/details/${order.id}`}><button className='btn btn-info btn-sm'><i className="fas fa-solid fa-eye"></i></button></Link>
                               </td>
                             </tr>
-                          ))}
+                          )) : <NoDataFound/> }
                         </tbody>
                         <tfoot>
                           <tr>

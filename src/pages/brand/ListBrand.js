@@ -231,7 +231,6 @@ const ListBrand = () => {
                             </tr>
                           )) : <NoDataFound/> }
                         </tbody>
-                        {/* Table Footer */}
                         <tfoot>
                           <tr>
                             <th>SL</th>

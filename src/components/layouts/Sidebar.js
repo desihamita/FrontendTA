@@ -155,6 +155,13 @@ const Sidebar = () => {
                 <p>Orders</p>
               </Link>
             </li>
+            <li className="nav-header">ACCESSORIES</li>
+            <li className="nav-item">
+              <Link to='/generate-barcode' className="nav-link">
+                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
+                <p>Generate Barcode</p>
+              </Link>
+            </li>
             <li className="nav-header">SETTING</li>
             <li className="nav-item">
               <Link to='#' className="nav-link">

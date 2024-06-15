@@ -30,6 +30,7 @@ import EditSalesManager from '../../pages/salesManager/EditSalesManager'
 import ListOrder from '../../pages/order/ListOrder'
 import AddOrder from '../../pages/order/AddOrder'
 import OrderDetails from '../../pages/order/OrderDetails'
+import Barcode from '../modules/barcode/Barcode'
 
 const ProjectRouter = createBrowserRouter([
     {
@@ -117,7 +118,10 @@ const ProjectRouter = createBrowserRouter([
             }, {
                 path: '/order/details/:id',
                 element: <OrderDetails/>
-            },{
+            }, {
+                path: '/generate-barcode',
+                element: <Barcode/>
+            }, {
                 path: '/error500',
                 element: <Error500/>
             }
