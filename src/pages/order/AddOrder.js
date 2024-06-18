@@ -42,6 +42,7 @@ const AddOrder = () => {
     paid_amount: 0,
     due_amount: 0,
     payment_method_id: 1,
+    trx_id: '',
   });
 
   const getPaymentMethods = () => {
@@ -55,6 +56,19 @@ const AddOrder = () => {
   const handleOrderPlace = () => {
     setIsLoading(true)
     axios.post(`${Constants.BASE_URL}/order`, {carts: carts, 'order_summary' : orderSummary}).then((res) => {
+      Swal.fire({
+        position: "top-end",
+        icon: res.data.cls,
+        title: res.data.msg,
+        showConfirmButton: false,
+        toast: true,
+        timer: 1500
+      });
+
+      if(res.data.flag != undefined) {
+        setShowOrderConfirmationModel(false)
+      }
+      
       setIsLoading(false);
     });
   }
@@ -200,6 +214,17 @@ const AddOrder = () => {
       setOrderSummary(prevState => ({
         ...prevState,
         payment_method_id: e.target.value,
+      }));
+      if(e.traget.value == 1) {
+        setOrderSummary(prevState => ({
+          ...prevState,
+          trx_id: '',
+        }));
+      }
+    } else if(e.target.name == 'trx_id') {
+      setOrderSummary(prevState => ({
+        ...prevState,
+        trx_id: e.target.value,
       }));
     }
   }
@@ -389,7 +414,7 @@ const AddOrder = () => {
                         </ul>
                         <div className='d-grid mt-4'>
                           <button 
-                            disabled={orderSummary.items = 0 || orderSummary.customer_id == 0} 
+                            disabled={orderSummary.items == 0 || orderSummary.customer_id == 0} 
                             onClick={() => setShowOrderConfirmationModel(true)} 
                             className='btn btn-warning w-100'
                           >

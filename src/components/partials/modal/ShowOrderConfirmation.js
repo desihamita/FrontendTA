@@ -114,12 +114,27 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                                             value={props.orderSummary.payment_method_id}
                                                             onChange={handleOrderSummaryInput}
                                                         >
+                                                            <option value="" disabled={true} selected>Select Method</option>
                                                             {props.paymentMethods.map((payment_method, index) => (
                                                                 <option key={index} value={payment_method.id}>{payment_method.name}</option>
                                                             ))}
                                                         </select>
                                                     </td>
                                                 </tr>
+                                                {props.orderSummary.payment_method_id != 1 ? 
+                                                    <tr>
+                                                        <th colSpan="4" className="text-right">Transaction ID</th>
+                                                        <td>
+                                                            <input 
+                                                                className='form-control'
+                                                                type='text'
+                                                                name='trx_id'
+                                                                value={props.orderSummary.trx_id}
+                                                                onChange={handleOrderSummaryInput}
+                                                            />
+                                                        </td>
+                                                    </tr> : null
+                                                }
                                             </tbody>
                                         </Table>
                                     </Card.Body>
