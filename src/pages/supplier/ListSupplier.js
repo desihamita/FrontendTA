@@ -113,7 +113,7 @@ const ListSupplier = () => {
                     <div className='row'>
                       <div className='col-md-3'>
                         <label className='w-100'>
-                          <p className='mb-0'>Search :</p>
+                          <p className='mb-0'>Search</p>
                           <input 
                             className='form-control'
                             type='search'
@@ -126,7 +126,7 @@ const ListSupplier = () => {
                       </div>
                       <div className='col-md-3'>
                         <label className='w-100'>
-                          <p className='mb-0'>Order By :</p>
+                          <p className='mb-0'>Order By</p>
                           <select 
                             className='form-control select2'
                             name='order_by'
@@ -143,7 +143,7 @@ const ListSupplier = () => {
                       </div>
                       <div className='col-md-2'>
                         <label className='w-100'>
-                          <p className='mb-0'>Order Direction :</p>
+                          <p className='mb-0'>Order Direction</p>
                           <select 
                             className='form-control select2'
                             name='direction'
@@ -157,7 +157,7 @@ const ListSupplier = () => {
                       </div>
                       <div className='col-md-2'>
                         <label className='w-100'>
-                          <p className='mb-0'>Per Page :</p>
+                          <p className='mb-0'>Per Page</p>
                           <select 
                             className='form-control select2'
                             name='per_page'
@@ -183,7 +183,6 @@ const ListSupplier = () => {
                   {isLoading ? <Loader/> : 
                     <div className="table-responsive">
                       <table className="table table-hover table-striped table-bordered">
-                        {/* Table Header */}
                         <thead>
                           <tr>
                             <th>SL</th>
@@ -196,12 +195,11 @@ const ListSupplier = () => {
                             <th>Action</th>
                           </tr>
                         </thead>
-                        {/* Table Body */}
                         <tbody>
                           {suppliers.length > 0 ? suppliers.map((supplier, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
-                              <td>{supplier.name} {supplier.id}</td>
+                              <td>{supplier.name}</td>
                               <td>
                                 <p className="mb-0">Email : {supplier.email}</p>
                                 <p className="text-success">Phone : {supplier.phone}</p>
@@ -236,20 +234,19 @@ const ListSupplier = () => {
                             </tr>
                           )) : <NoDataFound/> }
                         </tbody>
-                        {/* Table Footer */}
                         <tfoot>
                           <tr>
                             <th>SL</th>
-                            <th>Name / Slug</th>
-                            <th>Serial</th>
+                            <th>Name</th>
+                            <th>Phone / Email</th>
                             <th>Status</th>
+                            <th>Photo</th>
                             <th>Created By</th>
                             <th>Date Time</th>
                             <th>Action</th>
                           </tr>
                         </tfoot>
                       </table>
-                      {/* Supplier Photo Modal */}
                       <CategoryPhotoModal
                         show={modalLogoShow}
                         onHide={() => setModalLogoShow(false)}
@@ -257,8 +254,6 @@ const ListSupplier = () => {
                         size={'800'}
                         photo={modalLogo}
                       />
-
-                      {/* Category Details Modal */}
                       <DetailsSupplier
                         show={modalShow}
                         onHide={() => setModalShow(false)}

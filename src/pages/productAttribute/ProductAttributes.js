@@ -378,6 +378,27 @@ const ProductAttributes = () => {
                   </div>
               )}
             </div>
+            {/* <div className="form-group col-md-6">
+              <label>Supplier</label>
+              <select
+                className={errors.supplier_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
+                name={'supplier_id'}
+                value={input.supplier_id}
+                onChange={handleInput}
+                placeholder={'Select product supplier'}
+              >
+                <option>Select Product Supplier</option>
+                {suppliers.map((supplier, index) => (
+                    <option value={supplier.id}
+                            key={index}>{supplier.name} - {supplier.phone}</option>
+                ))}
+              </select>
+              {errors.supplier_id && (
+                <div className="invalid-feedback">
+                  {errors.supplier_id[0]}
+                </div>
+              )}
+            </div> */}
             <div className="form-group">
               <label>Status</label>
               <select

@@ -6,129 +6,118 @@ import Constants from '../../Constants';
 import { useNavigate } from 'react-router-dom';
 
 const AddSalesManager = () => {
-    const navigate = useNavigate();
-    const [input, setInput] = useState({
-      status: 1,
-      division_id: "",
-      district_id: "",
-      sub_district_id: "",
-      area_id: "",
-    });
-    const [errors, setErrors] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [divisions, setDivisions] = useState([]);
-    const [districts, setDistricts] = useState([]);
-    const [subDistricts, setSubDistricts] = useState([]);
-    const [areas, setAreas] = useState([]);
-    const [shops, setShops] = useState([]);
+  const navigate = useNavigate();
+  const [input, setInput] = useState({
+    status: 1,
+    division_id: "",
+    district_id: "",
+    sub_district_id: "",
+    area_id: "",
+  })
+  const [errors, setErrors] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [divisions, setDivisions] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [subDistricts, setSubDistricts] = useState([])
+  const [areas, setAreas] = useState([])
 
-    const getShops = async () => {
-        try {
-          const res = await axios.get(`${Constants.BASE_URL}/get-shop-list`);
-          setShops(res.data);
-        } catch (error) {
-          console.error('Failed to fetch divisions:', error);
-        }
+  const getDivisions = async () => {
+    try {
+      const res = await axios.get(`${Constants.BASE_URL}/divisions`);
+      setDivisions(res.data);
+    } catch (error) {
+      console.error('Failed to fetch divisions:', error);
+    }
+  };
+
+  const getDistricts = async (division_id) => {
+    try {
+      const res = await axios.get(`${Constants.BASE_URL}/districts/${division_id}`);
+      setDistricts(res.data);
+    } catch (error) {
+      console.error('Failed to fetch districts:', error);
+    }
+  };
+
+  const getSubDistricts = async (district_id) => {
+    try {
+      const res = await axios.get(`${Constants.BASE_URL}/sub-districts/${district_id}`);
+      setSubDistricts(res.data);
+    } catch (error) {
+      console.error('Failed to fetch sub-districts:', error);
+    }
+  };
+
+  const getAreas = async (sub_district_id) => {
+    try {
+      const res = await axios.get(`${Constants.BASE_URL}/areas/${sub_district_id}`);
+      setAreas(res.data);
+    } catch (error) {
+      console.error('Failed to fetch areas:', error);
+    }
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInput((prevState) => ({ ...prevState, [name]: value }));
+
+    if (name === 'division_id') {
+      setDistricts([]);
+      setSubDistricts([]);
+      setAreas([]);
+      if (value) getDistricts(value);
+    } else if (name === 'district_id') {
+      setSubDistricts([]);
+      setAreas([]);
+      if (value) getSubDistricts(value);
+    } else if (name === 'sub_district_id') {
+      setAreas([]);
+      if (value) getAreas(value);
+    }
+  };
+
+  const handlePhoto = (e) => {
+    let file = e.target.files[0];
+    if (file) {
+      let reader = new FileReader();
+      reader.onloadend = () => {
+        setInput((prevState) => ({ ...prevState, [e.target.name]: reader.result }));
+        document.getElementById('fileLabel').innerText = file.name;
       };
-  
-    const getDivisions = async () => {
-      try {
-        const res = await axios.get(`${Constants.BASE_URL}/divisions`);
-        setDivisions(res.data);
-      } catch (error) {
-        console.error('Failed to fetch divisions:', error);
-      }
-    };
-  
-    const getDistricts = async (division_id) => {
-      try {
-        const res = await axios.get(`${Constants.BASE_URL}/districts/${division_id}`);
-        setDistricts(res.data);
-      } catch (error) {
-        console.error('Failed to fetch districts:', error);
-      }
-    };
-  
-    const getSubDistricts = async (district_id) => {
-      try {
-        const res = await axios.get(`${Constants.BASE_URL}/sub-districts/${district_id}`);
-        setSubDistricts(res.data);
-      } catch (error) {
-        console.error('Failed to fetch sub-districts:', error);
-      }
-    };
-  
-    const getAreas = async (sub_district_id) => {
-      try {
-        const res = await axios.get(`${Constants.BASE_URL}/areas/${sub_district_id}`);
-        setAreas(res.data);
-      } catch (error) {
-        console.error('Failed to fetch areas:', error);
-      }
-    };
-  
-    const handleInput = (e) => {
-      const { name, value } = e.target;
-      setInput((prevState) => ({ ...prevState, [name]: value }));
-  
-      if (name === 'division_id') {
-        setDistricts([]);
-        setSubDistricts([]);
-        setAreas([]);
-        if (value) getDistricts(value);
-      } else if (name === 'district_id') {
-        setSubDistricts([]);
-        setAreas([]);
-        if (value) getSubDistricts(value);
-      } else if (name === 'sub_district_id') {
-        setAreas([]);
-        if (value) getAreas(value);
-      }
-    };
-  
-    const handlePhoto = (e) => {
-      let file = e.target.files[0];
-      if (file) {
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          setInput((prevState) => ({ ...prevState, [e.target.name]: reader.result }));
-          document.getElementById('fileLabel').innerText = file.name;
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-  
-    const handleSalesManagerCreate = async (e) => {
-      e.preventDefault();
-      setIsLoading(true);
-      try {
-        const res = await axios.post(`${Constants.BASE_URL}/sales-manager`, input);
-        setIsLoading(false);
-        Swal.fire({
-          position: 'top-end',
-          icon: res.data.cls,
-          title: res.data.msg,
-          showConfirmButton: false,
-          toast: true,
-          timer: 1500,
-        });
-        if (res.data.flag === undefined) {
-          navigate('/sales-manager');
-        }
-      } catch (errors) {
-        setIsLoading(false);
-        if (errors.response.status === 422) {
-          setErrors(errors.response.data.errors);
-        }
-      }
-    };
-  
-    useEffect(() => {
-      getDivisions();
-      getShops();
-    }, []);
+      reader.readAsDataURL(file);
+    }
+  };
 
-    return (
+  const handleSalesManagerCreate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await axios.post(`${Constants.BASE_URL}/sales-manager`, input);
+      setIsLoading(false);
+      Swal.fire({
+        position: 'top-end',
+        icon: res.data.cls,
+        title: res.data.msg,
+        showConfirmButton: false,
+        toast: true,
+        timer: 1500,
+      });
+      if (res.data.flag === undefined) {
+        navigate('/sales-manager');
+      }
+    } catch (errors) {
+      setIsLoading(false);
+      if (errors.response.status === 422) {
+        setErrors(errors.response.data.errors);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getDivisions();
+  }, []);
+
+  return (
     <div className="content-wrapper">
       <section className="content-header">
         <Breadcrumb title="Add Sales Manager" breadcrumb="Form Data" />
@@ -143,7 +132,7 @@ const AddSalesManager = () => {
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Sales Manager Details</h3>
+                          <h3 className="card-title">Employee Details</h3>
                         </div>
                         <form>
                           <div className="card-body">
@@ -196,18 +185,6 @@ const AddSalesManager = () => {
                               {errors.email && <div className="invalid-feedback">{errors.email[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>NID/Passport/Driving License Number</label>
-                              <input
-                                type="text"
-                                name="nid"
-                                value={input.nid}
-                                onChange={handleInput}
-                                className={errors.nid ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter NID/Passport/Driving License Number"
-                              />
-                              {errors.nid && <div className="invalid-feedback">{errors.nid[0]}</div>}
-                            </div>
-                            <div className="form-group">
                               <label>Status</label>
                               <select
                                 name="status"
@@ -220,21 +197,6 @@ const AddSalesManager = () => {
                                 <option value={0}>Inactive</option>
                               </select>
                               {errors.status && <div className="invalid-feedback">{errors.status[0]}</div>}
-                            </div>
-                            <div className="form-group">
-                              <label>Select Shop</label>
-                              <select
-                                name="shop_id"
-                                value={input.shop_id}
-                                onChange={handleInput}
-                                className={errors.shop_id ? 'form-control select2 is-invalid' : 'form-control'}
-                              >
-                                <option value="" disabled={true} selected>Select Shop</option>
-                                {shops.map((shop, index) => (
-                                    <option key={index} value={shop.id}>{shop.name}</option>
-                                ))}
-                              </select>
-                              {errors.shop_id && <div className="invalid-feedback">{errors.shop_id[0]}</div>}
                             </div>
                             <div className="form-group">
                               <label>Bio</label>
@@ -262,21 +224,6 @@ const AddSalesManager = () => {
                                 </div>
                               )}
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">NID/Pasport/Driving License</label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input type="file" name="nid_photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
-                                  <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                                </div>
-                                {errors.nid_photo && <div className="invalid-feedback">{errors.nid_photo[0]}</div>}
-                              </div>
-                              {input.nid_photo && (
-                                <div className="card-body">
-                                  <img className="img-fluid w-50 h-50" src={input.nid_photo} alt="photo" />
-                                </div>
-                              )}
-                            </div>
                           </div>
                         </form>
                       </div>
@@ -284,7 +231,7 @@ const AddSalesManager = () => {
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Sales Manager Address</h3>
+                          <h3 className="card-title">Employee Address</h3>
                         </div>
                         <form>
                           <div className="card-body">

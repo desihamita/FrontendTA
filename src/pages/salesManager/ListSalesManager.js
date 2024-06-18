@@ -95,7 +95,7 @@ const ListSalesManager = () => {
     return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Sales Manager List" breadcrumb="sales" />
+        <Breadcrumb title="Employee List" breadcrumb="employee" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -182,20 +182,18 @@ const ListSalesManager = () => {
                   {isLoading ? <Loader/> : 
                     <div className="table-responsive">
                       <table className="table table-hover table-striped table-bordered">
-                        {/* Table Header */}
                         <thead>
                           <tr>
                             <th>SL</th>
                             <th>Name</th>
                             <th>Phone / Email</th>
-                            <th>Status / Shop</th>
+                            <th>Status</th>
                             <th>Photo</th>
                             <th>Created By</th>
                             <th>Date Time</th>
                             <th>Action</th>
                           </tr>
                         </thead>
-                        {/* Table Body */}
                         <tbody>
                           {salesManagers.length > 0 ? salesManagers.map((salesManager, index) => (
                             <tr key={index}>
@@ -207,7 +205,6 @@ const ListSalesManager = () => {
                               </td>
                               <td>
                                 <p className="mb-0">Status : {salesManager.status}</p>
-                                <p className="text-success">Shop : {salesManager.shop}</p>
                               </td>
                               <td>
                                 <img
@@ -238,20 +235,19 @@ const ListSalesManager = () => {
                             </tr>
                           )) : <NoDataFound/> }
                         </tbody>
-                        {/* Table Footer */}
                         <tfoot>
                           <tr>
                             <th>SL</th>
-                            <th>Name / Slug</th>
-                            <th>Serial</th>
+                            <th>Name</th>
+                            <th>Phone / Email</th>
                             <th>Status</th>
+                            <th>Photo</th>
                             <th>Created By</th>
                             <th>Date Time</th>
                             <th>Action</th>
                           </tr>
                         </tfoot>
                       </table>
-                      {/* Supplier Photo Modal */}
                       <CategoryPhotoModal
                         show={modalLogoShow}
                         onHide={() => setModalLogoShow(false)}
@@ -259,8 +255,6 @@ const ListSalesManager = () => {
                         size={'800'}
                         photo={modalLogo}
                       />
-
-                      {/* Category Details Modal */}
                       <DetailsSupplier
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -271,7 +265,6 @@ const ListSalesManager = () => {
                     </div>
                   }
                 </div>
-                {/* Pagination */}
                 <div className="card-footer d-flex justify-content-between align-items-center">
                   <div className="data_tables_info">
                       Showing {startFrom} to {startFrom + salesManagers.length - 1} of {totalItemsCount} entries

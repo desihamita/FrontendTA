@@ -44,30 +44,6 @@ const Sidebar = () => {
                 <p>Dashboard</p>
               </Link>
             </li>
-            <li className="nav-header">MASTER PRODUCT</li>
-            <li className="nav-item">
-              <Link to="#" className="nav-link">
-                <i className="fas fa-solid fa-cube nav-icon"></i>
-                <p>
-                  Master Product
-                  <i className="right fas fa-angle-left"></i>
-                </p>
-              </Link>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/product-attribute' className="nav-link">
-                    <i className="far fa-circle nav-icon"></i>
-                    <p>Ingredients</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/product' className="nav-link">
-                    <i className="far fa-circle nav-icon"></i>
-                    <p>Products</p>
-                  </Link>
-                </li>
-              </ul>
-            </li>
             {isAdmin && (
               <>
                 <li className="nav-header">MASTER DATA</li>
@@ -106,37 +82,52 @@ const Sidebar = () => {
                     </li>
                   </ul>
                 </li>
-                <li className="nav-header">SHOP</li>
+              </>
+            )}
+            <li className="nav-header">MASTER PRODUCT</li>
+            <li className="nav-item">
+              <Link to="#" className="nav-link">
+                <i className="fas fa-solid fa-cube nav-icon"></i>
+                <p>
+                  Master Product
+                  <i className="right fas fa-angle-left"></i>
+                </p>
+              </Link>
+              <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <Link to='/shop' className="nav-link">
-                    <i className="fas fa-solid fa-cart-plus nav-icon"></i>
-                    <p>Shops</p>
+                  <Link to='/product-attribute' className="nav-link">
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Ingredients</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to='/sales-manager' className="nav-link">
-                    <i className="far fa-solid fa-user nav-icon"></i>
-                    <p>Sales Manager</p>
+                  <Link to='/product' className="nav-link">
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Products</p>
                   </Link>
                 </li>
-                <li className="nav-header">TRANSACTION</li>
-                <li className="nav-item">
-                  <Link to='/' className="nav-link">
-                    <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                    <p>Orders</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='#' className="nav-link">
-                    <i className="fas fa-file nav-icon" />
-                    <p>Stock Out</p>
-                  </Link>
-                </li>
+              </ul>
+            </li>
+            <li className="nav-header">MASTER TRANSAKSI</li>
+            <li className="nav-item">
+              <Link to='/order' className="nav-link">
+                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
+                <p>Orders Ingredients</p>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to='/order' className="nav-link">
+                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
+                <p>Orders Products</p>
+              </Link>
+            </li>
+            {isAdmin && (
+              <>
                 <li className="nav-header">REPORT</li>
                 <li className="nav-item">
-                  <Link to='#' className="nav-link">
+                  <Link to='' className="nav-link">
                     <i className="fas fa-solid fa-book nav-icon"></i>
-                    <p>Lap. Barang Masuk</p>
+                    <p>Order Report</p>
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -145,24 +136,44 @@ const Sidebar = () => {
                     <p>Lap. Barang Keluar</p>
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to='/reports' className="nav-link">
+                    <i className="fas fa-solid fa-book nav-icon"></i>
+                    <p>Sales Report</p>
+                  </Link>
+                </li>
               </>
             )}
-            
-            <li className="nav-header">MASTER TRANSAKSI</li>
+            <li className="nav-header">GENERATE BARCODE</li>
             <li className="nav-item">
-              <Link to='/order' className="nav-link">
+              <Link to='/generate-barcode-ingredients' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Orders</p>
+                <p>Ingredients</p>
               </Link>
             </li>
-            <li className="nav-header">ACCESSORIES</li>
             <li className="nav-item">
               <Link to='/generate-barcode' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Generate Barcode</p>
+                <p>Product</p>
               </Link>
             </li>
             <li className="nav-header">SETTING</li>
+            {isAdmin && (
+              <>
+              <li className="nav-item">
+                <Link to='/shop' className="nav-link">
+                  <i className="far fa-solid fa-user nav-icon"></i>
+                  <p>Shop</p>
+                </Link>
+              </li>
+                <li className="nav-item">
+                  <Link to='/sales-manager' className="nav-link">
+                    <i className="far fa-solid fa-user nav-icon"></i>
+                    <p>Data Users</p>
+                  </Link>
+                </li>
+              </>
+            )}
             <li className="nav-item">
               <Link to='#' className="nav-link">
                 <i className="fas fa-solid fa-user nav-icon"></i>

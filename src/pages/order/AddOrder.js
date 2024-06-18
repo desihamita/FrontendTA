@@ -25,6 +25,7 @@ const AddOrder = () => {
   const [carts, setCarts] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [showOrderConfirmationModel, setShowOrderConfirmationModel] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
@@ -38,7 +39,25 @@ const AddOrder = () => {
     pay_able: 0,
     customer: '',
     customer_id: 0,
+    paid_amount: 0,
+    due_amount: 0,
+    payment_method_id: 1,
   });
+
+  const getPaymentMethods = () => {
+    axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
+      setPaymentMethods(res.data);
+    }).catch((error) => {
+      console.error('Error fetching payment methods:', error);
+    });
+  }
+
+  const handleOrderPlace = () => {
+    setIsLoading(true)
+    axios.post(`${Constants.BASE_URL}/order`, {carts: carts, 'order_summary' : orderSummary}).then((res) => {
+      setIsLoading(false);
+    });
+  }
 
   const handleSelectCustomer = (customer) => () => {
     setOrders(prevState => ({ ...prevState, customer_id: customer.id }));
@@ -48,8 +67,17 @@ const AddOrder = () => {
 
   const handleCustomerSearch = (e) => {
     setCustomerInput(e.target.value);
+    getCustomers(e.target.value);
   }
 
+  const getCustomers = () => {
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/customer?&search=${customerInput}`).then((res) => {
+      setCustomers(res.data);
+      setIsLoading(false);
+    });
+  }
+  
   const handleIncrease = (id) => {
     if(carts[id].stock > carts[id].quantity) {
       setCarts(prevState => ({
@@ -71,6 +99,10 @@ const AddOrder = () => {
       }))
     }
   }
+
+  const handleInput = (e) => {
+    setInput((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+  };
 
   const handleCart = (id) => {
     products.map((product, index) => {
@@ -95,18 +127,6 @@ const AddOrder = () => {
         }
       }
     })
-  };
-
-  const getCustomers = () => {
-    setIsLoading(true);
-    axios.get(`${Constants.BASE_URL}/customer?&search=${customerInput}`).then((res) => {
-      setCustomers(res.data);
-      setIsLoading(false);
-    });
-  }
-
-  const handleInput = (e) => {
-    setInput((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
   const handleRemoveCart = (id) => {
@@ -150,6 +170,7 @@ const AddOrder = () => {
     let amount = 0;
     let discount = 0;
     let pay_able = 0;
+    let paid_amount = 0;
 
     Object.keys(carts).map((key) => {
       items += carts[key].quantity;
@@ -164,15 +185,28 @@ const AddOrder = () => {
       amount: amount,
       discount: discount,
       pay_able: pay_able,
+      paid_amount: pay_able,
     }));
   }
 
-  useEffect(() => {
-    getCustomers()
-  }, [customerInput])
+  const handleOrderSummaryInput = (e) => {
+    if(e.target.name == 'paid_amount' && orderSummary.pay_able >= e.target.value) {
+      setOrderSummary(prevState => ({
+        ...prevState,
+        paid_amount: e.target.value,
+        due_amount: orderSummary.pay_able - e.target.value,
+      }));
+    } else if(e.target.name == 'payment_method_id') {
+      setOrderSummary(prevState => ({
+        ...prevState,
+        payment_method_id: e.target.value,
+      }));
+    }
+  }
 
   useEffect(() => {
     getProducts();
+    getPaymentMethods();
   }, []);
 
   useEffect(() => {
@@ -227,7 +261,7 @@ const AddOrder = () => {
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{product.name}</h4>
                               <div className="attachment-text">
-                                <p className="mb-0">Original Price : <small>{GlobalFunction.formatRupiah(product.price)}</small></p>
+                                <p className="mb-0">Original Price : <small>{product.price}</small></p>
 
                                 <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.discount)}</small></p>
 
@@ -338,6 +372,7 @@ const AddOrder = () => {
                               name='search'
                               value={customerInput}
                               onChange={handleCustomerSearch}
+                              onKeyUp={getCustomers}
                               placeholder='Search'
                             />
                             <div className="input-group-append">
@@ -380,6 +415,10 @@ const AddOrder = () => {
         onHide={() => setShowOrderConfirmationModel(false)}
         orderSummary={orderSummary}
         carts={carts}
+        is_loading={isLoading}
+        handleOrderPlace={handleOrderPlace}
+        handleOrderSummaryInput={handleOrderSummaryInput}
+        paymentMethods={paymentMethods}
       />
     </>
   );

@@ -7,159 +7,110 @@ import { useNavigate } from 'react-router-dom';
 
 const ProductAdd = () => {
   const navigate = useNavigate();
-    const [input, setInput] = useState({status: 1})
-    const [attribute_input, setAttribute_input] = useState({})
-    const [specification_input, setSpecification_input] = useState({})
-    const [errors, setErrors] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    const [categories, setCategories] = useState([])
-    const [subCategories, setSubCategories] = useState([])
-    const [brands, setBrands] = useState([])
-    const [countries, setCountries] = useState([])
-    const [suppliers, setSuppliers] = useState([])
-    const [attributes, setAttributes] = useState([])
-    const [attributeFiled, setAttributeField] = useState([])
-    const [attributeFieldId, setAttributeFieldId] = useState(1)
-    const [specificationFiled, setSpecificationFiled] = useState([])
-    const [specificationFiledId, setSpecificationFiledId] = useState(1)
+  const [input, setInput] = useState({status: 1})
+  const [attribute_input, setAttribute_input] = useState({})
+  const [errors, setErrors] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [subCategories, setSubCategories] = useState([])
+  const [attributes, setAttributes] = useState([])
+  const [attributeFiled, setAttributeField] = useState([])
+  const [attributeFieldId, setAttributeFieldId] = useState(1)
 
-    const handleSpecificationFieldRemove = (id) => {
-      setSpecificationFiled(oldValues => {
-        return oldValues.filter(specificationFiled => specificationFiled !== id)
-      })
-      setSpecification_input(current => {
-        const copy = {...current};
-        delete copy[id];
-        return copy;
-      })
-      setSpecificationFiledId(specificationFiledId-1)
-    }
+  const handleAttributeFieldsRemove = (id) => {
+    setAttributeField(oldValues => {
+      return oldValues.filter(attributeFiled => attributeFiled !== id)
+    })
+    setAttribute_input(current => {
+      const copy = {...current};
+      delete copy[id];
+      return copy;
+    })
+    setAttributeFieldId(attributeFieldId-1)
+  }
 
-    const handleSpecificationFields = (id) => {
-      setSpecificationFiledId(specificationFiledId+1)
-      setSpecificationFiled(prevState => [...prevState, specificationFiledId])
+  const handleAttributeFields = (id) => {
+    if (attributes.length >= attributeFieldId){
+      setAttributeFieldId(attributeFieldId+1)
+      setAttributeField(prevState => [...prevState, attributeFieldId])
     }
+  }
 
-    const handleAttributeFieldsRemove = (id) => {
-      setAttributeField(oldValues => {
-        return oldValues.filter(attributeFiled => attributeFiled !== id)
-      })
-      setAttribute_input(current => {
-        const copy = {...current};
-        delete copy[id];
-        return copy;
-      })
-      setAttributeFieldId(attributeFieldId-1)
-    }
-    const handleAttributeFields = (id) => {
-      if (attributes.length >= attributeFieldId){
-        setAttributeFieldId(attributeFieldId+1)
-        setAttributeField(prevState => [...prevState, attributeFieldId])
+  const handleAttributeInput = (e, id) => {
+    setAttribute_input(prevState => ({
+      ...prevState,
+      [id]:{
+          ...prevState[id], [e.target.name]: e.target.value
+      }
+    }))
+  }
+
+  const getAttributes = () => {
+    axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
+      setAttributes(res.data)
+    })
+  }
+
+  const getCategories = () => {
+    axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
+      setCategories(res.data)
+    })
+  }
+
+  const getSubCategories = (category_id) => {
+    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
+      setSubCategories(res.data)
+    })
+  }
+
+  const handleInput = (e) => {
+    if (e.target.name === 'name') {
+      let slug = e.target.value
+      slug = slug.toLowerCase()
+      slug = slug.replaceAll(' ', '-')
+      setInput(prevState => ({...prevState, slug: slug}))
+    } else if (e.target.name === 'category_id') {
+      let category_id = parseInt(e.target.value);
+      if (!Number.isNaN(category_id)) {
+        getSubCategories(e.target.value)
       }
     }
-    const handleSpecificationInput = (e, id) => {
-      setSpecification_input(prevState => ({
-        ...prevState,
-        [id]:{
-            ...prevState[id], [e.target.name]: e.target.value
-        }
-      }))
-    }
-    const handleAttributeInput = (e, id) => {
-      setAttribute_input(prevState => ({
-        ...prevState,
-        [id]:{
-            ...prevState[id], [e.target.name]: e.target.value
-        }
-      }))
-    }
-    const getAttributes = () => {
-      axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
-        setAttributes(res.data)
-      })
-    }
-    const getSuppliers = () => {
-      axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
-        setSuppliers(res.data)
-      })
-    }
-    const getCountries = () => {
-      axios.get(`${Constants.BASE_URL}/get-country-list`).then(res => {
-        setCountries(res.data)
-      })
-    }
-    const getCategories = () => {
-      axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-        setCategories(res.data)
-      })
-    }
-    const getBrands = () => {
-      axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
-        setBrands(res.data)
-      })
-    }
 
-    const getSubCategories = (category_id) => {
-      axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-        setSubCategories(res.data)
+    setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
+  }
+  
+  const handleProductCreate = (e) => {
+    e.preventDefault(e)
+    setIsLoading(true)
+    axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
+      setIsLoading(false)
+      Swal.fire({
+        position: 'top-end',
+        icon: res.data.cls,
+        title: res.data.msg,
+        showConfirmButton: false,
+        toast: true,
+        timer: 1500
       })
-    }
-
-    const handleInput = (e) => {
-      if (e.target.name === 'name') {
-        let slug = e.target.value
-        slug = slug.toLowerCase()
-        slug = slug.replaceAll(' ', '-')
-        setInput(prevState => ({...prevState, slug: slug}))
-      } else if (e.target.name === 'category_id') {
-        let category_id = parseInt(e.target.value);
-        if (!Number.isNaN(category_id)) {
-          getSubCategories(e.target.value)
-        }
+      if (res.data.product_id !== 'undefined') {
+        navigate('/product/photo/'+res.data.product_id);
       }
-
-      setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
-    }
-    
-    const handleProductCreate = (e) => {
-      e.preventDefault(e)
-      setIsLoading(true)
-      axios.post(`${Constants.BASE_URL}/product`, input).then(res => {
-        setIsLoading(false)
-        Swal.fire({
-          position: 'top-end',
-          icon: res.data.cls,
-          title: res.data.msg,
-          showConfirmButton: false,
-          toast: true,
-          timer: 1500
-        })
-        if (res.data.product_id !== 'undefined') {
-          navigate('/product/photo/'+res.data.product_id);
-        }
-      }).catch(errors => {
-        setIsLoading(false)
-        if (errors.response.status === 422) {
-          setErrors(errors.response.data.errors)
-        }
-      })
-    }
+    }).catch(errors => {
+      setIsLoading(false)
+      if (errors.response.status === 422) {
+        setErrors(errors.response.data.errors)
+      }
+    })
+  }
 
   useEffect(() => {
     getCategories()
-    getBrands()
-    getCountries()
-    getSuppliers()
     getAttributes()
   }, []);
 
   useEffect(()=>{
     setInput(prevState => ({...prevState, attributes: attribute_input}))
   }, [attribute_input])
-
-  useEffect(()=>{
-    setInput(prevState => ({...prevState, specifications: specification_input}))
-  }, [specification_input])
 
   return (
     <div className="content-wrapper">
@@ -248,67 +199,6 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Select Brands</label>
-                      <select
-                        className={errors.brand_id !== undefined ? 'form-control is-invalid' : 'form-control'}
-                        name={'brand_id'}
-                        value={input.brand_id}
-                        onChange={handleInput}
-                        placeholder={'Select product brand'}
-                      >
-                        <option>Select Brand</option>
-                        {brands.map((brand, index) => (
-                            <option value={brand.id} key={index}>{brand.name}</option>
-                        ))}
-                      </select>
-                      {errors.brand_id && (
-                        <div className="invalid-feedback">
-                          {errors.brand_id[0]}
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label>Country</label>
-                      <select
-                        className={errors.country_id !== undefined ? 'form-control is-invalid' : 'form-control '}
-                        name={'country_id'}
-                        value={input.country_id}
-                        onChange={handleInput}
-                        placeholder={'Select product origin'}
-                      >
-                        <option>Select Product Origin</option>
-                        {countries.map((country, index) => (
-                            <option value={country.id} key={index}>{country.name}</option>
-                        ))}
-                      </select>
-                      {errors.country && (
-                        <div className="invalid-feedback">
-                          {errors.country[0]}
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label>Supplier</label>
-                      <select
-                        className={errors.supplier_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
-                        name={'supplier_id'}
-                        value={input.supplier_id}
-                        onChange={handleInput}
-                        placeholder={'Select product supplier'}
-                      >
-                        <option>Select Product Supplier</option>
-                        {suppliers.map((supplier, index) => (
-                            <option value={supplier.id}
-                                    key={index}>{supplier.name} - {supplier.phone}</option>
-                        ))}
-                      </select>
-                      {errors.supplier_id && (
-                        <div className="invalid-feedback">
-                          {errors.supplier_id[0]}
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group col-md-6">
                       <label>Status</label>
                       <select
                         className={errors.status !== undefined ? 'form-control is-invalid' : 'form-control'}
@@ -327,7 +217,7 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Attribute </label>
+                      <label>Ingredients </label>
                       <button 
                         type="button"
                         className="btn btn-primary btn-sm ml-2"
@@ -345,7 +235,7 @@ const ProductAdd = () => {
                               onChange={(e)=>handleAttributeInput(e, id)}
                               placeholder={'Select product attribute'}
                             >
-                              <option>Select Attribute</option>
+                              <option>Select Ingredients</option>
                               {attributes.map((value, index)=>(
                                   <option value={value.id}>{value.name}</option>
                               ))}
@@ -388,57 +278,6 @@ const ProductAdd = () => {
                           </div>
                       </div>
                     ))}
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label>Specification </label>
-                      <button 
-                        type="button"
-                        className="btn btn-primary btn-sm ml-2"
-                        onClick={handleSpecificationFields}
-                      >
-                        <i className="fas fa-solid fa-plus"/>
-                      </button>
-                      {specificationFiled.map((id, ind)=> (
-                        <div key={ind} className="row my-2 align-items-baseline">
-                          <div className="col-md-5">
-                            <input
-                              className={'form-control'}
-                              type={'text'}
-                              name={'name'}
-                              value={specification_input[id] !== undefined ? specification_input[id].name : null}
-                              onChange={(e)=>handleSpecificationInput(e, id)}
-                              placeholder={'Enter Name'}
-                            />
-                            {errors.name && (
-                              <div className="invalid-feedback">
-                                {errors.name[0]}
-                              </div>
-                            )}
-                          </div>
-                          <div className='col-md-5'>
-                            <input
-                              className='form-control'
-                              type={'text'}
-                              name={'value'}
-                              value={specification_input[id] !== undefined ? specification_input[id].value : null}
-                              onChange={(e)=>handleSpecificationInput(e, id)}
-                              placeholder={'Enter value'}
-                            />
-                            {errors.name && (
-                              <div className="invalid-feedback">
-                                {errors.name[0]}
-                              </div>
-                            )}
-                          </div>
-                          <div className="col-md-2">
-                            {specificationFiled.length -1 === ind ?
-                                <button className={'btn btn-danger mt-0'} onClick={()=>handleSpecificationFieldRemove(id)}>
-                                    <i className="fas fa-solid fa-minus"/>
-                                </button> : null
-                            }
-                          </div>
-                        </div>
-                      ))}
                     </div>
                     <div className="form-group col-md-6">
                       <label>Cost</label>
