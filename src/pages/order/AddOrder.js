@@ -9,6 +9,7 @@ import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConf
 import GlobalFunction from '../../GlobalFunction';
 
 const AddOrder = () => {
+  const navigate = useNavigate()
   const [input, setInput] = useState({
     order_by: 'created_at',
     per_page: 10,
@@ -67,8 +68,8 @@ const AddOrder = () => {
 
       if(res.data.flag != undefined) {
         setShowOrderConfirmationModel(false)
+        navigate(`/order/details/${res.data.order_id}`) 
       }
-      
       setIsLoading(false);
     });
   }
