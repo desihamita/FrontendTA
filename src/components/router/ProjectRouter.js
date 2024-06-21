@@ -32,6 +32,7 @@ import AddOrder from '../../pages/order/AddOrder';
 import OrderDetails from '../../pages/order/OrderDetails';
 import BarcodeComponent from '../modules/barcode/BarcodeComponent'
 import Reports from '../../pages/report/Reports';
+import SalesReport from '../../pages/report/SalesReport';
 
 const ProjectRouter = createBrowserRouter([
   {
@@ -151,8 +152,8 @@ const ProjectRouter = createBrowserRouter([
         element: <BarcodeComponent />,
       },
       {
-        path: '/reports',
-        element: <Reports />,
+        path: '/sales-reports',
+        element: <SalesReport/>,
       },
       {
         path: '/error500',

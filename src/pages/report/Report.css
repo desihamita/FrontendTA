@@ -1,0 +1,12 @@
+.report-card {
+    box-shadow: 0 0 5px silver;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.report-card:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+h6, h4 {
+    font-weight: 100;
+}

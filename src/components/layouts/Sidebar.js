@@ -137,7 +137,7 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to='/reports' className="nav-link">
+                  <Link to='/sales-reports' className="nav-link">
                     <i className="fas fa-solid fa-book nav-icon"></i>
                     <p>Sales Report</p>
                   </Link>
@@ -157,6 +157,12 @@ const Sidebar = () => {
                 <p>Product</p>
               </Link>
             </li>
+                <li className="nav-item">
+                  <Link to='/sales-reports' className="nav-link">
+                    <i className="fas fa-solid fa-book nav-icon"></i>
+                    <p>Sales Report</p>
+                  </Link>
+                </li>
             <li className="nav-header">SETTING</li>
             {isAdmin && (
               <>
