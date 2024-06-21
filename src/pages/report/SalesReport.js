@@ -36,7 +36,7 @@ const SalesReport = () => {
                                         <i class="fas fa-shopping-cart fa-2x"></i>
                                         <div className="media-body ml-3">
                                             <h6 className="mt-0">Total Sales</h6>
-                                            <h4>12.258</h4>
+                                            <h4>{report.total_sale}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -49,33 +49,7 @@ const SalesReport = () => {
                                         <i class="fas fa-cart-plus fa-2x"></i>
                                         <div className="media-body ml-3">
                                             <h6 className="mt-0">Total Purchase</h6>
-                                            <h4>12.258</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-undo fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Total Sales Return</h6>
-                                            <h4>12.258</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-undo fa-flip-horizontal fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Total Purchase Return</h6>
-                                            <h4>12.258</h4>
+                                            <h4>{report.total_purchase}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +62,7 @@ const SalesReport = () => {
                                         <i class="fas fa-hand-holding-usd fa-2x"></i>
                                         <div className="media-body ml-3">
                                             <h6 className="mt-0">Today Sale</h6>
-                                            <h4>12.258</h4>
+                                            <h4>{report.total_sale_today}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -98,36 +72,10 @@ const SalesReport = () => {
                             <div className='card report-card'>
                                 <div className='card-body'>
                                     <div className="media align-items-center">
-                                        <i class="fas fa-undo fa-flip-horizontal fa-2x" rotation={250}></i>
+                                        <i class="fas fa-undo fa-flip-horizontal fa-2x"></i>
                                         <div className="media-body ml-3">
                                             <h6 className="mt-0">Today Purchase</h6>
-                                            <h4>12.258</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-exchange-alt fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Today Sale Return</h6>
-                                            <h4>12.258</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-exchange-alt fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Purchase Return Today</h6>
-                                            <h4>12.258</h4>
+                                            <h4>{report.total_purchase_today}</h4>
                                         </div>
                                     </div>
                                 </div>
