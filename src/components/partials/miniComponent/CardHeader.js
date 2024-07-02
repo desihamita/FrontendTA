@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom'
 const CardHeader = (props) => {
   return (
     <div>
-        <Link to={props.add} className="btn btn-primary mr-2">Add</Link>
-        <button className="btn btn-secondary mr-2">PDF</button>
-        <button className="btn btn-success mr-2">Excel</button>
+        {props.hide == undefined ? 
+          <Link to={props.link}><button className={`mr-2 ${props.btn}`}><i className={`mr-2 ${props.icon}`}></i>{props.btnText}</button></Link>
+          : ''
+        }
     </div>
   )
 }

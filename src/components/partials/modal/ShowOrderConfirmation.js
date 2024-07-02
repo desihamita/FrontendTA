@@ -33,15 +33,19 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                 <Modal.Body>
                     <Container>
                         <Row className="justify-content-md-center">
-                            <Col md="8">
+                            <Col md="10">
                                 <Card>
                                     <Card.Header className="text-center">
-                                        <img src={Logo} alt='logo' className='img-fluid' />
-                                        <p>123 Main Street, Anytown, USA</p>
-                                        <p>Phone: (123) 456-7890</p>
+                                        {Object.keys(branch).length > 0 ? 
+                                            <>
+                                            <img src={branch.logo} alt='logo' className='img-fluid' />
+                                            <p><strong>{branch.name}</strong></p>
+                                            <p>{branch.address.district} {branch.address.subDistrict} {branch.address.landmark}</p>
+                                            <p>Phone: {branch.phone}</p>
+                                            </> : null
+                                        }
                                     </Card.Header>
                                     <Card.Body>
-                                        <h5>Order Details</h5>
                                         <Row>
                                             <dt className="col-sm-4">Date</dt>
                                             <dd className="col-sm-8">

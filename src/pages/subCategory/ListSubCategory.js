@@ -17,20 +17,21 @@ const ListSubCategory = () => {
         per_page : 10,
         direction : 'asc',
         search : '',
-    });
+    })
 
     const [isLoading, setIsLoading] = useState(false)
     const [category, setCategory] = useState([])
+    const [columns, setColumns] = useState([])
 
-    const [itemsCountPerPage, setitemsCountPerPage] = useState(0);
-    const [totalItemsCount, setTotalItemsCount] = useState(1);
-    const [startFrom, setStartFrom] = useState(1);
-    const [activePage, setActivePage] = useState(1);
+    const [itemsCountPerPage, setitemsCountPerPage] = useState(0)
+    const [totalItemsCount, setTotalItemsCount] = useState(1)
+    const [startFrom, setStartFrom] = useState(1)
+    const [activePage, setActivePage] = useState(1)
 
-    const [modalShow, setModalShow] = useState(false);
-    const [modalPhotoShow, setModalPhotoShow] = useState(false);
-    const [categories, setCategories] = useState([]);
-    const [modalPhoto, setModalPhoto] = useState('');
+    const [modalShow, setModalShow] = useState(false)
+    const [modalPhotoShow, setModalPhotoShow] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [modalPhoto, setModalPhoto] = useState('')
 
     const handleInput = (e) => {
         setInput(prevState => ({...prevState, [e.target.name] : e.target.value}));
@@ -85,208 +86,205 @@ const ListSubCategory = () => {
             }
         });
     }
+
+    const getColumns = () => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-column`).then(res => {
+            setColumns(res.data)
+        });
+    }
     
     useEffect(() => {
-        getCategories();
+        getCategories()
+        getColumns()
     }, []);
+
     return (
     <div className="content-wrapper">
         <section className="content-header">
             <Breadcrumb title="Sub Category List" breadcrumb="Sub Category" />
         </section>
         <section className="content">
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="card card-outline card-warning">
-                            <div className="card-header">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <CardHeader add={'/sub-category/create'} />
-                                </div>
+            <div className="card">
+                <div className="card-header">
+                    <CardHeader 
+                        link={'/sub-category/create'} 
+                        btnText="Add Sub Category"
+                        btn="btn btn-warning"
+                        icon="fas fa-plus"
+                    />
+                </div>
+                <div className="card-body">
+                    <div className='search-area mb-2'>
+                        <div className='row'>
+                            <div className='col-md-3'>
+                                <label className='w-100'>
+                                <p className='mb-0'>Search</p>
+                                <input 
+                                    className='form-control '
+                                    type='search'
+                                    name='search'
+                                    value={input.search}
+                                    onChange={handleInput}
+                                    placeholder='Search'
+                                />
+                                </label>
                             </div>
-                            <div className="card-body">
-                                <div className='search-area mb-2'>
-                                    <div className='row'>
-                                        <div className='col-md-3'>
-                                            <label className='w-100'>
-                                            <p className='mb-0'>Search : </p>
-                                            <input 
-                                                className='form-control '
-                                                type='search'
-                                                name='search'
-                                                value={input.search}
-                                                onChange={handleInput}
-                                                placeholder='Search'
-                                            />
-                                            </label>
-                                        </div>
-                                        <div className='col-md-3'>
-                                            <label className='w-100'>
-                                            <p className='mb-0'>Order By : </p>
-                                            <select 
-                                                className='form-control select2'
-                                                name='order_by'
-                                                value={input.order_by}
-                                                onChange={handleInput}
-                                            >
-                                                <option value={'name'}>Name</option>
-                                                <option value={'created_at'}>Created At</option>
-                                                <option value={'updated_at'}>Updated At</option>
-                                                <option value={'serial'}>Serial</option>
-                                            </select>
-                                            </label>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <label className='w-100'>
-                                            <p className='mb-0'>Order Direction : </p>
-                                            <select 
-                                                className='form-control select2'
-                                                name='direction'
-                                                value={input.direction}
-                                                onChange={handleInput}
-                                            >
-                                                <option value={'asc'}>ASC</option>
-                                                <option value={'desc'}>DESC</option>
-                                            </select>
-                                            </label>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <label className='w-100'>
-                                            <p className='mb-0'>Per Page : </p>
-                                            <select 
-                                                className='form-control select2'
-                                                name='per_page'
-                                                value={input.per_page}
-                                                onChange={handleInput}
-                                            >
-                                                <option value={10}>10</option>
-                                                <option value={25}>25</option>
-                                                <option value={50}>50</option>
-                                                <option value={100}>100</option>
-                                            </select>
-                                            </label>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <div className='d-grid mt-4'>
-                                                <button className='btn btn-warning w-100' onClick={() => getCategories(1)}>
-                                                    <i className="fas fa-search"></i> Search
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {isLoading ? <Loader/> : 
-                                    <div className="table-responsive">
-                                        <table className="table table-hover table-striped table-bordered">
-                                        {/* Table Header */}
-                                        <thead>
-                                            <tr>
-                                                <th>SL</th>
-                                                <th>Name / SLug / Category</th>
-                                                <th>Serial / Status</th>
-                                                <th>Photo</th>
-                                                <th>Created By</th>
-                                                <th>Date Time</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        {/* Table Body */}
-                                        <tbody>
-                                        {Object.keys(categories).length > 0 ? categories.map((category, index) => (
-                                            <tr key={index}>
-                                                <td>{startFrom + index}</td>
-                                                <td>
-                                                    <p className="mb-0">Name : {category.name}</p>
-                                                    <p className="text-success mb-0">Slug : {category.slug}</p>
-                                                    <p className="text-secondary">Category : {category.category_name}</p>
-                                                </td>
-                                                <td>
-                                                    <p className="mb-0">Serial : {category.serial}</p>
-                                                    <p className="text-success">Status : {category.status}</p>
-                                                </td>
-                                                <td>
-                                                    <img
-                                                    src={category.photo}
-                                                    alt={category.name}
-                                                    className="img-thumbnail table-image"
-                                                    width={75}
-                                                    style={{ cursor: 'pointer' }}
-                                                    onClick={() => handlePhotoModal(category.photo_full)}
-                                                    />
-                                                </td>
-                                                <td>{category.created_by}</td>
-                                                <td>
-                                                    <p className="mb-0">
-                                                    <small>Created : {category.created_at}</small>
-                                                    </p>
-                                                    <p className="text-success">
-                                                    <small>Updated : {category.updated_at}</small>
-                                                    </p>
-                                                </td>
-                                                <td className='m-1'>
-                                                    <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
-
-                                                    <Link to={`/sub-category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-
-                                                    <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                        )) : <NoDataFound/> }
-                                        </tbody>
-                                        {/* Table Footer */}
-                                        <tfoot>
-                                        <tr>
-                                            <th>SL</th>
-                                            <th>Name / SLug</th>
-                                            <th>Serial</th>
-                                            <th>Status</th>
-                                            <th>Created By</th>
-                                            <th>Date Time</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </tfoot>
-                                        </table>
-                                        {/* Category Photo Modal */}
-                                        <CategoryPhotoModal
-                                            show={modalPhotoShow}
-                                            onHide={() => setModalPhotoShow(false)}
-                                            title={'Sub Category Photo'}
-                                            size={''}
-                                            photo={modalPhoto}
-                                        />
-
-                                        {/* Category Details Modal */}
-                                        <CategoryDetailsModal
-                                            show={modalShow}
-                                            onHide={() => setModalShow(false)}
-                                            title={'Sub Category Details'}
-                                            size={''}
-                                            category={category}
-                                        />
-                                    </div> 
-                                }
+                            <div className='col-md-3'>
+                                <label className='w-100'>
+                                <p className='mb-0'>Order By</p>
+                                <select 
+                                    className='form-control select2'
+                                    name='order_by'
+                                    value={input.order_by}
+                                    onChange={handleInput}
+                                >
+                                    {columns.map((column, index) => (
+                                        <option key={index} value={column}>{column}</option>
+                                    ))}
+                                </select>
+                                </label>
                             </div>
-                            {/* Pagination */}
-                            <div className="card-footer d-flex justify-content-between align-items-center">
-                                <div className="data_tables_info">
-                                    Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
+                            <div className='col-md-2'>
+                                <label className='w-100'>
+                                <p className='mb-0'>Order Direction</p>
+                                <select 
+                                    className='form-control select2'
+                                    name='direction'
+                                    value={input.direction}
+                                    onChange={handleInput}
+                                >
+                                    <option value={'asc'}>ASC</option>
+                                    <option value={'desc'}>DESC</option>
+                                </select>
+                                </label>
+                            </div>
+                            <div className='col-md-2'>
+                                <label className='w-100'>
+                                <p className='mb-0'>Per Page</p>
+                                <select 
+                                    className='form-control select2'
+                                    name='per_page'
+                                    value={input.per_page}
+                                    onChange={handleInput}
+                                >
+                                    <option value={10}>10</option>
+                                    <option value={25}>25</option>
+                                    <option value={50}>50</option>
+                                    <option value={100}>100</option>
+                                </select>
+                                </label>
+                            </div>
+                            <div className='col-md-2'>
+                                <div className='d-grid mt-4'>
+                                    <button className='btn btn-warning w-100' onClick={() => getCategories(1)}>
+                                        <i className="fas fa-search"></i> Search
+                                    </button>
                                 </div>
-                                <nav className="pagination-sm ml-auto">
-                                    <Pagination
-                                    activePage={activePage}
-                                    itemsCountPerPage={itemsCountPerPage}
-                                    totalItemsCount={totalItemsCount}
-                                    pageRangeDisplayed={10}
-                                    onChange={getCategories}
-                                    nextPageText={'Next'}
-                                    prevPageText={'Previous'}
-                                    itemClass="page-item"
-                                    linkClass="page-link"
-                                    />
-                                </nav>
                             </div>
                         </div>
                     </div>
+                    {isLoading ? <Loader/> : 
+                        <div className="table-responsive">
+                            <table className="table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name / SLug / Category</th>
+                                    <th>Serial / Status</th>
+                                    <th>Photo</th>
+                                    <th>Created By</th>
+                                    <th>Date Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {Object.keys(categories).length > 0 ? categories.map((category, index) => (
+                                <tr key={index}>
+                                    <td>{startFrom + index}</td>
+                                    <td>
+                                        <p className="mb-0">Name : {category.name}</p>
+                                        <p className="text-success mb-0">Slug : {category.slug}</p>
+                                        <p className="text-secondary">Category : {category.category_name}</p>
+                                    </td>
+                                    <td>
+                                        <p className="mb-0">Serial : {category.serial}</p>
+                                        <p className="text-success">Status : {category.status}</p>
+                                    </td>
+                                    <td>
+                                        <img
+                                        src={category.photo}
+                                        alt={category.name}
+                                        className="img-thumbnail table-image"
+                                        width={75}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => handlePhotoModal(category.photo_full)}
+                                        />
+                                    </td>
+                                    <td>{category.created_by}</td>
+                                    <td>
+                                        <p className="mb-0">
+                                        <small>Created : {category.created_at}</small>
+                                        </p>
+                                        <p className="text-success">
+                                        <small>Updated : {category.updated_at}</small>
+                                        </p>
+                                    </td>
+                                    <td className='m-1'>
+                                        <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+
+                                        <Link to={`/sub-category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+
+                                        <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            )) : <NoDataFound colSpan={7} /> }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name / SLug / Category</th>
+                                    <th>Serial / Status</th>
+                                    <th>Photo</th>
+                                    <th>Created By</th>
+                                    <th>Date Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                            </table>
+                            <CategoryPhotoModal
+                                show={modalPhotoShow}
+                                onHide={() => setModalPhotoShow(false)}
+                                title={'Sub Category Photo'}
+                                size={''}
+                                photo={modalPhoto}
+                            />
+                            <CategoryDetailsModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                                title={'Sub Category Details'}
+                                size={''}
+                                category={category}
+                            />
+                        </div> 
+                    }
+                </div>
+                <div className="card-footer d-flex justify-content-between align-items-center">
+                    <div className="data_tables_info">
+                        Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
+                    </div>
+                    <nav className="pagination-sm ml-auto">
+                        <Pagination
+                        activePage={activePage}
+                        itemsCountPerPage={itemsCountPerPage}
+                        totalItemsCount={totalItemsCount}
+                        pageRangeDisplayed={10}
+                        onChange={getCategories}
+                        nextPageText={'Next'}
+                        prevPageText={'Previous'}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        />
+                    </nav>
                 </div>
             </div>
         </section>

@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
-import Pagination from 'react-js-pagination'
-import { Link } from 'react-router-dom'
-import Loader from '../../components/partials/miniComponent/Loader'
-import CardHeader from '../../components/partials/miniComponent/CardHeader'
 import Breadcrumb from '../../components/partials/Breadcrumb'
+import CardHeader from '../../components/partials/miniComponent/CardHeader'
 import Swal from 'sweetalert2'
 import Constants from '../../Constants'
 import axios from 'axios'
+import Loader from '../../components/partials/miniComponent/Loader'
+import { Link } from 'react-router-dom'
+import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
+import Pagination from 'react-js-pagination'
 import GlobalFunction from '../../GlobalFunction'
 
-const ProductList = () => {
+const ListBahanBaku = () => {
     const [input, setInput] = useState({
         order_by: 'created_at',
         per_page: 10,
         direction: 'asc',
         search: ''
     })
+
     const [isLoading, setIsLoading] = useState(false)
-    const [products, setProducts] = useState([])
-    const [productColumns, setProductColumn] = useState([])
+    const [attributes, setAttributes] = useState([])
+    const [attributeColumns, setAttributeColumn] = useState([])
 
     const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
     const [totalItemsCount, setTotalItemsCount] = useState(1)
     const [startFrom, setStartFrom] = useState(1)
     const [activePage, setActivePage] = useState(1)
 
-    const getProductColumn = () => {
-        axios.get(`${Constants.BASE_URL}/get-product-column`).then(res => {
-            setProductColumn(res.data)
+    const getAttributeColumn = () => {
+        axios.get(`${Constants.BASE_URL}/get-attribute-column`).then(res => {
+            setAttributeColumn(res.data)
         });
     }
     
@@ -36,11 +37,11 @@ const ProductList = () => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
     
-    const getProducts = (pageNumber = 1) => {
+    const getAttributes = (pageNumber = 1) => {
         setIsLoading(true);
-        axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+        axios.get(`${Constants.BASE_URL}/attribute?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
         .then(res => {
-            setProducts(res.data.data);
+            setAttributes(res.data.data);
             setItemsCountPerPage(res.data.meta.per_page);
             setStartFrom(res.data.meta.from);
             setTotalItemsCount(res.data.meta.total);
@@ -49,10 +50,10 @@ const ProductList = () => {
         });
     };
 
-    const handleProductDelete = (id) => {
+    const handleAttributeDelete = (id) => {
         Swal.fire({
           title: "Are you sure?",
-          text: "Product will be deleted",
+          text: "Ingredients will be deleted",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -60,7 +61,7 @@ const ProductList = () => {
           confirmButtonText: "Yes, Delete it!"
         }).then((result) => {
           if (result.isConfirmed) {
-            axios.delete(`${Constants.BASE_URL}/product/${id}`).then(res => {
+            axios.delete(`${Constants.BASE_URL}/attribute/${id}`).then(res => {
               Swal.fire({
                 position: "top-end",
                 icon: res.data.cls,
@@ -69,15 +70,15 @@ const ProductList = () => {
                 toast: true,
                 timer: 1500
               });
-              getProducts(activePage);
+              getAttributes(activePage);
             });
           }
         });
     };
     
     useEffect(() => {
-        getProducts()
-        getProductColumn()
+        getAttributes()
+        getAttributeColumn()
     }, []);
 
     const isAdmin = GlobalFunction.isAdmin();
@@ -85,7 +86,7 @@ const ProductList = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Product List" breadcrumb="product" />
+            <Breadcrumb title="Ingredients List" breadcrumb="ingredients" />
         </section>
         <section className="content">
             <div className="container-fluid">
@@ -95,8 +96,8 @@ const ProductList = () => {
                             <div className="card-header">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <CardHeader 
-                                        link={'/product/create'} 
-                                        btnText="Add Product"
+                                        link={'/bahan-baku/create'} 
+                                        btnText="Add Ingredients"
                                         btn="btn btn-warning"
                                         icon="fas fa-plus"
                                     />
@@ -133,7 +134,7 @@ const ProductList = () => {
                                                     value={input.order_by}
                                                     onChange={handleInput}
                                                 >
-                                                    {productColumns.map((column, index) => (
+                                                    {attributeColumns.map((column, index) => (
                                                         <option key={index} value={column.id}>{column.name}</option>
                                                     ))}
                                                 </select>
@@ -171,7 +172,7 @@ const ProductList = () => {
                                         </div>
                                         <div className='col-md-2'>
                                             <div className='d-grid mt-4'>
-                                                <button className='btn btn-warning w-100' onClick={() => getProducts(1)}>
+                                                <button className='btn btn-warning w-100' onClick={() => getAttributes()}>
                                                 <i className="fas fa-search"></i> Search
                                                 </button>
                                             </div>
@@ -183,76 +184,78 @@ const ProductList = () => {
                                     <table className="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>SL</th>
+                                                <th>No</th>
+                                                <th>Photo</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
                                                 <th>Status</th>
                                                 <th>Category</th>
-                                                <th>Photo</th>
+                                                <th>Brand / Supplier</th>
                                                 <th>Date Time</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {products.length > 0 ? products.map((product, index) => (
+                                            {attributes.length > 0 ? attributes.map((attribute, index) => (
                                             <tr key={index}>
                                                 <td>{startFrom + index}</td>
                                                 <td>
-                                                    <p className="mb-0">Name : {product.name}</p>
-                                                </td>
-                                                <td>
-                                                    <p className="mb-0">Sell Price : <strong>{product.sell_price.symbol} {product.sell_price.price} || Discount : {product.sell_price.symbol} {product.sell_price.discount}</strong></p>
-                                                    <p className="mb-0">Price : {product.price}</p>
-                                                    <p className="mb-0">Price : {product.discount_fixed}</p>
-                                                    <p className="mb-0">Price : {product.discount_percent}</p>
-                                                    <p className="mb-0">Price : {product.discount_start}</p>
-                                                    <p className="mb-0">Price : {product.discount_end}</p>
-                                                </td>
-                                                <td>
-                                                    <p className="mb-0">Status : {product.status}</p>
-                                                    <p className="text-success mb-0">SKU : {product.sku}</p>
-                                                    <p className="mb-0">Stock : {product.stock}</p>
-                                                </td>
-                                                <td>
-                                                    <p className="mb-0">Category : {product.category}</p>
-                                                </td>
-                                                <td>
                                                     <img
-                                                        src={product.primary_photo}
-                                                        alt={product.primary_photo}
+                                                        src={attribute.photo}
+                                                        alt={attribute.photo}
                                                         className="img-thumbnail table-image"
                                                         width={75}
                                                         style={{ cursor: 'pointer' }}
                                                     />
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0"><small>Created : {product.created_at}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated : {product.updated_at}</small></p>
-                                                    <p className="mb-0"><small>Created By : {product.created_by}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated By : {product.updated_by}</small></p>
+                                                    <p className="mb-0">Name : {attribute.name}</p>
+                                                    <p className="text-success mb-0">SKU : {attribute.sku}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Price : {attribute.price}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Status : {attribute.status}</p>
+                                                    <p className="mb-0">Stock : {attribute.stock}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Category : {attribute.category}</p>
+                                                    <p className="mb-0">Sub Category : {attribute.sub_category}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0">Brand : {attribute.brand}</p>
+                                                    <p className="mb-0">Supplier : {attribute.supplier}</p>
+                                                </td>
+                                                <td>
+                                                    <p className="mb-0"><small>Created : {attribute.created_at}</small></p>
+                                                    <p className="text-success mb-0"><small>Updated : {attribute.updated_at}</small></p>
+                                                    <p className="mb-0"><small>Created By : {attribute.created_by}</small></p>
+                                                    <p className="text-success mb-0"><small>Updated By : {attribute.updated_by}</small></p>
                                                 </td>
                                                 <td className='m-1'>
-                                                    <Link to={`/product/details/${product.id}`} ><button className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button></Link>
+                                                    <Link to={`/bahan-baku/details/${attribute.id}`} ><button className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button></Link>
 
                                                     {isAdmin && (
                                                         <>
-                                                            <Link to={`/product/edit/${product.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                                            <Link to={`/bahan-baku/edit/${attribute.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
                                                             
-                                                            <button onClick={() => handleProductDelete(product.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                                            <button onClick={() => handleAttributeDelete(attribute.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                                                         </>
                                                     )}
                                                 </td>
                                             </tr>
-                                            )) : <NoDataFound colSpan={8} /> }
+                                            )) : <NoDataFound colSpan={9} /> }
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>SL</th>
+                                                <th>No</th>
+                                                <th>Photo</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
                                                 <th>Status</th>
                                                 <th>Category</th>
-                                                <th>Photo</th>
+                                                <th>Brand / Supplier</th>
                                                 <th>Date Time</th>
                                                 <th>Action</th>
                                             </tr>
@@ -264,7 +267,7 @@ const ProductList = () => {
                             {/* Pagination */}
                             <div className="card-footer d-flex justify-content-between align-items-center">
                                 <div className="data_tables_info">
-                                    Showing {startFrom} to {startFrom + products.length - 1} of {totalItemsCount} entries
+                                    Showing {startFrom} to {startFrom + attributes.length - 1} of {totalItemsCount} entries
                                 </div>
                                 <nav className="pagination-sm ml-auto">
                                     <Pagination
@@ -272,7 +275,7 @@ const ProductList = () => {
                                         itemsCountPerPage={itemsCountPerPage}
                                         totalItemsCount={totalItemsCount}
                                         pageRangeDisplayed={10}
-                                        onChange={getProducts}
+                                        onChange={getAttributes}
                                         nextPageText={'Next'}
                                         prevPageText={'Previous'}
                                         itemClass="page-item"
@@ -286,7 +289,7 @@ const ProductList = () => {
             </div>
         </section>
     </div>
-    )
+  )
 }
 
-export default ProductList
+export default ListBahanBaku

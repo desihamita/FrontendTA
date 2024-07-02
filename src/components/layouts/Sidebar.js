@@ -55,7 +55,13 @@ const Sidebar = () => {
                       <i className="right fas fa-angle-left"></i>
                     </p>
                   </Link>
-                  <ul className="nav nav-treeview">
+                  <ul className="nav nav-treeview">   
+                    <li className="nav-item">
+                      <Link to='/sales-manager' className="nav-link">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Data Karyawan</p>
+                      </Link>
+                    </li>
                     <li className="nav-item">
                       <Link to='/category' className="nav-link">
                         <i className="far fa-circle nav-icon"></i>
@@ -95,7 +101,7 @@ const Sidebar = () => {
               </Link>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <Link to='/product-attribute' className="nav-link">
+                  <Link to='/bahan-baku' className="nav-link">
                     <i className="far fa-circle nav-icon"></i>
                     <p>Ingredients</p>
                   </Link>
@@ -110,7 +116,7 @@ const Sidebar = () => {
             </li>
             <li className="nav-header">MASTER TRANSAKSI</li>
             <li className="nav-item">
-              <Link to='/order' className="nav-link">
+              <Link to='/order-bahan-baku' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
                 <p>Orders Ingredients</p>
               </Link>
@@ -131,12 +137,6 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to='#' className="nav-link">
-                    <i className="fas fa-solid fa-book nav-icon"></i>
-                    <p>Lap. Barang Keluar</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
                   <Link to='/sales-reports' className="nav-link">
                     <i className="fas fa-solid fa-book nav-icon"></i>
                     <p>Sales Report</p>
@@ -144,44 +144,9 @@ const Sidebar = () => {
                 </li>
               </>
             )}
-            <li className="nav-header">GENERATE BARCODE</li>
-            <li className="nav-item">
-              <Link to='/generate-barcode-ingredients' className="nav-link">
-                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Ingredients</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to='/generate-barcode' className="nav-link">
-                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Product</p>
-              </Link>
-            </li>
-                <li className="nav-item">
-                  <Link to='/sales-reports' className="nav-link">
-                    <i className="fas fa-solid fa-book nav-icon"></i>
-                    <p>Sales Report</p>
-                  </Link>
-                </li>
             <li className="nav-header">SETTING</li>
-            {isAdmin && (
-              <>
-              <li className="nav-item">
-                <Link to='/shop' className="nav-link">
-                  <i className="far fa-solid fa-user nav-icon"></i>
-                  <p>Shop</p>
-                </Link>
-              </li>
-                <li className="nav-item">
-                  <Link to='/sales-manager' className="nav-link">
-                    <i className="far fa-solid fa-user nav-icon"></i>
-                    <p>Data Users</p>
-                  </Link>
-                </li>
-              </>
-            )}
             <li className="nav-item">
-              <Link to='#' className="nav-link">
+              <Link to='/profile' className="nav-link">
                 <i className="fas fa-solid fa-user nav-icon"></i>
                 <p>Profile</p>
               </Link>

@@ -72,7 +72,7 @@ const AddBrand = () => {
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">
-                                        <label>Category Name</label>
+                                        <label>Name</label>
                                         <input 
                                             type="text" 
                                             name="name"
@@ -88,7 +88,7 @@ const AddBrand = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
-                                        <label>Category Slug</label>
+                                        <label>Slug</label>
                                         <input 
                                             type="text" 
                                             name="slug"

@@ -104,7 +104,12 @@ const ListSalesManager = () => {
               <div className="card card-outline card-warning">
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
-                    <CardHeader add={'/sales-manager/create'} />
+                    <CardHeader 
+                      link={'/sales-manager/create'} 
+                      btnText="Add Karyawan"
+                      btn="btn btn-warning"
+                      icon="fas fa-plus"
+                    />
                   </div>
                 </div>
                 <div className="card-body">
@@ -233,7 +238,7 @@ const ListSalesManager = () => {
                                 <button onClick={() => handleSalesManagerDelete(salesManager.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                               </td>
                             </tr>
-                          )) : <NoDataFound/> }
+                          )) : <NoDataFound colSpan={8} /> }
                         </tbody>
                         <tfoot>
                           <tr>

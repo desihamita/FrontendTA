@@ -32,7 +32,6 @@ const EditSupplier = () => {
 
   const getSupplier = async () => {
     axios.get(`${Constants.BASE_URL}/supplier/${params.id}`).then(res => {
-        console.log(res.data.data)
         setInput(res.data.data)
         getDistricts(res.data.data.division_id)
         getSubDistricts(res.data.data.district_id)

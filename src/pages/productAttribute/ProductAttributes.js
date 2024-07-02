@@ -9,6 +9,7 @@ import Loader from '../../components/partials/miniComponent/Loader'
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
 import Pagination from 'react-js-pagination'
 import './attribute.css';
+import CardHeader from '../../components/partials/miniComponent/CardHeader'
 
 const ProductAttributes = () => {
   const navigate = useNavigate()
@@ -35,7 +36,7 @@ const ProductAttributes = () => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/attribute`).then(res => {
       setIsLoading(false);
-      setAttributes(res.data.data)
+      setAttributes(res.data.data);
       setItemsCountPerPage(res.data.meta.per_page);
       setStartFrom(res.data.meta.from);
       setTotalItemsCount(res.data.meta.total);
@@ -240,7 +241,7 @@ const ProductAttributes = () => {
   return (
     <div className='content-wrapper'>
       <section className="content-header">
-        <Breadcrumb title="Product Attributes" breadcrumb="Product" />
+        <Breadcrumb title="Bahan Baku List" breadcrumb="ingredients" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -248,8 +249,20 @@ const ProductAttributes = () => {
             <div className="col-12">
               <div className="card card-outline card-warning">
                 <div className="card-header">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <button onClick={() => handleModalShow()} className="btn btn-primary mr-2">Add</button>
+                  <div className="d-flex align-items-center">
+                    <button onClick={() => handleModalShow()} className="btn btn-warning mr-2">Add</button>
+                    <CardHeader 
+                      link={'/generate-barcode-ingredients'} 
+                      btnText="Generate Barcode"
+                      btn="btn btn-primary"
+                      icon="fas fa-barcode"
+                    />
+                    <CardHeader 
+                      link={'/export-pdf'} 
+                      btnText="Exprot PDF"
+                      icon="fas fa-file-export"
+                      btn="btn btn-success"
+                    />
                   </div>
                 </div>
                 <div className="card-body">
@@ -305,7 +318,7 @@ const ProductAttributes = () => {
                             <button onClick={() => handleAttributeDelete(attribute.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                           </td>
                         </tr>
-                      )) : <NoDataFound/> }
+                      )) : <NoDataFound colSpan={7}/> }
                       </tbody>
                       <tfoot>
                         <tr>
@@ -378,27 +391,6 @@ const ProductAttributes = () => {
                   </div>
               )}
             </div>
-            {/* <div className="form-group col-md-6">
-              <label>Supplier</label>
-              <select
-                className={errors.supplier_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
-                name={'supplier_id'}
-                value={input.supplier_id}
-                onChange={handleInput}
-                placeholder={'Select product supplier'}
-              >
-                <option>Select Product Supplier</option>
-                {suppliers.map((supplier, index) => (
-                    <option value={supplier.id}
-                            key={index}>{supplier.name} - {supplier.phone}</option>
-                ))}
-              </select>
-              {errors.supplier_id && (
-                <div className="invalid-feedback">
-                  {errors.supplier_id[0]}
-                </div>
-              )}
-            </div> */}
             <div className="form-group">
               <label>Status</label>
               <select

@@ -30,9 +30,17 @@ import EditSalesManager from '../../pages/salesManager/EditSalesManager';
 import ListOrder from '../../pages/order/ListOrder';
 import AddOrder from '../../pages/order/AddOrder';
 import OrderDetails from '../../pages/order/OrderDetails';
-import BarcodeComponent from '../modules/barcode/BarcodeComponent'
-import Reports from '../../pages/report/Reports';
+import BarcodeComponent from '../modules/barcode/BarcodeComponent';
 import SalesReport from '../../pages/report/SalesReport';
+import Profile from '../../pages/profile/Profile';
+import ProductDetails from '../../pages/product/ProductDetails';
+import ListBahanBaku from '../../pages/bahanBaku/ListBahanBaku';
+import AddBahanBaku from '../../pages/bahanBaku/AddBahanBaku';
+import EditBahanBaku from '../../pages/bahanBaku/EditBahanBaku';
+import DetailsBahanBaku from '../../pages/bahanBaku/DetailsBahanBaku';
+import OrderBahanBakuAdd from '../../pages/orderBahanBaku/OrderBahanBakuAdd';
+import OrderBahanBakuList from '../../pages/orderBahanBaku/OrderBahanBakuList';
+import OrderBahanBakuDetails from '../../pages/orderBahanBaku/OrderBahanBakuDetails';
 
 const ProjectRouter = createBrowserRouter([
   {
@@ -92,12 +100,12 @@ const ProjectRouter = createBrowserRouter([
         element: <EditSupplier />,
       },
       {
-        path: '/product-attribute',
-        element: <ProductAttributes />,
-      },
-      {
         path: '/product',
         element: <ProductList />,
+      },
+      {
+        path: '/product/details/:id',
+        element: <ProductDetails />,
       },
       {
         path: '/product/create',
@@ -148,12 +156,44 @@ const ProjectRouter = createBrowserRouter([
         element: <OrderDetails />,
       },
       {
+        path: '/order-bahan-baku',
+        element: <OrderBahanBakuList />,
+      },
+      {
+        path: '/order-bahan-baku/create',
+        element: <OrderBahanBakuAdd />,
+      },
+      {
+        path: '/order-bahan-baku/details/:id',
+        element: <OrderBahanBakuDetails />,
+      },
+      {
         path: '/generate-barcode',
         element: <BarcodeComponent />,
       },
       {
         path: '/sales-reports',
         element: <SalesReport/>,
+      },
+      {
+        path: '/bahan-baku',
+        element: <ListBahanBaku />,
+      },
+      {
+        path: '/bahan-baku/create',
+        element: <AddBahanBaku />,
+      },
+      {
+        path: '/bahan-baku/edit/:id',
+        element: <EditBahanBaku />,
+      },
+      {
+        path: '/bahan-baku/details/:id',
+        element: <DetailsBahanBaku />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
       },
       {
         path: '/error500',

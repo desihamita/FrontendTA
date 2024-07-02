@@ -25,67 +25,6 @@ const SalesReport = () => {
         <section className="content">
             <div className="card">
                 <div className="card-header">
-                    <h3 className="card-title">Sales (Branch)</h3>
-                </div>
-                <div className="card-body">
-                    <div className='row'>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-shopping-cart fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Total Sales</h6>
-                                            <h4>{report.total_sale}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-cart-plus fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Total Purchase</h6>
-                                            <h4>{report.total_purchase}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-hand-holding-usd fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Today Sale</h6>
-                                            <h4>{report.total_sale_today}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-md-3'>
-                            <div className='card report-card'>
-                                <div className='card-body'>
-                                    <div className="media align-items-center">
-                                        <i class="fas fa-undo fa-flip-horizontal fa-2x"></i>
-                                        <div className="media-body ml-3">
-                                            <h6 className="mt-0">Today Purchase</h6>
-                                            <h4>{report.total_purchase_today}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="card">
-                <div className="card-header">
                     <h3 className="card-title">Stocks</h3>
                 </div>
                 <div className="card-body">

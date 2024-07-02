@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import Pagination from 'react-js-pagination';
-import Swal from 'sweetalert2';
 import axios from 'axios';
-
+import React, { useEffect, useState } from 'react'
+import Constants from '../../Constants';
+import Swal from 'sweetalert2';
+import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 import Loader from '../../components/partials/miniComponent/Loader';
-import Breadcrumb from '../../components/partials/Breadcrumb';
-import Constants from '../../Constants';
 import GlobalFunction from '../../GlobalFunction';
-import { Link } from 'react-router-dom';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
+import { Link } from 'react-router-dom';
+import Pagination from 'react-js-pagination';
 
-const ListOrder = () => {
+const OrderBahanBakuList = () => {
   const [input, setInput] = useState({
     order_by: 'created_at',
     per_page: 10,
@@ -19,8 +18,8 @@ const ListOrder = () => {
     search: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [order, setOrder] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [orderIngredient, setOrderIngredient] = useState([]);
+  const [orderIngredients, setOrderIngredients] = useState([]);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
@@ -36,9 +35,9 @@ const ListOrder = () => {
 
   const getOrders = (pageNumber = 1) => {
     setIsLoading(true);
-    axios.get(`${Constants.BASE_URL}/order?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+    axios.get(`${Constants.BASE_URL}/order-bahan-baku?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
       .then(res => {
-        setOrders(res.data.data);
+        setOrderIngredients(res.data.data);
         setItemsCountPerPage(res.data.meta.per_page);
         setStartFrom(res.data.meta.from);
         setTotalItemsCount(res.data.meta.total);
@@ -49,14 +48,14 @@ const ListOrder = () => {
   };
 
   const handleDetailsModal = (order) => {
-    setOrder(order);
+    setOrderIngredient(order);
     setModalShow(true);
   };
 
   const handleOrderDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "Order will be deleted",
+      text: "Order Ingredient will be deleted",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -64,7 +63,7 @@ const ListOrder = () => {
       confirmButtonText: "Yes, Delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/order/${id}`).then(res => {
+        axios.delete(`${Constants.BASE_URL}/order-bahan-baku/${id}`).then(res => {
           Swal.fire({
             position: "top-end",
             icon: res.data.cls,
@@ -86,7 +85,7 @@ const ListOrder = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Order List" breadcrumb="order" />
+        <Breadcrumb title="Order Ingredients List" breadcrumb="order ingredients" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -96,8 +95,14 @@ const ListOrder = () => {
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
                     <CardHeader 
-                        link={'/order/create'} 
+                        link={'/order-bahan-baku/create'} 
                         btnText="Add Order"
+                        btn="btn btn-warning"
+                        icon="fas fa-plus"
+                    />
+                    <CardHeader 
+                        link={'/order-bahan-baku/create'} 
+                        btnText="Export Data"
                         btn="btn btn-warning"
                         icon="fas fa-plus"
                     />
@@ -188,7 +193,7 @@ const ListOrder = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {Object.keys(orders).length > 0 ? orders.map((order, index) => (
+                          {Object.keys(orderIngredients).length > 0 ? orderIngredients.map((order, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
@@ -197,16 +202,15 @@ const ListOrder = () => {
                                 <p>Payment Status : {order.payment_status}</p>
                               </td>
                               <td>
-                                <p>{order.customer_name}</p>
-                                <p className='text-success'>{order.customer_phone}</p>
+                                <p>{order.supplier_name}</p>
+                                <p className='text-success'>{order.supplier_phone}</p>
                               </td>
                               <td>
                                 <p>Quantity : {order.quantity}</p>
-                                <p className='text-success'>Sub Total : {GlobalFunction.formatRupiah(order.sub_total)}</p>
-                                <p>Discount : {GlobalFunction.formatRupiah(order.discount)}</p>
-                                <p className='text-success'>Total : {GlobalFunction.formatRupiah(order.total)}</p>
-                                <p>Due Amount : {GlobalFunction.formatRupiah(order.due_amount)}</p>
-                                <p className='text-success'>Paid Amount : {GlobalFunction.formatRupiah(order.paid_amount)}</p>
+                                <p className='text-success'>Sub Total : {order.sub_total}</p>
+                                <p className='text-success'>Total : {order.total}</p>
+                                <p>Due Amount : {order.due_amount}</p>
+                                <p className='text-success'>Paid Amount : {order.paid_amount}</p>
                               </td>
                               <td>
                                 <p>Shop : {order.shop}</p>
@@ -216,15 +220,16 @@ const ListOrder = () => {
                                 <p className="mb-0">
                                   <small>Created : {order.created_at}</small>
                                 </p>
-                                <p className="text-suc  cess">
+                                <p className="text-success">
                                   <small>Updated : {order.updated_at}</small>
                                 </p>
                               </td>
                               <td>
-                                <Link to={`/order/details/${order.id}`}><button className='btn btn-info btn-sm'><i className="fas fa-solid fa-eye"></i></button></Link>
+                                <Link to={`/order-bahan-baku/details/${order.id}`}><button className='btn btn-info btn-sm'><i className="fas fa-solid fa-eye"></i></button></Link>
                               </td>
                             </tr>
-                          )) : <NoDataFound/> }
+                          )) : <NoDataFound colSpan={7} /> 
+                          }
                         </tbody>
                         <tfoot>
                           <tr>
@@ -244,7 +249,7 @@ const ListOrder = () => {
                 {/* Pagination */}
                 <div className="card-footer d-flex justify-content-between align-items-center">
                   <div className="data_tables_info">
-                      Showing {startFrom} to {startFrom + orders.length - 1} of {totalItemsCount} entries
+                      Showing {startFrom} to {startFrom + orderIngredients.length - 1} of {totalItemsCount} entries
                   </div>
                   <nav className="pagination-sm ml-auto">
                       <Pagination
@@ -269,4 +274,4 @@ const ListOrder = () => {
   )
 }
 
-export default ListOrder
+export default OrderBahanBakuList

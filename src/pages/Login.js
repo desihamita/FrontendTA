@@ -88,7 +88,7 @@ const Login = () => {
               >
                 <option value="" disabled={true} selected>Select Role</option>
                 <option value={1}>Admin</option>
-                <option value={2}>Sales Manager</option>
+                <option value={2}>Karyawan</option>
               </select>
               <div className="input-group-append">
                 <div className="input-group-text">
