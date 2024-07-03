@@ -86,7 +86,7 @@ const ListBahanBaku = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Ingredients List" breadcrumb="ingredients" />
+            <Breadcrumb title="Daftar Bahan Baku" breadcrumb="bahan baku" />
         </section>
         <section className="content">
             <div className="container-fluid">
@@ -102,7 +102,7 @@ const ListBahanBaku = () => {
                                         icon="fas fa-plus"
                                     />
                                     <CardHeader 
-                                        link={'/generate-barcode'} 
+                                        link={'/generate-barcode-bahan-baku'} 
                                         btnText="Generate Barcode"
                                         btn="btn btn-primary"
                                         icon="fas fa-barcode"

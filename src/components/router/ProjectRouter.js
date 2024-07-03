@@ -16,7 +16,6 @@ import ListBrand from '../../pages/brand/ListBrand';
 import ListSupplier from '../../pages/supplier/ListSupplier';
 import AddSupplier from '../../pages/supplier/AddSupplier';
 import EditSupplier from '../../pages/supplier/EditSupplier';
-import ProductAttributes from '../../pages/productAttribute/ProductAttributes';
 import ProductList from '../../pages/product/ProductList';
 import ProductAdd from '../../pages/product/ProductAdd';
 import ProductEdit from '../../pages/product/ProductEdit';
@@ -41,6 +40,10 @@ import DetailsBahanBaku from '../../pages/bahanBaku/DetailsBahanBaku';
 import OrderBahanBakuAdd from '../../pages/orderBahanBaku/OrderBahanBakuAdd';
 import OrderBahanBakuList from '../../pages/orderBahanBaku/OrderBahanBakuList';
 import OrderBahanBakuDetails from '../../pages/orderBahanBaku/OrderBahanBakuDetails';
+import AddBarangKeluar from '../../pages/barangKeluar/AddBarangKeluar';
+import ListBarangKeluar from '../../pages/barangKeluar/ListBarangKeluar';
+import DetailsBarangKeluar from '../../pages/barangKeluar/DetailsBarangKeluar';
+import BarcodeBahanBakuComponent from '../modules/barcodeBahanBaku/BarcodeBahanBakuComponent';
 
 const ProjectRouter = createBrowserRouter([
   {
@@ -52,7 +55,7 @@ const ProjectRouter = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/category',
+      path: '/category',
         element: <CategoryList />,
       },
       {
@@ -156,6 +159,18 @@ const ProjectRouter = createBrowserRouter([
         element: <OrderDetails />,
       },
       {
+        path: '/barang-keluar',
+        element: <ListBarangKeluar />,
+      },
+      {
+        path: '/barang-keluar/create',
+        element: <AddBarangKeluar />,
+      },
+      {
+        path: '/barang-keluar/details/:id',
+        element: <DetailsBarangKeluar />,
+      },
+      {
         path: '/order-bahan-baku',
         element: <OrderBahanBakuList />,
       },
@@ -170,6 +185,10 @@ const ProjectRouter = createBrowserRouter([
       {
         path: '/generate-barcode',
         element: <BarcodeComponent />,
+      },
+      {
+        path: '/generate-barcode-bahan-baku',
+        element: <BarcodeBahanBakuComponent />,
       },
       {
         path: '/sales-reports',

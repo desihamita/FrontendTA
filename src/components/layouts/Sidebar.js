@@ -41,7 +41,7 @@ const Sidebar = () => {
             <li className="nav-item menu-open">
               <Link to="/" className="nav-link active">
                 <i className="nav-icon fas fa-tachometer-alt" />
-                <p>Dashboard</p>
+                <p>Home</p>
               </Link>
             </li>
             {isAdmin && (
@@ -59,19 +59,19 @@ const Sidebar = () => {
                     <li className="nav-item">
                       <Link to='/sales-manager' className="nav-link">
                         <i className="far fa-circle nav-icon"></i>
-                        <p>Data Karyawan</p>
+                        <p>Karyawan</p>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link to='/category' className="nav-link">
                         <i className="far fa-circle nav-icon"></i>
-                        <p>Category</p>
+                        <p>kateogri</p>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link to='/sub-category' className="nav-link">
                         <i className="far fa-circle nav-icon"></i>
-                        <p>Sub Category</p>
+                        <p>Sub kateogri</p>
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -83,7 +83,7 @@ const Sidebar = () => {
                     <li className="nav-item">
                       <Link to='/supplier' className="nav-link">
                         <i className="far fa-circle nav-icon"></i>
-                        <p>Suppliers</p>
+                        <p>supplier</p>
                       </Link>
                     </li>
                   </ul>
@@ -95,7 +95,7 @@ const Sidebar = () => {
               <Link to="#" className="nav-link">
                 <i className="fas fa-solid fa-cube nav-icon"></i>
                 <p>
-                  Master Product
+                  Master Produk
                   <i className="right fas fa-angle-left"></i>
                 </p>
               </Link>
@@ -103,13 +103,13 @@ const Sidebar = () => {
                 <li className="nav-item">
                   <Link to='/bahan-baku' className="nav-link">
                     <i className="far fa-circle nav-icon"></i>
-                    <p>Ingredients</p>
+                    <p>Bahan Baku</p>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link to='/product' className="nav-link">
                     <i className="far fa-circle nav-icon"></i>
-                    <p>Products</p>
+                    <p>Produk</p>
                   </Link>
                 </li>
               </ul>
@@ -118,32 +118,21 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to='/order-bahan-baku' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Orders Ingredients</p>
+                <p>Barang Masuk</p>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to='/barang-keluar' className="nav-link">
+                <i className="fas fa-solid fa-file-invoice nav-icon"></i>
+                <p>Barang Keluar</p>
               </Link>
             </li>
             <li className="nav-item">
               <Link to='/order' className="nav-link">
                 <i className="fas fa-solid fa-file-invoice nav-icon"></i>
-                <p>Orders Products</p>
+                <p>Pemesanan</p>
               </Link>
             </li>
-            {isAdmin && (
-              <>
-                <li className="nav-header">REPORT</li>
-                <li className="nav-item">
-                  <Link to='' className="nav-link">
-                    <i className="fas fa-solid fa-book nav-icon"></i>
-                    <p>Order Report</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/sales-reports' className="nav-link">
-                    <i className="fas fa-solid fa-book nav-icon"></i>
-                    <p>Sales Report</p>
-                  </Link>
-                </li>
-              </>
-            )}
             <li className="nav-header">SETTING</li>
             <li className="nav-item">
               <Link to='/profile' className="nav-link">

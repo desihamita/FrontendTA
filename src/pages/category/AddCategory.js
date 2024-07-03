@@ -4,6 +4,7 @@ import axios from 'axios';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -69,6 +70,14 @@ const AddCategory = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
+                            <div className="card-header">
+                                <CardHeader 
+                                    link={'/category'} 
+                                    btnText="Cancel"
+                                    btn="btn btn-info"
+                                    icon="fas fa-backspace"
+                                />
+                            </div>
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">

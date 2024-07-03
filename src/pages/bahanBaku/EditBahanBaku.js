@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const EditBahanBaku = () => {
     const params = useParams();
@@ -138,13 +139,21 @@ const EditBahanBaku = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Edit Ingredients" breadcrumb="Form Data" />
+            <Breadcrumb title="Ubah Bahan Baku" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
+                            <div className="card-header">
+                            <CardHeader 
+                                link={'/bahan-baku'} 
+                                btnText="Cancel"
+                                btn="btn btn-info"
+                                icon="fas fa-backspace"
+                            />
+                            </div>
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">

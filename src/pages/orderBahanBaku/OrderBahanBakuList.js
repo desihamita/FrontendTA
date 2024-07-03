@@ -78,6 +78,28 @@ const OrderBahanBakuList = () => {
     });
   };
 
+  const handleExportOrders = () => {
+    axios.get(`${Constants.BASE_URL}/export-bahan-baku`, {
+      responseType: 'blob',
+    })
+    .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'PesananBahanBaku.csv');
+        document.body.appendChild(link);
+        link.click();
+    })
+    .catch(error => {
+        console.error('Error exporting orders:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Export Error',
+            text: 'Failed to export orders. Please try again later.',
+        });
+    });
+  }
+
   useEffect(() => {
     getOrders();
   }, []);
@@ -85,7 +107,7 @@ const OrderBahanBakuList = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Order Ingredients List" breadcrumb="order ingredients" />
+        <Breadcrumb title="Daftar Pesanan Bahan Baku" breadcrumb="Pesanan Bahan Baku" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -96,16 +118,13 @@ const OrderBahanBakuList = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <CardHeader 
                         link={'/order-bahan-baku/create'} 
-                        btnText="Add Order"
+                        btnText="Tambah Pesanan"
                         btn="btn btn-warning"
                         icon="fas fa-plus"
                     />
-                    <CardHeader 
-                        link={'/order-bahan-baku/create'} 
-                        btnText="Export Data"
-                        btn="btn btn-warning"
-                        icon="fas fa-plus"
-                    />
+                    <button className="btn btn-success ml-2" onClick={handleExportOrders}>
+                          <i className="fas fa-download"></i> Export
+                    </button>
                   </div>
                 </div>
                 <div className="card-body">

@@ -85,7 +85,7 @@ const ProductList = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Product List" breadcrumb="product" />
+            <Breadcrumb title="Daftar Produk" breadcrumb="produk" />
         </section>
         <section className="content">
             <div className="container-fluid">

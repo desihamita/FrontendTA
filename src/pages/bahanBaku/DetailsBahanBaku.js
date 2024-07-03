@@ -34,7 +34,7 @@ const DetailsBahanBaku = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Add Bahan Baku" breadcrumb="Form Data" />
+        <Breadcrumb title="Detail Bahan Baku" breadcrumb="Form Data" />
       </section>
       <section className="content">
         <div className="card">

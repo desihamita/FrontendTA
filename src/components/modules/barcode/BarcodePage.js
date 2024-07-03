@@ -1,5 +1,4 @@
 import React from 'react';
-import GlobalFunction from '../../../GlobalFunction';
 import Barcode from 'react-barcode';
 
 const BarcodePage = React.forwardRef((props, ref) => {

@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import GlobalFunction from '../../GlobalFunction';
 import ShowOrderConfirmation from './ShowOrderConfirmation';
 import { useNavigate } from 'react-router-dom';
+import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const OrderBahanBakuAdd = () => {
     const navigate = useNavigate()
@@ -257,6 +259,14 @@ const OrderBahanBakuAdd = () => {
             <section className="content">
                 <div className="container-fluid">
                     <div className="card card-warning card-outline">
+                        <div className="card-header">
+                            <CardHeader
+                                link={'/order-bahan-baku'} 
+                                btnText="Cancel"
+                                btn="btn btn-warning"
+                                icon="fas fa-plus"
+                            />
+                        </div>
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-4">
@@ -331,7 +341,7 @@ const OrderBahanBakuAdd = () => {
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            {Object.keys(carts).map((key) => (
+                                            {Object.keys(carts).length < 0 ? carts.map((key) => (
                                                 <div
                                                     key={key}
                                                     className="attachment-block border-bottom align-items-center py-2"
@@ -374,7 +384,7 @@ const OrderBahanBakuAdd = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            ))}
+                                            )) : <NoDataFound/> }
                                         </div>
                                     </div>
                                 </div>

@@ -79,6 +79,10 @@ const ListOrder = () => {
     });
   };
 
+  const handleExportOrders = () => {
+
+  }
+
   useEffect(() => {
     getOrders();
   }, []);
@@ -101,6 +105,9 @@ const ListOrder = () => {
                         btn="btn btn-warning"
                         icon="fas fa-plus"
                     />
+                    <button className="btn btn-success ml-2" onClick={handleExportOrders}>
+                          <i className="fas fa-download"></i> Export
+                    </button>
                   </div>
                 </div>
                 <div className="card-body">
@@ -224,7 +231,7 @@ const ListOrder = () => {
                                 <Link to={`/order/details/${order.id}`}><button className='btn btn-info btn-sm'><i className="fas fa-solid fa-eye"></i></button></Link>
                               </td>
                             </tr>
-                          )) : <NoDataFound/> }
+                          )) : <NoDataFound colSpan={7} /> }
                         </tbody>
                         <tfoot>
                           <tr>

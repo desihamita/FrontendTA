@@ -4,6 +4,7 @@ import Constants from '../../Constants';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Breadcrumb from '../../components/partials/Breadcrumb';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const AddBrand = () => {
     const navigate = useNavigate();
@@ -69,6 +70,14 @@ const AddBrand = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
+                            <div className="card-header">
+                                <CardHeader 
+                                    link={'/brand'} 
+                                    btnText="Cancel"
+                                    btn="btn btn-info"
+                                    icon="fas fa-backspace"
+                                />
+                            </div>
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">

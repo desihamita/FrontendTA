@@ -4,11 +4,11 @@ import Constants from '../../Constants';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/partials/Breadcrumb';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const EditSupplier = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { id } = useParams();
   const [input, setInput] = useState({
     status: 1,
     division_id: '',
@@ -155,6 +155,14 @@ const EditSupplier = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="card card-warning card-outline">
+              <div className="card-header">
+                  <CardHeader 
+                    link={'/supplier'} 
+                    btnText="Cancel"
+                    btn="btn btn-info"
+                    icon="fas fa-backspace"
+                  />
+                </div>
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-6">

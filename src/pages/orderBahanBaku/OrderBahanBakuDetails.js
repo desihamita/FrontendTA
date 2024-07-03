@@ -5,6 +5,7 @@ import Constants from '../../Constants';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import GlobalFunction from '../../GlobalFunction';
 import Breadcrumb from '../../components/partials/Breadcrumb';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const OrderBahanBakuDetails = () => {
   const params = useParams();
@@ -52,7 +53,12 @@ const OrderBahanBakuDetails = () => {
       <section className="content">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">Order Ingredients Details</h3>
+            <CardHeader
+              link={'/order-bahan-baku'} 
+              btnText="Cancel"
+              btn="btn btn-primary"
+              icon="fas fa-plus"
+            />
           </div>
           <div className="card-body">
             <div className='row'>

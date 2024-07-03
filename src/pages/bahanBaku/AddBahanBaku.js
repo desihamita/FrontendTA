@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Constants from '../../Constants'
 import Swal from 'sweetalert2'
 import Breadcrumb from '../../components/partials/Breadcrumb'
+import CardHeader from '../../components/partials/miniComponent/CardHeader'
 
 const AddBahanBaku = () => {
     const navigate = useNavigate();
@@ -123,13 +124,21 @@ const AddBahanBaku = () => {
     return (
         <div className="content-wrapper">
             <section className="content-header">
-                <Breadcrumb title="Add Bahan Baku" breadcrumb="Form Data" />
+                <Breadcrumb title="Tambah Bahan Baku" breadcrumb="Form Data" />
             </section>
             <section className="content">
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card card-warning card-outline">
+                                <div className="card-header">
+                                    <CardHeader 
+                                        link={'/bahan-baku'} 
+                                        btnText="Cancel"
+                                        btn="btn btn-info"
+                                        icon="fas fa-backspace"
+                                    />
+                                </div>
                                 <form id="quickForm">
                                     <div className="card-body row">
                                         <div className="form-group col-md-6">

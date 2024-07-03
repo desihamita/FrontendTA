@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import Constants from '../../Constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const ProductAdd = () => {
   const navigate = useNavigate();
@@ -115,13 +116,21 @@ const ProductAdd = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Add Product" breadcrumb="Form Data" />
+        <Breadcrumb title="Tambah Produk" breadcrumb="Form Data" />
       </section>
       <section className="content">
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-12">
               <div className="card card-warning card-outline">
+                <div className="card-header">
+                  <CardHeader 
+                    link={'/product'} 
+                    btnText="Cancel"
+                    btn="btn btn-info"
+                    icon="fas fa-backspace"
+                  />
+                </div>
                 <form id="quickForm">
                   <div className="card-body row">
                     <div className="form-group col-md-6">
@@ -215,69 +224,6 @@ const ProductAdd = () => {
                           {errors.status[0]}
                         </div>
                       )}
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label>Ingredients </label>
-                      <button 
-                        type="button"
-                        className="btn btn-primary btn-sm ml-2"
-                        onClick={handleAttributeFields}
-                      >
-                        <i className="fas fa-solid fa-plus"/>
-                      </button>
-                      {attributeFiled.map((id, ind)=>(
-                        <div key={ind} className="row my-2 align-items-baseline">
-                          <div className="col-md-5">
-                            <select
-                              className='form-control'
-                              name={'attribute_id'}
-                              value={attribute_input[id] !== undefined ? attribute_input[id].attribute_id : null}
-                              onChange={(e)=>handleAttributeInput(e, id)}
-                              placeholder={'Select product attribute'}
-                            >
-                              <option>Select Ingredients</option>
-                              {attributes.map((value, index)=>(
-                                  <option value={value.id}>{value.name}</option>
-                              ))}
-                            </select>
-                            {errors.attribute_id && (
-                              <div className="invalid-feedback">
-                                {errors.attribute_id != undefined ? errors.attribute_id[0] : null}
-                              </div>
-                            )}
-                          </div>
-                          <div className="col-md-5">
-                            <select
-                                className={'form-control'}
-                                name={'value_id'}
-                                value={attribute_input[id] != undefined ? attribute_input[id].value_id : null}
-                                onChange={(e)=>handleAttributeInput(e, id)}
-                                placeholder={'Select product attribute value'}
-                            >
-                              <option>Select Attribute Value</option>
-                              {attributes.map((value, index)=>(
-                                <>
-                                  {attribute_input[id] != undefined && value.id == attribute_input[id].attribute_id ? value.value.map((atr_value, value_ind)=>(
-                                      <option value={atr_value.id}>{atr_value.name}</option>
-                                  )):null}
-                                </>
-                              ))}
-                            </select>
-                            {errors.attribute_id && (
-                              <div className="invalid-feedback">
-                                {errors.attribute_id != undefined ? errors.attribute_id[0] : null}
-                              </div>
-                            )}
-                          </div>
-                          <div className="col-md-2">
-                            {attributeFiled.length -1 == ind ?
-                              <button className={'btn btn-danger'} onClick={()=>handleAttributeFieldsRemove(id)}>
-                                  <i className="fas fa-solid fa-minus"/>
-                              </button>:null
-                            }
-                          </div>
-                      </div>
-                    ))}
                     </div>
                     <div className="form-group col-md-6">
                       <label>Cost</label>
@@ -407,7 +353,7 @@ const ProductAdd = () => {
                         </div>
                       )}
                     </div>
-                    <div className="form-group col-md-12">
+                    <div className="form-group col-md-6">
                       <label>Description</label>
                       <textarea
                         className={errors.description !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}

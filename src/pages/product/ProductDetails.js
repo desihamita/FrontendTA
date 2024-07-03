@@ -28,7 +28,7 @@ const ProductDetails = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Product Details" breadcrumb="product details" />
+        <Breadcrumb title="Detail Produk" breadcrumb="product details" />
       </section>
       <section className="content">
         <div className="card">
