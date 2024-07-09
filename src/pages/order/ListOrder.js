@@ -80,7 +80,25 @@ const ListOrder = () => {
   };
 
   const handleExportOrders = () => {
-
+    axios.get(`${Constants.BASE_URL}/export-order`, {
+      responseType: 'blob',
+    })
+    .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Pesanan.csv');
+        document.body.appendChild(link);
+        link.click();
+    })
+    .catch(error => {
+        console.error('Error exporting orders:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Export Error',
+            text: 'Failed to export orders. Please try again later.',
+        });
+    });
   }
 
   useEffect(() => {

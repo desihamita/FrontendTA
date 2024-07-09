@@ -109,7 +109,7 @@ const Profile = () => {
         <section className="content">
             <div className='row'>
                 <div className='col-md-3'>
-                    <div className="card card-primary card-outline">
+                    <div className="card card-warning card-outline">
                         <div className="card-body box-profile">
                             <div className="text-center">
                                 <img className="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture" />
@@ -127,7 +127,7 @@ const Profile = () => {
                                     <b>Friends</b> <a className="float-right">13,287</a>
                                 </li>
                             </ul>
-                            <a href="#" className="btn btn-primary btn-block"><b>Follow</b></a>
+                            <a href="#" className="btn btn-warning btn-block"><b>Follow</b></a>
                         </div>
                     </div>
                 </div>
@@ -318,18 +318,6 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            
-            {/* <div className="card">
-            <div className="card-header">
-                
-            </div>
-                <div className="card-body">
-
-                </div>
-                <div className="card-footer">
-
-                </div>
-            </div> */}
         </section>
     </div>
   )

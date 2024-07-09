@@ -26,9 +26,6 @@ const OrderBahanBakuList = () => {
   const [startFrom, setStartFrom] = useState(1);
   const [activePage, setActivePage] = useState(1);
 
-  const [modalShow, setModalShow] = useState(false);
-  const [modalPhotoShow, setModalPhotoShow] = useState(false);
-
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
@@ -45,37 +42,6 @@ const OrderBahanBakuList = () => {
         setIsLoading(false);
       }
     );
-  };
-
-  const handleDetailsModal = (order) => {
-    setOrderIngredient(order);
-    setModalShow(true);
-  };
-
-  const handleOrderDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Order Ingredient will be deleted",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/order-bahan-baku/${id}`).then(res => {
-          Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
-          });
-          getOrders(activePage);
-        });
-      }
-    });
   };
 
   const handleExportOrders = () => {

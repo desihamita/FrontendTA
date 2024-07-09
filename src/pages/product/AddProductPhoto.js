@@ -72,7 +72,7 @@ const AddProductPhoto = () => {
     },[photos])
 
     return (
-        <div className="content-wrapper">
+    <div className="content-wrapper">
         <section className="content-header">
             <Breadcrumb title="Add Product Photo" breadcrumb="Form Data" />
         </section>

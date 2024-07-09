@@ -14,43 +14,6 @@ const ProductAdd = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [categories, setCategories] = useState([])
   const [subCategories, setSubCategories] = useState([])
-  const [attributes, setAttributes] = useState([])
-  const [attributeFiled, setAttributeField] = useState([])
-  const [attributeFieldId, setAttributeFieldId] = useState(1)
-
-  const handleAttributeFieldsRemove = (id) => {
-    setAttributeField(oldValues => {
-      return oldValues.filter(attributeFiled => attributeFiled !== id)
-    })
-    setAttribute_input(current => {
-      const copy = {...current};
-      delete copy[id];
-      return copy;
-    })
-    setAttributeFieldId(attributeFieldId-1)
-  }
-
-  const handleAttributeFields = (id) => {
-    if (attributes.length >= attributeFieldId){
-      setAttributeFieldId(attributeFieldId+1)
-      setAttributeField(prevState => [...prevState, attributeFieldId])
-    }
-  }
-
-  const handleAttributeInput = (e, id) => {
-    setAttribute_input(prevState => ({
-      ...prevState,
-      [id]:{
-          ...prevState[id], [e.target.name]: e.target.value
-      }
-    }))
-  }
-
-  const getAttributes = () => {
-    axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
-      setAttributes(res.data)
-    })
-  }
 
   const getCategories = () => {
     axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
@@ -62,6 +25,15 @@ const ProductAdd = () => {
     axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
       setSubCategories(res.data)
     })
+  }
+
+  const generateSku = (category_id) => {
+    const category = categories.find(cat => cat.id === category_id)
+
+    const categoryCode = category ? category.name.slice(0, 2).toUpperCase() : 'CTG'
+    const uniqueIdentifier = Math.random().toString(36).substring(2, 7).toUpperCase()
+
+    return `${categoryCode}-${uniqueIdentifier}`
   }
 
   const handleInput = (e) => {
@@ -77,8 +49,26 @@ const ProductAdd = () => {
       }
     }
 
+    if (['category_id'].includes(e.target.name)) {
+      const category_id = e.target.name === 'category_id' ? parseInt(e.target.value) : input.category_id
+      const sku = generateSku(category_id)
+      setInput(prevState => ({ ...prevState, sku }))
+    }
+
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
   }
+
+  const handlePhoto = (e) => {
+    let file = e.target.files[0];
+    if (file) {
+      let reader = new FileReader();
+      reader.onloadend = () => {
+        setInput((prevState) => ({ ...prevState, photo: reader.result }));
+        document.getElementById('fileLabel').innerText = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   
   const handleProductCreate = (e) => {
     e.preventDefault(e)
@@ -93,9 +83,7 @@ const ProductAdd = () => {
         toast: true,
         timer: 1500
       })
-      if (res.data.product_id !== 'undefined') {
-        navigate('/product/photo/'+res.data.product_id);
-      }
+      navigate('/product');
     }).catch(errors => {
       setIsLoading(false)
       if (errors.response.status === 422) {
@@ -106,7 +94,6 @@ const ProductAdd = () => {
 
   useEffect(() => {
     getCategories()
-    getAttributes()
   }, []);
 
   useEffect(()=>{
@@ -258,6 +245,22 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
+                      <label>Product Stock</label>
+                      <input
+                        className={errors.stock !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        type={'number'}
+                        name={'stock'}
+                        value={input.stock}
+                        onChange={handleInput}
+                        placeholder={'Enter Product Stock'}
+                      />
+                      {errors.stock && (
+                        <div className="invalid-feedback">
+                          {errors.stock[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="form-group col-md-6">
                       <label>Discount %</label>
                       <input
                         className={errors.discount_percent !== undefined ? 'form-control is-invalid' : 'form-control mt-2'}
@@ -322,28 +325,13 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Product Stock</label>
-                      <input
-                        className={errors.stock !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
-                        type={'number'}
-                        name={'stock'}
-                        value={input.stock}
-                        onChange={handleInput}
-                        placeholder={'Enter Product Stock'}
-                      />
-                      {errors.stock && (
-                        <div className="invalid-feedback">
-                          {errors.stock[0]}
-                        </div>
-                      )}
-                    </div>
-                    <div className="form-group col-md-6">
                       <label>SKU</label>
                       <input
                         className={errors.sku !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
                         type={'text'}
                         name={'sku'}
                         value={input.sku}
+                        readOnly
                         onChange={handleInput}
                         placeholder={'Enter Product SKU'}
                       />
@@ -368,10 +356,25 @@ const ProductAdd = () => {
                         </div>
                       )}
                     </div>
+                      <div className="form-group col-md-6">
+                        <label htmlFor="exampleInputFile">Photo</label>
+                        <div className="input-group">
+                          <div className="custom-file">
+                          <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
+                          <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
+                          </div>
+                          {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+                        </div>
+                        {input.photo && (
+                          <div className="card-body">
+                            <img className="img-fluid w-50 h-50" src={input.photo} alt="photo" />
+                          </div>
+                        )}
+                      </div>
                   </div>
                   <div className="card-footer">
                     <button className={'btn btn-warning'} onClick={handleProductCreate}
-                      dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Next'}}
+                      dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Produk'}}
                     />
                   </div>
                 </form>

@@ -7,16 +7,9 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 
 const AddBarangKeluar = () => {
   const navigate = useNavigate();
-  const [input, setInput] = useState({
-    quantity: '',
-    date: '', // Add the date field here
-    keterangan: '',
-    attribute_id: '',
-    sales_manager_id: '',
-    shop_id: ''
-  });
+  const [input, setInput] = useState({});
 
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState([]);  
   const [isLoading, setIsLoading] = useState(false);
   const [salesManagers, setSalesManagers] = useState([]);
   const [attributes, setAttributes] = useState([]);
@@ -53,24 +46,31 @@ const AddBarangKeluar = () => {
   const handleBarangKeluarCreate = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    axios.post(`${Constants.BASE_URL}/outbound-items`, input).then(res => {
-        setIsLoading(false);
-        Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
+    axios.post(`${Constants.BASE_URL}/outbound-items`, input)
+        .then(res => {
+            setIsLoading(false)
+            Swal.fire({
+                position: "top-end",
+                icon: res.data.cls,
+                title: res.data.msg,
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500
+            });
+            const updatedAttribute = attributes.find(attr => attr.id === input.attribute_id);
+            if (updatedAttribute) {
+                updatedAttribute.stock -= input.quantity;
+                setAttributes([...attributes]);
+            }
+            navigate('/barang-keluar');
+        })
+        .catch(errors => {
+            setIsLoading(false);
+            if(errors.response.status === 422) {
+                setErrors(errors.response.data.errors);
+            }
         });
-        //navigate('/barang-keluar');
-    }).catch(errors => {
-        setIsLoading(false);
-        if(errors.response.status === 422) {
-          setErrors(errors.response.data.errors);
-        }
-    });
-  };
+    };
 
   useEffect(() => {
     getSalesManagers();

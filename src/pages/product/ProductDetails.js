@@ -9,15 +9,22 @@ import GlobalFunction from '../../GlobalFunction'
 
 const ProductDetails = () => {
   const params = useParams();
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState({
+    edit: {},
+    details: {}
+  });
   const [isLoading, setIsLoading] = useState(false)
 
   const getProducts = (id) => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/product/${params.id}`)
     .then(res => {
-        setProducts(res.data.data);
+        setProducts(res.data);
         setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching product details:', error);
+      setIsLoading(false);
     });
   };
 
@@ -52,43 +59,43 @@ const ProductDetails = () => {
                       <tbody>
                         <tr>
                           <th>Title</th>
-                          <td>{products?.name}</td>
+                          <td>{products.details.name}</td>
                         </tr>
                         <tr>
                           <th>Slug</th>
-                          <td>{products?.slug}</td>
+                          <td>{products.details.slug}</td>
                         </tr>
                         <tr>
                           <th>SKU</th>
-                          <td>{products.sku}</td>
+                          <td>{products.details.sku}</td>
                         </tr>
                         <tr>
                           <th>Status</th>
-                          <td>{products.status}</td>
+                          <td>{products.details.status}</td>
                         </tr>
                         <tr>
                           <th>Category</th>
-                          <td>{GlobalFunction.isAdmin() ? <Link to={'/category'}>{products?.category}</Link> : products?.category}</td>
+                          <td>{GlobalFunction.isAdmin() ? <Link to={'/category'}>{products.details.category}</Link> : products.details.category}</td>
                         </tr>
                         <tr>
                           <th>Sub Category</th>
-                          <td>{GlobalFunction.isAdmin() ? <Link to={'/sub-category'}>{products?.sub_category}</Link> : products?.sub_category}</td>
+                          <td>{GlobalFunction.isAdmin() ? <Link to={'/sub-category'}>{products.details.sub_category}</Link> : products.sub_category}</td>
                         </tr>
                         <tr>
                           <th>Created By</th>
-                          <td>{products?.created_by}</td>
+                          <td>{products.details.created_by}</td>
                         </tr>
                         <tr>
                           <th>Updated By</th>
-                          <td>{products?.updated_by}</td>
+                          <td>{products.details.updated_by}</td>
                         </tr>
                         <tr>
                           <th>Created At</th>
-                          <td>{products?.created_at}</td>
+                          <td>{products.details.created_at}</td>
                         </tr>
                         <tr>
                           <th>Updated At</th>
-                          <td>{products?.updated_at}</td>
+                          <td>{products.details.updated_at}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -105,51 +112,51 @@ const ProductDetails = () => {
                       <tbody>
                         <tr>
                           <th>Cost</th>
-                          <td>{products.cost}</td>
+                          <td>{products.details.cost}</td>
                         </tr>
                         <tr>
                           <th>Original Sale Price</th>
-                          <td>{products.price}</td>
+                          <td>{products.details.price}</td>
                         </tr>
                         <tr>
                           <th>Sale Price</th>
-                          <td>{products.sell_price?.price}</td>
+                          <td>{products.details.sell_price?.price}</td>
                         </tr>
                         <tr>
                           <th>Discount</th>
-                          <td>{products?.sell_price?.discount}</td>
+                          <td>{products?.details.sell_price?.discount}</td>
                         </tr>
                         <tr>
                           <th>Discount Percent</th>
-                          <td>{products.discount_percent}</td>
+                          <td>{products.details.discount_percent}</td>
                         </tr>
                         <tr>
                           <th>Discount Fixed</th>
-                          <td>{products?.discount_fixed}</td>
+                          <td>{products?.details.discount_fixed}</td>
                         </tr>
                         <tr>
                           <th>Discount Start</th>
-                          <td>{products.discount_start}</td>
+                          <td>{products.details.discount_start}</td>
                         </tr>
                         <tr>
                           <th>Discount End</th>
-                          <td>{products.discount_end}</td>
+                          <td>{products.details.discount_end}</td>
                         </tr>
                         <tr>
                           <th>Discount Remaining Days</th>
-                          <td>{products.discount_remaining_days} Days</td>
+                          <td>{products.details.discount_remaining_days} Days</td>
                         </tr>
                         <tr>
                           <th>Stock</th>
-                          <td>{products.stock}</td>
+                          <td>{products.details.stock}</td>
                         </tr>
                         <tr>
                           <th>Profit</th>
-                          <td>{products.profit}</td>
+                          <td>{products.details.profit}</td>
                         </tr>
                         <tr>
                           <th>Profit Percentage</th>
-                          <td>{products.profit_precentage}%</td>
+                          <td>{products.details.profit_percentage}%</td>
                         </tr>
                       </tbody>
                     </table>

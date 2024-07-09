@@ -9,7 +9,11 @@ import CardHeader from '../../components/partials/miniComponent/CardHeader';
 const ProductEdit = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [input, setInput] = useState({status: 1})
+  const [input, setInput] = useState({
+    status: 1,
+    category_id: '',
+    sub_category_id: '',
+  })
   
   const [attribute_input, setAttribute_input] = useState({})
   const [errors, setErrors] = useState([])
@@ -17,64 +21,35 @@ const ProductEdit = () => {
 
   const [categories, setCategories] = useState([])
   const [subCategories, setSubCategories] = useState([])
-  const [attributes, setAttributes] = useState([])
 
-  const [attributeFiled, setAttributeField] = useState([])
-  const [attributeFieldId, setAttributeFieldId] = useState(1)
-
-  const handleAttributeFieldsRemove = (id) => {
-    setAttributeField(oldValues => {
-      return oldValues.filter(attributeFiled => attributeFiled !== id)
-    })
-    setAttribute_input(current => {
-      const copy = {...current};
-      delete copy[id];
-      return copy;
-    })
-    setAttributeFieldId(attributeFieldId-1)
-  }
-
-  const handleAttributeFields = (id) => {
-    if (attributes.length >= attributeFieldId){
-      setAttributeFieldId(attributeFieldId+1)
-      setAttributeField(prevState => [...prevState, attributeFieldId])
-    }
-  }
-
-  const handleAttributeInput = (e, id) => {
-    setAttribute_input(prevState => ({
-      ...prevState,
-      [id]:{
-          ...prevState[id], [e.target.name]: e.target.value
-      }
-    }))
-  }
 
   const getProduct = async () => {
-    axios.get(`${Constants.BASE_URL}/product/${params.id}`).then(res => {
-      setInput(res.data.data)
-      getCategories(res.data.data.category)
-      getSubCategories(res.data.data.sub_category)
-    })
+    try {
+        const res = await axios.get(`${Constants.BASE_URL}/product/${params.id}`);
+        setInput(res.data.edit); 
+        getSubCategories(res.data.edit.sub_category_id);
+    } catch (error) {
+        console.error('Error fetching attribute:', error);
+    }
+};
+
+  const getCategories = async () => {
+    try {
+        const res = await axios.get(`${Constants.BASE_URL}/get-category-list`);
+        setCategories(res.data);
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+    }
   };
 
-  const getAttributes = () => {
-    axios.get(`${Constants.BASE_URL}/get-attribute-list`).then(res => {
-      setAttributes(res.data)
-    })
-  }
-
-  const getCategories = () => {
-    axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-      setCategories(res.data)
-    })
-  }
-
-  const getSubCategories = (category_id) => {
-    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-      setSubCategories(res.data)
-    })
-  }
+  const getSubCategories = async (category_id) => {
+    try {
+        const res = await axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`);
+        setSubCategories(res.data);
+    } catch (error) {
+        console.error('Error fetching sub categories:', error);
+    }
+  };
 
   const handleInput = (e) => {
     if (e.target.name === 'name') {
@@ -91,6 +66,16 @@ const ProductEdit = () => {
 
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
   }
+
+  const handlePhoto = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.onloadend = () => {
+        setInput((prevState) => ({ ...prevState, photo: reader.result }));
+        document.getElementById('fileLabel').innerText = file.name;
+    };
+    reader.readAsDataURL(file);
+  };
   
   const handleProductUpdate = async (e) => {
     e.preventDefault();
@@ -106,9 +91,7 @@ const ProductEdit = () => {
         toast: true,
         timer: 1500,
       });
-      if (res.data.flag === undefined) {
-        navigate('/product');
-      }
+      navigate('/product');
     } catch (errors) {
       setIsLoading(false);
       if (errors.response.status === 422) {
@@ -119,7 +102,7 @@ const ProductEdit = () => {
 
   useEffect(() => {
     getProduct()
-    getAttributes()
+    getCategories()
   }, []);
 
   useEffect(()=>{
@@ -358,6 +341,7 @@ const ProductEdit = () => {
                         name={'sku'}
                         value={input.sku}
                         onChange={handleInput}
+                        readOnly
                         placeholder={'Enter Product SKU'}
                       />
                       {errors.sku && (
@@ -366,7 +350,7 @@ const ProductEdit = () => {
                         </div>
                       )}
                     </div>
-                    <div className="form-group col-md-12">
+                    <div className="form-group col-md-6">
                       <label>Description</label>
                       <textarea
                         className={errors.description !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
@@ -381,6 +365,21 @@ const ProductEdit = () => {
                         </div>
                       )}
                     </div>
+                      <div className="form-group col-md-6">
+                        <label htmlFor="exampleInputFile">Photo</label>
+                        <div className="input-group">
+                          <div className="custom-file">
+                            <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
+                            <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
+                          </div>
+                          {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+                        </div>
+                        {(input.photo || input.photo_preview !== undefined) && (
+                          <div className="card-body">
+                            <img className="img-fluid w-50 h-50" src={input.photo === undefined ? input.photo_preview : input.photo} alt="Photo" />
+                          </div>
+                        )}
+                      </div>
                   </div>
                   <div className="card-footer">
                     <button className={'btn btn-warning'} onClick={handleProductUpdate}

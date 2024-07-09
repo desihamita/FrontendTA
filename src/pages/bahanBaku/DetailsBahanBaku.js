@@ -18,7 +18,7 @@ const DetailsBahanBaku = () => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/attribute/${params.id}`)
       .then(res => {
-        setAttributes(res.data);
+        setAttributes(res.data.data);
         setIsLoading(false);
       })
       .catch(error => {

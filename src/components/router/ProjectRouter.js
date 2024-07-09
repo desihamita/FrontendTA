@@ -44,6 +44,7 @@ import AddBarangKeluar from '../../pages/barangKeluar/AddBarangKeluar';
 import ListBarangKeluar from '../../pages/barangKeluar/ListBarangKeluar';
 import DetailsBarangKeluar from '../../pages/barangKeluar/DetailsBarangKeluar';
 import BarcodeBahanBakuComponent from '../modules/barcodeBahanBaku/BarcodeBahanBakuComponent';
+import EditProductPhoto from '../../pages/product/EditProductPhoto';
 
 const ProjectRouter = createBrowserRouter([
   {
@@ -121,6 +122,10 @@ const ProjectRouter = createBrowserRouter([
       {
         path: '/product/edit/:id',
         element: <ProductEdit />,
+      },
+      {
+        path: '/product/photo/edit/:id',
+        element: <EditProductPhoto />,
       },
       {
         path: '/shop',

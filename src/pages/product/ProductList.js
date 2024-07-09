@@ -218,8 +218,8 @@ const ProductList = () => {
                                                 </td>
                                                 <td>
                                                     <img
-                                                        src={product.primary_photo}
-                                                        alt={product.primary_photo}
+                                                        src={product.photo}
+                                                        alt={product.photo}
                                                         className="img-thumbnail table-image"
                                                         width={75}
                                                         style={{ cursor: 'pointer' }}
