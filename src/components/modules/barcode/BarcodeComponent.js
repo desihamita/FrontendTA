@@ -5,6 +5,7 @@ import Constants from '../../../Constants'
 import './barcode.css'
 import ReactToPrint, { useReactToPrint } from 'react-to-print'
 import BarcodePage from './BarcodePage'
+import CardHeader from '../../partials/miniComponent/CardHeader'
 
 const BarcodeComponent = () => {
   const [input, setInput] = useState({
@@ -70,9 +71,12 @@ const BarcodeComponent = () => {
       <section className="content">
         <div className="card">
           <div className="card-header">
-            <button type="button" className="btn btn-success" data-card-widget="collapse" title="Collapse">
-              Print
-            </button>
+            <CardHeader 
+              link={'/product'} 
+              btnText="Cancel"
+              btn="btn btn-info"
+              icon="fas fa-backspace"
+            />
           </div>
           <div className="card-body">
             <div className='row align-items-center'>

@@ -283,7 +283,7 @@ const AddOrder = () => {
                               <button className='btn btn-xs btn-success m-1'><i className='fas fa-solid fa-eye'></i></button>
                               <button className='btn btn-xs btn-primary m-1' onClick={() => handleCart(product.id)}><i className='fas fa-solid fa-plus'></i></button>
                             </div>
-                            <img className="attachment-img" src={product.primary_photo} alt={product.name} />
+                            <img className="attachment-img" src={product.photo} alt={product.name} />
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{product.name}</h4>
                               <div className="attachment-text">
@@ -338,7 +338,7 @@ const AddOrder = () => {
                               <button className='btn btn-xs btn-info m-1'><i className='fas fa-solid fa-eye'></i></button>
                               <button className='btn btn-xs btn-danger m-1' onClick={() => handleRemoveCart(key)}><i className="fas fa-solid fa-times"></i></button>
                             </div>
-                            <img className="attachment-img" src={carts[key].primary_photo} alt={carts[key].name} />
+                            <img className="attachment-img" src={carts[key].photo} alt={carts[key].name} />
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{carts[key].name}</h4>
                               <div className="attachment-text">

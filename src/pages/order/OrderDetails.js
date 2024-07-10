@@ -165,7 +165,7 @@ const OrderDetails = () => {
                           <th>Name</th>
                           <th>Info</th>
                           <th>Quantity</th>
-                          <th>Phone</th>
+                          <th>Photo</th>
                           <th>Amounts</th>
                           <th>Sub Total</th>
                         </tr>
@@ -184,7 +184,9 @@ const OrderDetails = () => {
                                 <p>Sub Category : {product.sub_category}</p>
                               </td>
                               <td>{product.quantity}</td>
-                              <td><img src={product.photo} alt='product photo' className='img-thumbnail' /></td>
+                              <td>
+                                {/* <img src={product.photo} alt='product photo' className='img-thumbnail' /> */}
+                                </td>
                               <td>
                                 <p>Original Price : {product.price}</p>
                                 <p>Discount : {GlobalFunction.formatRupiah(product?.sell_price?.discount)}</p>
@@ -193,13 +195,7 @@ const OrderDetails = () => {
                               <td>{GlobalFunction.formatRupiah(product.sell_price.price * product.quantity)}</td>
                             </tr>
                           ))
-                        ) : (
-                          <tr>
-                            <td colSpan="7">
-                              <NoDataFound />
-                            </td>
-                          </tr>
-                        )}
+                        ) : <NoDataFound colSpan={7}/>}
                       </tbody>
                     </table>
                   </div>
@@ -249,13 +245,7 @@ const OrderDetails = () => {
                               </td>
                             </tr>
                           ))
-                        ) : (
-                          <tr>
-                            <td colSpan="7">
-                              <NoDataFound />
-                            </td>
-                          </tr>
-                        )}
+                        ) : <NoDataFound colSpan={8} />}
                       </tbody>
                     </table>
                   </div>
