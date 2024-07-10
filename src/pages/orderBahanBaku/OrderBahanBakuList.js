@@ -70,6 +70,8 @@ const OrderBahanBakuList = () => {
     getOrders();
   }, []);
 
+  const isSales = GlobalFunction.isSales();
+
   return (
     <div className="content-wrapper">
       <section className="content-header">
@@ -82,12 +84,14 @@ const OrderBahanBakuList = () => {
               <div className="card card-outline card-warning">
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
+                  {isSales && (
                     <CardHeader 
                         link={'/order-bahan-baku/create'} 
                         btnText="Tambah Pesanan"
                         btn="btn btn-warning"
                         icon="fas fa-plus"
                     />
+                  )}
                     <button className="btn btn-success ml-2" onClick={handleExportOrders}>
                           <i className="fas fa-download"></i> Export
                     </button>

@@ -11,7 +11,13 @@ const GlobalFunction = {
     isAdmin(){
         if (localStorage.role != undefined && localStorage.role == '1') {
             return true;
-        }
+        } 
+        return false;
+    },
+    isSales(){
+        if (localStorage.role != undefined && localStorage.role == '2') {
+            return true;
+        } 
         return false;
     },
     formatRupiah(number){

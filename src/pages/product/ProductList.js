@@ -94,12 +94,14 @@ const ProductList = () => {
                         <div className="card card-outline card-warning">
                             <div className="card-header">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <CardHeader 
-                                        link={'/product/create'} 
-                                        btnText="Add Product"
-                                        btn="btn btn-warning"
-                                        icon="fas fa-plus"
-                                    />
+                                    {isAdmin && (
+                                        <CardHeader 
+                                            link={'/product/create'} 
+                                            btnText="Add Product"
+                                            btn="btn btn-warning"
+                                            icon="fas fa-plus"
+                                        />
+                                    )}
                                     <CardHeader 
                                         link={'/generate-barcode'} 
                                         btnText="Generate Barcode"

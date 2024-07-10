@@ -8,6 +8,7 @@ import Loader from '../../components/partials/miniComponent/Loader';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import ItemDetailsModal from './ItemDetailsModal';
 import Swal from 'sweetalert2';
+import GlobalFunction from '../../GlobalFunction';
 
 const ListBarangKeluar = () => {
     const [input, setInput] = useState({
@@ -74,6 +75,8 @@ const ListBarangKeluar = () => {
         getItems();
     }, []);
 
+    const isSales = GlobalFunction.isSales();
+
     return (
         <div className="content-wrapper">
             <section className="content-header">
@@ -86,12 +89,14 @@ const ListBarangKeluar = () => {
                             <div className="card card-outline card-warning">
                                 <div className="card-header">
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <CardHeader 
-                                            link={'/barang-keluar/create'} 
-                                            btnText="Tambah Barang Keluar"
-                                            btn="btn btn-warning"
-                                            icon="fas fa-plus"
-                                        />
+                                        {isSales && (
+                                            <CardHeader 
+                                                link={'/barang-keluar/create'} 
+                                                btnText="Tambah Barang Keluar"
+                                                btn="btn btn-warning"
+                                                icon="fas fa-plus"
+                                            />
+                                        )}
                                         <button className="btn btn-success ml-2" onClick={handleExport}>
                                           <i className="fas fa-download"></i> Export
                                         </button>

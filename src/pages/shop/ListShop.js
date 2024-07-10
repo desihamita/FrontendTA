@@ -10,6 +10,7 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 import DetailsSupplier from '../supplier/DetailsSupplier';
+import GlobalFunction from '../../GlobalFunction';
 
 const ListShop = () => {
     const [input, setInput] = useState({
@@ -100,6 +101,8 @@ const ListShop = () => {
         getShops()
         getColumns()
     }, []);
+
+    const isAdmin = GlobalFunction.isAdmin();
     
     return (
     <div className="content-wrapper">
@@ -108,6 +111,7 @@ const ListShop = () => {
         </section>
         <section className="content">
           <div className="card card-outline card-warning">
+          {isAdmin && (
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">
                 <CardHeader 
@@ -118,6 +122,7 @@ const ListShop = () => {
                 />
               </div>
             </div>
+          )}
             <div className="card-body">
               <div className='search-area mb-2'>
                 <div className='row'>
@@ -235,12 +240,16 @@ const ListShop = () => {
                           <td className='m-1'>
                             <button onClick={() => handleDetailsModal(shop)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                             
-                            <Link to={`/shop/edit/${shop.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                            
-                            <button onClick={() => handleShopDelete(shop.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                            {isAdmin && (
+                              <>
+                                <Link to={`/shop/edit/${shop.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                
+                                <button onClick={() => handleShopDelete(shop.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                              </>
+                            )}
                           </td>
                         </tr>
-                      )) : <NoDataFound/> }
+                      )) : <NoDataFound colSpan={7} /> }
                     </tbody>
                     <tfoot>
                       <tr>

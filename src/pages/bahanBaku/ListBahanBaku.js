@@ -95,12 +95,14 @@ const ListBahanBaku = () => {
                         <div className="card card-outline card-warning">
                             <div className="card-header">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <CardHeader 
-                                        link={'/bahan-baku/create'} 
-                                        btnText="Add Ingredients"
-                                        btn="btn btn-warning"
-                                        icon="fas fa-plus"
-                                    />
+                                    {isAdmin && (
+                                        <CardHeader 
+                                            link={'/bahan-baku/create'} 
+                                            btnText="Add Ingredients"
+                                            btn="btn btn-warning"
+                                            icon="fas fa-plus"
+                                        />
+                                    )}
                                     <CardHeader 
                                         link={'/generate-barcode-bahan-baku'} 
                                         btnText="Generate Barcode"

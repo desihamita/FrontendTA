@@ -104,58 +104,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-          {/* <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-dollar-sign fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Value (sale WOD)</h6>
-                    <h4>{reportAttribute.sale_value}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-dollar-sign fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Possible Profit</h6>
-                    <h4>{reportAttribute.possible_profit}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-hand-holding-usd fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Expense</h6>
-                    <h4>{reportAttribute.total_expense}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-money-bill-wave fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Expense Today</h6>
-                    <h4>12.258</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
         <div className='row m-2'>
           <div className='col-md-3'>

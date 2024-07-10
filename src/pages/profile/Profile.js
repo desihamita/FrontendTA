@@ -10,6 +10,7 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 import DetailsSupplier from '../supplier/DetailsSupplier';
+import GlobalFunction from '../../GlobalFunction';
 
 const Profile = () => {
     const [input, setInput] = useState({
@@ -101,6 +102,8 @@ const Profile = () => {
         getColumns()
     }, []);
 
+    const isAdmin = GlobalFunction.isAdmin();
+
     return (
     <div className="content-wrapper">
         <section className="content-header">
@@ -133,16 +136,18 @@ const Profile = () => {
                 </div>
                 <div className='col-md-9'>
                     <div className="card card-outline card-warning">
-                        <div className="card-header">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <CardHeader 
-                                link={'/shop/create'} 
-                                btnText="Add Shop"
-                                btn="btn btn-warning"
-                                icon="fas fa-plus"
-                                />
+                        {isAdmin && (
+                            <div className="card-header">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <CardHeader 
+                                        link={'/shop/create'} 
+                                        btnText="Add Shop"
+                                        btn="btn btn-warning"
+                                        icon="fas fa-plus"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                         <div className="card-body">
                             <div className='search-area mb-2'>
                                 <div className='row'>
@@ -260,12 +265,16 @@ const Profile = () => {
                                             <td className='m-1'>
                                                 <button onClick={() => handleDetailsModal(shop)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                                                 
-                                                <Link to={`/shop/edit/${shop.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                                                
-                                                <button onClick={() => handleShopDelete(shop.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                                {isAdmin && ( 
+                                                    <>
+                                                        <Link to={`/shop/edit/${shop.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                                                        
+                                                        <button onClick={() => handleShopDelete(shop.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                                    </>
+                                                )}
                                             </td>
                                         </tr>
-                                    )) : <NoDataFound/> }
+                                    )) : <NoDataFound colSpan={7} /> }
                                     </tbody>
                                     <tfoot>
                                         <tr>

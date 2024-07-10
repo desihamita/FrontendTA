@@ -105,10 +105,12 @@ const ListOrder = () => {
     getOrders();
   }, []);
 
+  const isSales = GlobalFunction.isSales();
+
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Order List" breadcrumb="order" />
+        <Breadcrumb title="Daftar Pesanan" breadcrumb="pesanan" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -117,12 +119,14 @@ const ListOrder = () => {
               <div className="card card-outline card-warning">
                 <div className="card-header">
                   <div className="d-flex justify-content-between align-items-center">
-                    <CardHeader 
-                        link={'/order/create'} 
-                        btnText="Add Order"
-                        btn="btn btn-warning"
-                        icon="fas fa-plus"
-                    />
+                    {isSales && (
+                      <CardHeader 
+                          link={'/order/create'} 
+                          btnText="Add Order"
+                          btn="btn btn-warning"
+                          icon="fas fa-plus"
+                      />
+                    )}
                     <button className="btn btn-success ml-2" onClick={handleExportOrders}>
                           <i className="fas fa-download"></i> Export
                     </button>
