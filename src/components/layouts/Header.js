@@ -1,13 +1,52 @@
-import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Constants from '../../Constants';
+import photoProfile from '../../assets/img/default-foto.png';
 
 const Header = () => {
-  const [branch, setBranch] = useState({})
+  const [branch, setBranch] = useState({});
+  const [users, setUsers] = useState(null);
+  const [reportAttribute, setReportAttribute] = useState([]);
+  const [reportProduct, setReportProduct] = useState([]);
+
+  const getBahanBakuReports = () => {
+    axios.get(`${Constants.BASE_URL}/get-attribute-reports`).then(res => {
+      setReportAttribute(res.data);
+    });
+  };
+
+  const getSalesReports = () => {
+    axios.get(`${Constants.BASE_URL}/get-sales-reports`).then(res => {
+      setReportProduct(res.data);
+    });
+  };
   
-  useEffect(() => {
+  const getUser = () => {
+    axios.get(`${Constants.BASE_URL}/get-user`)
+      .then(res => {
+        if (res.data.length > 0) {
+          setUsers(res.data[0]); 
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const getBranch = () => {
     if(localStorage.branch != undefined) {
       setBranch(JSON.parse(localStorage.branch))
     }
+  }
+  
+  useEffect(() => {
+    getBranch();
+    getUser();
+    getBahanBakuReports();
+    getSalesReports();
   }, [])
+
+  const totalNotifications = (reportAttribute.low_stock || 0) + (reportProduct.low_stock_product || 0);
 
   return (
     <nav className="main-header navbar navbar-expand bg-warning navbar-light bg-orange">
@@ -20,28 +59,21 @@ const Header = () => {
         <li className="nav-item dropdown">
           <a className="nav-link text-white" data-toggle="dropdown" href="#">
             <i className="far fa-bell" />
-            <span className="badge badge-warning navbar-badge">15</span>
+            <span className="badge badge-warning navbar-badge">{totalNotifications}</span>
           </a>
           <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span className="dropdown-item dropdown-header">15 Notifications</span>
-            <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item text-white">
-                <i className="fas fa-envelope mr-2" /> 4 new messages
-                <span className="float-right text-muted text-sm">3 mins</span>
+            <span className="dropdown-item dropdown-header">{totalNotifications} Notifications</span>
+              <div className="dropdown-divider" />
+              <a href="/#stock-bahan-baku" className="dropdown-item">
+                <i className="fas fa-box-open" /> Stock Bahan Baku Habis
+                <span className="float-right text-muted text-sm">{reportAttribute.low_stock} </span>
               </a>
-            <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item text-white">
-                <i className="fas fa-users mr-2" /> 8 friend requests
-                <span className="float-right text-muted text-sm">12 hours</span>
+              <div className="dropdown-divider" />
+              <a href="/#stock-product" className="dropdown-item">
+                <i className="fas fa-box-open" /> Stock Produk Habis
+                <span className="float-right text-muted text-sm">{reportProduct.low_stock_product}</span>
               </a>
-            <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item text-white">
-                <i className="fas fa-file mr-2" /> 3 new reports
-                <span className="float-right text-muted text-sm">2 days</span>
-              </a>
-            <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item dropdown-footer text-white">See All Notifications</a>
-          </div>
+            </div>
         </li>
         <li className="nav-item dropdown">
             <div className="user-panel d-flex" >
@@ -51,7 +83,15 @@ const Header = () => {
                     </a>
                 </div>
                 <div className="image mt-1 mr-3">
-                    <img src="dist/img/user2-160x160.jpg" className="profile-user-img img-circle" alt="User Image"  style={{border: '1px solid white'}} />
+                    {users ? (
+                      <>
+                        {users.photo ? (
+                            <img className="profile-user-img img-fluid img-circle" src={users.photo} alt="User profile picture" />
+                        ) : (
+                            <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
+                        )}
+                      </>
+                    ) : null}
                 </div>
             </div>
         </li>
@@ -60,4 +100,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default Header;

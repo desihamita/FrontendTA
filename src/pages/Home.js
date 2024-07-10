@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Breadcrumb from '../components/partials/Breadcrumb'
+import React, { useEffect, useState } from 'react';
+import Breadcrumb from '../components/partials/Breadcrumb';
 import axios from 'axios';
 import Constants from '../Constants';
 import { Link } from 'react-router-dom';
@@ -51,7 +51,8 @@ const Home = () => {
         <Breadcrumb title="Dashboard" breadcrumb="Dashboard"/>
       </section>
       <section className="content">
-        <div className='row m-2'>
+        
+      <div className='row m-2'>
           <div className='col-md-3'>
             <div className='card report-card'>
               <div className='card-body'>
@@ -213,7 +214,7 @@ const Home = () => {
         </div>
         <div className='row m-2'>
           <div className='col-md-6'>
-            <div className="card">
+            <div className="card" id="stock-bahan-baku">
               <div className="card-header border-transparent">
                 <h3 className="card-title">Stok Bahan Baku</h3>
                 <div className="card-tools">
@@ -262,7 +263,7 @@ const Home = () => {
             </div>
           </div>
           <div className='col-md-6'>
-            <div className="card">
+            <div className="card" id="stock-product">
               <div className="card-header border-transparent">
                 <h3 className="card-title">Stok Produk</h3>
                 <div className="card-tools">
@@ -316,4 +317,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;

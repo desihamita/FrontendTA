@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Pagination from 'react-js-pagination';
@@ -11,6 +11,7 @@ import CardHeader from '../../components/partials/miniComponent/CardHeader';
 import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 import DetailsSupplier from '../supplier/DetailsSupplier';
 import GlobalFunction from '../../GlobalFunction';
+import photoProfile from '../../assets/img/default-foto.png'
 
 const Profile = () => {
     const [input, setInput] = useState({
@@ -30,7 +31,9 @@ const Profile = () => {
     const [modalLogoShow, setModalLogoShow] = useState(false);
     const [shops, setShops] = useState([]);
     const [modalLogo, setModalLogo] = useState('');
-    const [columns, setColumns] = useState([])
+    const [columns, setColumns] = useState([]);
+    
+    const [users, setUsers] = useState(null);
 
     const handleInput = (e) => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
@@ -53,6 +56,18 @@ const Profile = () => {
         .catch(error => {
             setIsLoading(false);
         });
+    };
+
+    const getUser = () => {
+        axios.get(`${Constants.BASE_URL}/get-user`)
+          .then(res => {
+            if (res.data.length > 0) {
+              setUsers(res.data[0]); 
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
     };
 
     const handleLogoModal = (logo) => {
@@ -98,8 +113,9 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        getShops()
-        getColumns()
+        getShops();
+        getColumns();
+        getUser();
     }, []);
 
     const isAdmin = GlobalFunction.isAdmin();
@@ -114,23 +130,30 @@ const Profile = () => {
                 <div className='col-md-3'>
                     <div className="card card-warning card-outline">
                         <div className="card-body box-profile">
-                            <div className="text-center">
-                                <img className="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture" />
-                            </div>
-                            <h3 className="profile-username text-center">Nina Mcintire</h3>
-                            <p className="text-muted text-center">Software Engineer</p>
-                            <ul className="list-group list-group-unbordered mb-3">
-                                <li className="list-group-item">
-                                    <b>Followers</b> <a className="float-right">1,322</a>
-                                </li>
-                                <li className="list-group-item">
-                                    <b>Following</b> <a className="float-right">543</a>
-                                </li>
-                                <li className="list-group-item">
-                                    <b>Friends</b> <a className="float-right">13,287</a>
-                                </li>
-                            </ul>
-                            <a href="#" className="btn btn-warning btn-block"><b>Follow</b></a>
+                        {users ? (
+                            <>
+                                <div className="text-center">
+                                {users.photo ? (
+                                    <img className="profile-user-img img-fluid img-circle" src={users.photo} alt="User profile picture" />
+                                ) : (
+                                    <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
+                                )}
+                                </div>
+                                <h3 className="profile-username text-center">{users.name}</h3>
+                                <p className="text-muted text-center">Job Title</p>
+                                <ul className="list-group list-group-unbordered mb-3">
+                                    <li className="list-group-item">
+                                        <b>Email</b> <a className="float-right">{users.email}</a>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <b>Phone</b> <a className="float-right">{users.phone}</a>
+                                    </li>
+                                </ul>
+                                <a href="#" className="btn btn-warning btn-block"><b>Update</b></a>
+                            </>
+                        ) : (
+                            <Loader />
+                        )}
                         </div>
                     </div>
                 </div>
@@ -332,4 +355,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Profile;
