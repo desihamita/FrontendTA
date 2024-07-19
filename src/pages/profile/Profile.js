@@ -118,6 +118,11 @@ const Profile = () => {
         getUser();
     }, []);
 
+    const userPhoto = localStorage.getItem('photo');
+    const userName = localStorage.getItem('name');
+    const userPhone = localStorage.getItem('phone');
+    const userEmail = localStorage.getItem('email');
+
     const isAdmin = GlobalFunction.isAdmin();
 
     return (
@@ -130,30 +135,22 @@ const Profile = () => {
                 <div className='col-md-3'>
                     <div className="card card-warning card-outline">
                         <div className="card-body box-profile">
-                        {users ? (
-                            <>
                                 <div className="text-center">
-                                {users.photo ? (
-                                    <img className="profile-user-img img-fluid img-circle" src={users.photo} alt="User profile picture" />
+                                {userPhoto ? (
+                                    <img className="profile-user-img img-fluid img-circle" src={`http://localhost:8000/images/uploads/sales_manager_thumb/${userPhoto}`} alt="User profile picture" />
                                 ) : (
                                     <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
                                 )}
                                 </div>
-                                <h3 className="profile-username text-center">{users.name}</h3>
-                                <p className="text-muted text-center">Job Title</p>
+                                <h3 className="profile-username text-center">{userName}</h3>
                                 <ul className="list-group list-group-unbordered mb-3">
                                     <li className="list-group-item">
-                                        <b>Email</b> <a className="float-right">{users.email}</a>
+                                        <b>Email</b> <a className="float-right">{userEmail}</a>
                                     </li>
                                     <li className="list-group-item">
-                                        <b>Phone</b> <a className="float-right">{users.phone}</a>
+                                        <b>Phone</b> <a className="float-right">{userPhone}</a>
                                     </li>
                                 </ul>
-                                <a href="#" className="btn btn-warning btn-block"><b>Update</b></a>
-                            </>
-                        ) : (
-                            <Loader />
-                        )}
                         </div>
                     </div>
                 </div>

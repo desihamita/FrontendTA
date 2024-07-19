@@ -102,7 +102,7 @@ const AddShop = () => {
         toast: true,
         timer: 1500,
       });
-      navigate('/shop');
+      navigate('/profile');
     } catch (errors) {
       setIsLoading(false);
       if (errors.response.status === 422) {

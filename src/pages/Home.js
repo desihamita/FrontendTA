@@ -4,6 +4,7 @@ import axios from 'axios';
 import Constants from '../Constants';
 import { Link } from 'react-router-dom';
 import NoDataFound from '../components/partials/miniComponent/NoDataFound';
+import GlobalFunction from '../GlobalFunction';
 
 const Home = () => {
   const [reportProduct, setReportProduct] = useState([]);
@@ -44,6 +45,8 @@ const Home = () => {
 
   const lowStockIngredients = ingredients.filter(item => item.stock <= 5);
   const lowStockProducts = products.filter(item => item.stock <= 5);
+
+  const isAdmin = GlobalFunction.isAdmin();
 
   return (
     <div className="content-wrapper">
@@ -165,7 +168,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-dollar-sign fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Value (sale WOD)</h6>
+                    <h6 className="mt-0">Total Stock Value</h6>
                     <h4>{reportProduct.sale_value_product}</h4>
                   </div>
                 </div>
@@ -205,7 +208,7 @@ const Home = () => {
                   <i className="fas fa-money-bill-wave fa-2x"></i>
                   <div className="media-body ml-3">
                     <h6 className="mt-0">Total Expense Today</h6>
-                    <h4>12.258</h4>
+                    <h4>{reportProduct.total_expense_today}</h4>
                   </div>
                 </div>
               </div>
@@ -306,7 +309,9 @@ const Home = () => {
                 </div>
               </div>
               <div className="card-footer clearfix">
-                <Link to={`/order/create`}><button className="btn btn-sm btn-info float-left">Place New Order</button></Link>
+                {isAdmin && (
+                  <Link to={`/order/create`}><button className="btn btn-sm btn-info float-left">Place New Order</button></Link>
+                )}
                 <Link to={`/order`}><button className="btn btn-sm btn-secondary float-right">View All Orders</button></Link>
               </div>
             </div>

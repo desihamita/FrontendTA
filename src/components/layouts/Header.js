@@ -48,6 +48,9 @@ const Header = () => {
 
   const totalNotifications = (reportAttribute.low_stock || 0) + (reportProduct.low_stock_product || 0);
 
+  const userPhoto = localStorage.getItem('photo');
+  const userName = localStorage.getItem('name');
+
   return (
     <nav className="main-header navbar navbar-expand bg-warning navbar-light bg-orange">
       <ul className="navbar-nav">
@@ -79,19 +82,15 @@ const Header = () => {
             <div className="user-panel d-flex" >
                 <div className="nav-item d-none d-sm-inline-block">
                     <a href="/profile" className="nav-link pr-1 text-white">
-                      {localStorage.name !== undefined ? localStorage.name : null} 
+                      {userName !== undefined ? userName : null} 
                     </a>
                 </div>
                 <div className="image mt-1 mr-3">
-                    {users ? (
-                      <>
-                        {users.photo ? (
-                            <img className="profile-user-img img-fluid img-circle" src={users.photo} alt="User profile picture" />
-                        ) : (
-                            <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
-                        )}
-                      </>
-                    ) : null}
+                  {userPhoto ? (
+                    <img className="profile-user-img img-fluid img-circle" src={`http://localhost:8000/images/uploads/sales_manager_thumb/${userPhoto}`} alt="User profile picture" />
+                  ) : (
+                    <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
+                  )}
                 </div>
             </div>
         </li>
