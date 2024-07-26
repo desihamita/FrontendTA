@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AddCustomer from '../../components/partials/modal/AddCustomer';
 import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConfirmation';
 import GlobalFunction from '../../GlobalFunction';
+import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 
 const AddOrder = () => {
   const navigate = useNavigate()
@@ -243,7 +244,7 @@ const AddOrder = () => {
     <>
       <div className="content-wrapper">
         <section className="content-header">
-          <Breadcrumb title="Create Order" breadcrumb="Form Data" />
+          <Breadcrumb title="Buat Pesanan Produk" breadcrumb="Form Data" />
         </section>
         <section className="content">
           <div className="container-fluid">
@@ -253,7 +254,7 @@ const AddOrder = () => {
                   <div className="col-md-4">
                     <div className="card card-orange card-outline">
                       <div className="card-header">
-                        <h5>Product List</h5>
+                        <h5>Daftar Produk</h5>
                       </div>
                       <div className="card-body">
                         <div className="form-group">
@@ -287,11 +288,11 @@ const AddOrder = () => {
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{product.name}</h4>
                               <div className="attachment-text">
-                                <p className="mb-0">Original Price : <small>{product.price}</small></p>
+                                <p className="mb-0">Harga Asli : <small>{product.price}</small></p>
 
-                                <p className="mb-0">Sell Price : <small>{product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.discount)}</small></p>
+                                <p className="mb-0">Harga Jual : <small>{product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.price)} | Discount : {product.sell_price.symbol} {GlobalFunction.formatRupiah(product.sell_price.discount)}</small></p>
 
-                                <p className="mb-0"><small>SKU : {product.sku} | Stock : {product.stock}</small></p>
+                                <p className="mb-0"><small>SKU : {product.sku} | Stok : {product.stock}</small></p>
                               </div>
                             </div>
                           </div>
@@ -302,27 +303,27 @@ const AddOrder = () => {
                   <div className="col-md-4">
                     <div className="card card-orange card-outline">
                       <div className="card-header">
-                        <h5>Cart</h5>
+                        <h5>Pesanan</h5>
                       </div>
                       <div className="card-body">
                         <div className='order-summary'>
-                          <p className='pb-2'><strong className='pr-2'>Customer :</strong><span className='text-orange text-bold'>{orderSummary.customer}</span></p>
+                          <p className='pb-2'><strong className='pr-2'>Pelanggan :</strong><span className='text-orange text-bold'>{orderSummary.customer}</span></p>
                           <table className='table table-sm table-hover table-striped table-bordered'>
                             <tbody>
                               <tr>
-                                <th>Total Items</th>
+                                <th>Total Barang</th>
                                 <td className='text-right'>{orderSummary.items}</td>
                               </tr>
                               <tr>
-                                <th>Original Price</th>
+                                <th>Harga Asli</th>
                                 <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.amount)}</td>
                               </tr>
                               <tr>
-                                <th>Discount</th>
+                                <th>Diskon</th>
                                 <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.discount)}</td>
                               </tr>
                               <tr>
-                                <th>Payable</th>
+                                <th>Pembayaran</th>
                                 <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.pay_able)}</td>
                               </tr>
                             </tbody>
@@ -342,12 +343,12 @@ const AddOrder = () => {
                             <div className="attachment-pushed">
                               <h4 className="attachment-heading text-orange">{carts[key].name}</h4>
                               <div className="attachment-text">
-                                <p className="mb-0">Original Price : <small>{carts[key].price}</small></p>
+                                <p className="mb-0">Harga Asli : <small>{carts[key].price}</small></p>
 
-                                <p className="mb-0">Sell Price : <small>{carts[key].sell_price.symbol} {carts[key].sell_price.price} | Discount : {carts[key].sell_price.symbol} {carts[key].sell_price.discount}</small></p>
+                                <p className="mb-0">Harga Jual : <small>{carts[key].sell_price.symbol} {carts[key].sell_price.price} | Discount : {carts[key].sell_price.symbol} {carts[key].sell_price.discount}</small></p>
 
-                                <p className="mb-0"><small>SKU : {carts[key].sku} | Stock : {carts[key].stock}</small></p>
-                                <p className="pt-3"><span className='pr-2'> Quantity :</span>
+                                <p className="mb-0"><small>SKU : {carts[key].sku} | Stok : {carts[key].stock}</small></p>
+                                <p className="pt-3"><span className='pr-2'> Kuantitas :</span>
                                   <div class="btn-group">
                                     <button 
                                       onClick={() => handleDecrease(carts[key].id)} 
@@ -385,7 +386,7 @@ const AddOrder = () => {
                     <div className="card card-orange card-outline">
                       <div className="card-header">
                         <div className='d-flex justify-content-between'>
-                          <h5>Customer List</h5>
+                          <h5>Daftar Pelanggan</h5>
                           <button onClick={() => setModalShow(true)} className='btn btn-sm btn-success'><i className='fas fa-solid fa-plus'></i></button>
                         </div>
                       </div>
@@ -419,7 +420,7 @@ const AddOrder = () => {
                             onClick={() => setShowOrderConfirmationModel(true)} 
                             className='btn btn-warning w-100'
                           >
-                              Place Order
+                              Pesan Ditempat
                           </button>
                         </div>
                       </div>

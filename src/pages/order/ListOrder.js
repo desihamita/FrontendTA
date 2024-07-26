@@ -55,13 +55,13 @@ const ListOrder = () => {
 
   const handleOrderDelete = (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "Order will be deleted",
+      title: "Apa kamu yakin?",
+      text: "Pesanan akan dihapus",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete it!"
+      confirmButtonText: "Ya, Hapus!"
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${Constants.BASE_URL}/order/${id}`).then(res => {
@@ -122,7 +122,7 @@ const ListOrder = () => {
                     {isSales && (
                       <CardHeader 
                           link={'/order/create'} 
-                          btnText="Add Order"
+                          btnText="Tambah Pesanan"
                           btn="btn btn-warning"
                           icon="fas fa-plus"
                       />
@@ -207,13 +207,13 @@ const ListOrder = () => {
                       <table className="table table-hover table-striped table-bordered">
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Order Details</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Sales</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>No</th>
+                            <th>Detail Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Jumlah</th>
+                            <th>Penjual</th>
+                            <th>Tanggal/ Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -221,32 +221,31 @@ const ListOrder = () => {
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
-                                <p>Order No. <strong>{order.order_number}</strong></p>
-                                <p className='text-success'>Order Status : {order.order_status_string}</p>
-                                <p>Payment Status : {order.payment_status}</p>
+                                <p>No.Pesanan : <strong>{order.order_number}</strong></p>
+                                <p className='text-success'>Status Pesanan : {order.order_status_string}</p>
+                                <p>Status Pembayaran : {order.payment_status}</p>
                               </td>
                               <td>
                                 <p>{order.customer_name}</p>
                                 <p className='text-success'>{order.customer_phone}</p>
                               </td>
                               <td>
-                                <p>Quantity : {order.quantity}</p>
+                                <p>Kuantitas : {order.quantity}</p>
                                 <p className='text-success'>Sub Total : {GlobalFunction.formatRupiah(order.sub_total)}</p>
-                                <p>Discount : {GlobalFunction.formatRupiah(order.discount)}</p>
+                                <p>Diskon : {GlobalFunction.formatRupiah(order.discount)}</p>
                                 <p className='text-success'>Total : {GlobalFunction.formatRupiah(order.total)}</p>
-                                <p>Due Amount : {GlobalFunction.formatRupiah(order.due_amount)}</p>
-                                <p className='text-success'>Paid Amount : {GlobalFunction.formatRupiah(order.paid_amount)}</p>
+                                <p className='text-success'>Jumlah Pembayaran : {GlobalFunction.formatRupiah(order.paid_amount)}</p>
                               </td>
                               <td>
-                                <p>Shop : {order.shop}</p>
-                                <p className='text-success'>Sales Manager : {order.sales_manager}</p>
+                                <p>Kafe : {order.shop}</p>
+                                <p className='text-success'>Kasir : {order.sales_manager}</p>
                               </td>
                               <td>
                                 <p className="mb-0">
-                                  <small>Created : {order.created_at}</small>
+                                  <small>Dibuat : {order.created_at}</small>
                                 </p>
                                 <p className="text-suc  cess">
-                                  <small>Updated : {order.updated_at}</small>
+                                  <small>Diubah : {order.updated_at}</small>
                                 </p>
                               </td>
                               <td>
@@ -257,20 +256,19 @@ const ListOrder = () => {
                         </tbody>
                         <tfoot>
                           <tr>
-                            <th>#</th>
-                            <th>Order Details</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Sales</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>No</th>
+                            <th>Detail Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Jumlah</th>
+                            <th>Penjual</th>
+                            <th>Tanggal/ Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </tfoot>
                       </table>
                     </div>
                   }
                 </div>
-                {/* Pagination */}
                 <div className="card-footer d-flex justify-content-between align-items-center">
                   <div className="data_tables_info">
                       Showing {startFrom} to {startFrom + orders.length - 1} of {totalItemsCount} entries

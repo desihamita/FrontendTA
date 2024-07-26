@@ -63,32 +63,24 @@ const AddBrand = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Add Brand" breadcrumb="Form Data" />
+            <Breadcrumb title="Tambah Merek" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
-                            <div className="card-header">
-                                <CardHeader 
-                                    link={'/brand'} 
-                                    btnText="Cancel"
-                                    btn="btn btn-info"
-                                    icon="fas fa-backspace"
-                                />
-                            </div>
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">
-                                        <label>Name</label>
+                                        <label>Nama</label>
                                         <input 
                                             type="text" 
                                             name="name"
                                             value={input.name}
                                             onChange={handleInput} 
                                             className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Name" 
+                                            placeholder="Enter Nama Merek" 
                                         />
                                         {errors.name !== undefined && (
                                             <div className="invalid-feedback">
@@ -104,7 +96,7 @@ const AddBrand = () => {
                                             value={input.slug}
                                             onChange={handleInput} 
                                             className={errors.slug !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Name" 
+                                            placeholder="Enter Slug Merek" 
                                         />
                                         {errors.slug !== undefined && (
                                             <div className="invalid-feedback">
@@ -120,7 +112,7 @@ const AddBrand = () => {
                                             value={input.serial}
                                             onChange={handleInput} 
                                             className={errors.serial !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Serial" 
+                                            placeholder="Enter Serial Merek" 
                                         />
                                         {errors.serial !== undefined && (
                                             <div className="invalid-feedback">
@@ -135,9 +127,8 @@ const AddBrand = () => {
                                             value={input.status}
                                             onChange={handleInput}
                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                            placeholder="Select Category Status"
                                         >
-                                            <option disabled={true}>Select Category Status</option>
+                                            <option disabled={true}>Pilih Status</option>
                                             <option value={1}>Active</option>
                                             <option value={2}>Inactive</option>
                                         </select>
@@ -148,13 +139,13 @@ const AddBrand = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
-                                        <label>Description</label>
+                                        <label>Keterangan</label>
                                         <textarea 
                                             name="description"
                                             value={input.description}
                                             onChange={handleInput} 
                                             className={errors.description !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Category Description" 
+                                            placeholder="Enter Keterangan Merek" 
                                         />
                                         {errors.description !== undefined && (
                                             <div className="invalid-feedback">
@@ -163,18 +154,14 @@ const AddBrand = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">Logo</label>
-                                        <div className="input-group">
-                                            <div className="custom-file">
-                                                <input type="file" name="logo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
-                                                <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
+                                        <label>Logo</label>
+                                        <input type="file" name="logo" className={errors.logo !== undefined ? 'form-control is-invalid' : 'form-control'} onChange={handleLogo} />
+                                        {errors.logo !== undefined && (
+                                            <div className="invalid-feedback">
+                                                {errors.logo[0]}
                                             </div>
-                                            {errors.logo !== undefined && (
-                                                <div className="invalid-feedback">
-                                                    {errors.logo[0]}
-                                                </div>
-                                            )}
-                                        </div>
+                                        )}
+
                                         {input.logo && (
                                             <div className="card-body">
                                                 <img className="img-fluid w-50 h-50" src={input.logo} alt="logo" />
@@ -183,7 +170,14 @@ const AddBrand = () => {
                                     </div>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-warning w-30" onClick={handleBrandCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Brand'}} />
+                                    <div className="row justify-content-center">
+                                        <CardHeader 
+                                            link={'/brand'} 
+                                            btnText="Batal"
+                                            btn="btn btn-info"
+                                        />
+                                        <button className="btn btn-warning w-30" onClick={handleBrandCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Merek'}} />
+                                    </div>
                                 </div>
                             </form>
                         </div>

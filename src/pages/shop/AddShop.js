@@ -4,15 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Breadcrumb from '../../components/partials/Breadcrumb';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const AddShop = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({
     status: 1,
-    division_id: 0,
-    district_id: 0,
-    sub_district_id: 0,
-    area_id: 0,
+    division_id: "",
+    district_id: "",
+    sub_district_id: "",
+    area_id: "",
   });
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,32 +93,33 @@ const AddShop = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post(`${Constants.BASE_URL}/shop`, input);
-      setIsLoading(false);
-      Swal.fire({
-        position: 'top-end',
-        icon: res.data.cls,
-        title: res.data.msg,
-        showConfirmButton: false,
-        toast: true,
-        timer: 1500,
-      });
-      navigate('/profile');
+        const res = await axios.post(`${Constants.BASE_URL}/shop`, input);
+        setIsLoading(false);
+        Swal.fire({
+            position: 'top-end',
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500,
+        });
+        navigate('/profile');
     } catch (errors) {
-      setIsLoading(false);
-      if (errors.response.status === 422) {
-        setErrors(errors.response.data.errors);
-      }
+        setIsLoading(false);
+        if (errors.response && errors.response.status === 422) {
+            setErrors(errors.response.data.errors);
+        }
     }
-  };
+  }; 
 
   useEffect(() => {
     getDivisions();
   }, []);
+
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Add Shop" breadcrumb="Form Data" />
+        <Breadcrumb title="Tambah Kafe" breadcrumb="Form Data" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -129,43 +131,43 @@ const AddShop = () => {
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Shop Details</h3>
+                          <h3 className="card-title">Detail Kafe</h3>
                         </div>
                         <form>
                           <div className="card-body">
                             <div className="form-group">
-                              <label>Company Name</label>
+                              <label>Nama</label>
                               <input
                                 type="text"
                                 name="name"
                                 value={input.name}
                                 onChange={handleInput}
                                 className={errors.name ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Company Name"
+                                placeholder="Enter Nama kafe"
                               />
                               {errors.name && <div className="invalid-feedback">{errors.name[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Phone</label>
+                              <label>No.Telepon</label>
                               <input
                                 type="text"
                                 name="phone"
                                 value={input.phone}
                                 onChange={handleInput}
                                 className={errors.phone ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Phone Number"
+                                placeholder="Enter Np.Telepon Kafe"
                               />
                               {errors.phone && <div className="invalid-feedback">{errors.phone[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Email Address</label>
+                              <label>Email</label>
                               <input
                                 type="text"
                                 name="email"
                                 value={input.email}
                                 onChange={handleInput}
                                 className={errors.email ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Email Address"
+                                placeholder="Enter Email Kafe"
                               />
                               {errors.email && <div className="invalid-feedback">{errors.email[0]}</div>}
                             </div>
@@ -177,32 +179,28 @@ const AddShop = () => {
                                 onChange={handleInput}
                                 className={errors.status ? 'form-control select2 is-invalid' : 'form-control'}
                               >
-                                <option value="" disabled>Select Shop Status</option>
+                                <option value="" disabled>Pilih Status</option>
                                 <option value={1}>Active</option>
                                 <option value={0}>Inactive</option>
                               </select>
                               {errors.status && <div className="invalid-feedback">{errors.status[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Details</label>
+                              <label>Detail</label>
                               <textarea
                                 name="details"
                                 value={input.details}
                                 onChange={handleInput}
                                 className={errors.details ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Details"
+                                placeholder="Enter Detail Kafe"
                               />
                               {errors.details && <div className="invalid-feedback">{errors.details[0]}</div>}
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputFile">Logo</label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input type="file" name="logo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
-                                  <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                                </div>
-                                {errors.logo && <div className="invalid-feedback">{errors.logo[0]}</div>}
-                              </div>
+                              <input type="file" name="logo" className={errors.logo ? 'form-control is-invalid' : 'form-control'} onChange={handleLogo} />
+                              {errors.logo && <div className="invalid-feedback">{errors.logo[0]}</div>}
+
                               {input.logo && (
                                 <div className="card-body">
                                   <img className="img-fluid w-50 h-50" src={input.logo} alt="logo" />
@@ -216,106 +214,94 @@ const AddShop = () => {
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Shop Address</h3>
+                          <h3 className="card-title">Alamat Kafe</h3>
                         </div>
                         <form>
                           <div className="card-body">
                             <div className="form-group">
-                              <label>Address <small>(House/Road/village etc)</small></label>
+                              <label>Alamat <small>(Rumah/Jalan/Desa dll)</small></label>
                               <input
                                 type="text"
                                 name="address"
                                 value={input.address}
                                 onChange={handleInput}
                                 className={errors.address ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Address"
+                                placeholder="Enter Alamat Kafe"
                               />
                               {errors.address && <div className="invalid-feedback">{errors.address[0]}</div>}
                             </div>
-                            <div className="row">
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Province</label>
-                                  <select
+                            <div className='form-group'>
+                                <label>Provinsi</label>
+                                <select
                                     name="division_id"
                                     value={input.division_id}
                                     onChange={handleInput}
                                     className={errors.division_id ? 'form-control select2 is-invalid' : 'form-control'}
-                                  >
-                                    <option disabled>Select Province</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Provinsi</option>
                                     {divisions.map((division, index) => (
-                                      <option key={index} value={division.id}>{division.name}</option>
+                                        <option key={index} value={division.id}>{division.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.division_id && <div className="invalid-feedback">{errors.division_id[0]}</div>}
-                                </div>
-                              </div>
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>District</label>
-                                  <select
+                                </select>
+                                {errors.division_id && <div className="invalid-feedback">{errors.division_id[0]}</div>}
+                            </div>
+                            <div className='form-group'>
+                                <label>Kabupaten / Kota</label>
+                                <select
                                     name="district_id"
                                     value={input.district_id}
                                     onChange={handleInput}
                                     className={errors.district_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={districts.length < 1}
-                                  >
-                                    <option disabled>Select city/district</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kabupaten / Kota</option>
                                     {districts.map((district, index) => (
                                       <option key={index} value={district.id}>{district.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.district_id && <div className="invalid-feedback">{errors.district_id[0]}</div>}
-                                </div>
-                              </div>
+                                </select>
+                                {errors.district_id && <div className="invalid-feedback">{errors.district_id[0]}</div>}
                             </div>
-                            <div className="row">
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Sub District</label>
-                                  <select
+                            <div className='form-group'>
+                                <label>Kecamatan</label>
+                                <select
                                     name="sub_district_id"
                                     value={input.sub_district_id}
                                     onChange={handleInput}
                                     className={errors.sub_district_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={subDistricts.length < 1}
-                                  >
-                                    <option disabled>Select sub district</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kecamatan</option>
                                     {subDistricts.map((subDistrict, index) => (
                                       <option key={index} value={subDistrict.id}>{subDistrict.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.sub_district_id && <div className="invalid-feedback">{errors.sub_district_id[0]}</div>}
-                                </div>
-                              </div>
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Postal Code</label>
-                                  <select
+                                </select>
+                                {errors.sub_district_id && <div className="invalid-feedback">{errors.sub_district_id[0]}</div>}
+                            </div>
+                            <div className='form-group'>
+                                <label>Kode Pos</label>
+                                <select
                                     name="area_id"
                                     value={input.area_id}
                                     onChange={handleInput}
                                     className={errors.area_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={areas.length < 1}
-                                  >
-                                    <option disabled>Select Postal Code</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kode Pos</option>
                                     {areas.map((area, index) => (
                                       <option key={index} value={area.id}>{area.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
-                                </div>
-                              </div>
+                                </select>
+                                {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Landmark</label>
+                              <label>Penunjuk/Penanda Jalan (Optional)</label>
                               <input
                                 type="text"
                                 name="landmark"
                                 value={input.landmark}
                                 onChange={handleInput}
                                 className={errors.landmark ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Shop Landmark"
+                                placeholder="Enter Penunjuk/Penanda Jalan"
                               />
                               {errors.landmark && <div className="invalid-feedback">{errors.landmark[0]}</div>}
                             </div>
@@ -327,7 +313,12 @@ const AddShop = () => {
                 </div>
                 <div className="card-footer">
                   <div className='row justify-content-center'>
-                    <button className="btn btn-warning pr-5 pl-5" onClick={handleShopCreate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Shop' }} />
+                    <CardHeader 
+                        link={'/profile'} 
+                        btnText="Batal"
+                        btn="btn btn-info"
+                    />
+                    <button className="btn btn-warning pr-5 pl-5" onClick={handleShopCreate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Kafe' }} />
                   </div>
                 </div>
               </div>

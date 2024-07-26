@@ -21,7 +21,7 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          Order Detail Confirmation
+         Konfirmasi Detail Pesanan
         </Modal.Title>
         <button className="close" onClick={props.onHide}>
             <span aria-hidden="true">&times;</span>
@@ -41,15 +41,15 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                 <>
                     <p><strong>{branch.name}</strong></p>
                     <p>{branch.address.district} {branch.address.subDistrict} {branch.address.landmark}</p>
-                    <p>Phone: {branch.phone}</p>
+                    <p>No.Telepon: {branch.phone}</p>
                 </> : null
             }
             </div>
             <div className='col-md-6 text-right'>
                 <p><strong><Moment format="dddd, DD/MM/YYYY HH:mm"></Moment></strong></p>
-                <h5>Supplier Details</h5>
+                <h5>Detail Pemasok</h5>
                 <p>Nama : {props.orderSummary.supplier}</p>
-                <p>Phone : {props.orderSummary.supplierPhone}</p>
+                <p>No.Telepon : {props.orderSummary.supplierPhone}</p>
             </div>
             <div className='col-md-12'>
                 <table className='table table-hover table-striped table-bordered mt-4'>
@@ -57,8 +57,8 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
+                            <th>Kuantitas</th>
+                            <th>Harga Barang</th>
                             <th>Sub Total</th>
                         </tr>
                     </thead>
@@ -83,7 +83,7 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                             <td className="text-right">{GlobalFunction.formatRupiah(props.orderSummary.pay_able)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="4" className="text-right"><strong>Paid Amount</strong></td>
+                            <td colSpan="4" className="text-right"><strong>Jumlah Pembayaran</strong></td>
                             <td>
                                 <div className='input-group' >
                                     <div className='input-group-text'>Rp.</div>
@@ -98,11 +98,7 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                             </td>
                         </tr>
                         <tr>
-                            <td colSpan="4" className="text-right"><strong>Due Amount</strong></td>
-                            <td>{props.orderSummary.due_amount}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="4" className="text-right"><strong>Select Payment Method</strong></td>
+                            <td colSpan="4" className="text-right"><strong>Pilih Metode Pembayaran</strong></td>
                             <td>
                                 <select
                                     className='form-control'
@@ -110,7 +106,7 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                                     value={props.orderSummary.payment_method_id}
                                     onChange={handleOrderSummaryInput}
                                 >
-                                    <option value="" disabled={true} selected>Select Method</option>
+                                    <option value="" disabled={true} selected>Pilih Metode Pembayaran</option>
                                     {props.paymentMethods.map((payment_method, index) => (
                                         <option key={index} value={payment_method.id}>{payment_method.name}</option>
                                     ))}
@@ -119,7 +115,7 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
                         </tr>
                         {props.orderSummary.payment_method_id != 1 ? 
                             <tr>
-                                <th colSpan="4" className="text-right">Transaction ID</th>
+                                <th colSpan="4" className="text-right">ID Transaksi</th>
                                 <td>
                                     <input 
                                         className='form-control'
@@ -138,11 +134,11 @@ const ShowOrderConfirmation = ({handleOrderPlace, handleOrderSummaryInput, ...pr
       </Modal.Body>
       <Modal.Footer>
         <div className='px-4'>
-            <button className='btn btn-sm btn-danger' onClick={props.onHide}>Close</button>
+            <button className='btn btn-sm btn-danger' onClick={props.onHide}>Tutup</button>
             <button 
                 className='btn btn-sm btn-warning ml-3'
                 onClick={handleOrderPlace}
-                dangerouslySetInnerHTML={{__html: props.is_loading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Confirm'}}
+                dangerouslySetInnerHTML={{__html: props.is_loading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Konfirmasi'}}
                 {...(props.is_loading ? { 'data-loading': props.is_loading.toString() } : {})}
             />
         </div>

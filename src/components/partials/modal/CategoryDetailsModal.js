@@ -26,7 +26,7 @@ const CategoryDetailsModal = (props) => {
                             <td>{props.category.id}</td>
                         </tr>
                         <tr>
-                            <th>Name</th>
+                            <th>Nama</th>
                             <td>{props.category.name}</td>
                         </tr>
                         <tr>
@@ -35,12 +35,12 @@ const CategoryDetailsModal = (props) => {
                         </tr>
                         {props.category.category_name !== undefined ? 
                             <tr>
-                                <th>Category</th>
+                                <th>Kategori</th>
                                 <td>{props.category.category_name}</td>
                             </tr> : ''
                         }
                         <tr>
-                            <th>Description</th>
+                            <th>Keterangan</th>
                             <td>{props.category.description}</td>
                         </tr>
                         <tr>
@@ -52,19 +52,19 @@ const CategoryDetailsModal = (props) => {
                             <td>{props.category.status}</td>
                         </tr>
                         <tr>
-                            <th>Created By</th>
+                            <th>Dibuat Oleh</th>
                             <td>{props.category.created_by}</td>
                         </tr>
                         <tr>
-                            <th>Created At</th>
+                            <th>Dibuat</th>
                             <td>{props.category.created_at}</td>
                         </tr>
                         <tr>
-                            <th>Updated At</th>
+                            <th>Diubah</th>
                             <td>{props.category.updated_at}</td>
                         </tr>
                         <tr>
-                            <th>Photo</th>
+                            <th>Foto</th>
                             <td><img src={props.category.photo} className='img-thumbnail' alt='Photo' /></td>
                         </tr>
                     </tbody>

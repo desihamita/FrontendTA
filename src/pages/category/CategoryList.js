@@ -59,13 +59,13 @@ const CategoryList = () => {
 
   const handleCategoryDelete = (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "Category will be deleted",
+      title: "Apa kamu yakin?",
+      text: "Kategori akan dihapus",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete it!"
+      confirmButtonText: "Ya, Hapus!"
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${Constants.BASE_URL}/category/${id}`).then(res => {
@@ -97,14 +97,14 @@ const CategoryList = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-      <Breadcrumb title="Category List" breadcrumb="category" />
+      <Breadcrumb title="Daftar Kategori" breadcrumb="kategori" />
       </section>
       <section className="content">
         <div className="card">
           <div className="card-header">
             <CardHeader 
               link={'/category/create'} 
-              btnText="Add Category"
+              btnText="Tambah Kategori"
               btn="btn btn-warning"
               icon="fas fa-plus"
             />
@@ -134,9 +134,10 @@ const CategoryList = () => {
                       value={input.order_by}
                       onChange={handleInput}
                     >
-                      {columns.map((column, index) => (
-                        <option key={index} value={column}>{column}</option>
-                      ))}
+                      <option value={'serial'}>Serial</option>
+                      <option value={'name'}>Name</option>
+                      <option value={'created_at'}>Created At</option>
+                      <option value={'updated_at'}>Updated At</option>
                     </select>
                   </label>
                 </div>
@@ -185,12 +186,12 @@ const CategoryList = () => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Name / Slug</th>
+                      <th>Nama / Slug</th>
                       <th>Serial / Status</th>
-                      <th>Photo</th>
-                      <th>Created By</th>
-                      <th>Date Time</th>
-                      <th>Action</th>
+                      <th>Foto</th>
+                      <th>Dibuat Oleh</th>
+                      <th>Tanggal / Waktu</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -198,7 +199,7 @@ const CategoryList = () => {
                       <tr key={index}>
                         <td>{startFrom + index}</td>
                         <td>
-                          <p className="mb-0">Name : {category.name}</p>
+                          <p className="mb-0">Nama : {category.name}</p>
                           <p className="text-success">Slug : {category.slug}</p>
                         </td>
                         <td>
@@ -218,10 +219,10 @@ const CategoryList = () => {
                         <td>{category.created_by}</td>
                         <td>
                           <p className="mb-0">
-                            <small>Created : {category.created_at}</small>
+                            <small>Dibuat : {category.created_at}</small>
                           </p>
                           <p className="text-success">
-                            <small>Updated : {category.updated_at}</small>
+                            <small>Diubah : {category.updated_at}</small>
                           </p>
                         </td>
                         <td className='m-1'>
@@ -236,12 +237,12 @@ const CategoryList = () => {
                   <tfoot>
                     <tr>
                       <th>No</th>
-                      <th>Name / Slug</th>
-                      <th>Serial</th>
-                      <th>Status</th>
-                      <th>Created By</th>
-                      <th>Date Time</th>
-                      <th>Action</th>
+                      <th>Nama / Slug</th>
+                      <th>Serial / Status</th>
+                      <th>Foto</th>
+                      <th>Dibuat Oleh</th>
+                      <th>Tanggal / Waktu</th>
+                      <th>Aksi</th>
                     </tr>
                   </tfoot>
                 </table>

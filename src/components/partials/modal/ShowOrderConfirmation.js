@@ -18,7 +18,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
         <>
             <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">Order Details Confirmation</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Konfirmasi Detail Pesanan</Modal.Title>
                     <button className="close" onClick={props.onHide}>
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -31,31 +31,31 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                     <Card.Header className="text-center">
                                         {Object.keys(branch).length > 0 && branch.address ? (
                                             <>
-                                                <img src={branch.logo} alt='logo' className='img-fluid' />
+                                                <img src={branch.logo} alt='logo' className='profile-user-img img-fluid img-circle' />
                                                 <p><strong>{branch.name}</strong></p>
                                                 <p>{branch.address.district} {branch.address.subDistrict} {branch.address.landmark}</p>
-                                                <p>Phone: {branch.phone}</p>
+                                                <p>No.Telepon: {branch.phone}</p>
                                             </>
                                         ) : null}
                                     </Card.Header>
                                     <Card.Body>
                                         <Row>
-                                            <dt className="col-sm-4">Date</dt>
+                                            <dt className="col-sm-4">Tanggal</dt>
                                             <dd className="col-sm-8">
                                                 <Moment format="dddd, DD/MM/YYYY HH:mm"></Moment>
                                             </dd>
-                                            <dt className="col-sm-4">Order No</dt>
+                                            <dt className="col-sm-4">No.Pesanan</dt>
                                             <dd className="col-sm-8">{Math.floor(Math.random() * 100000)}</dd>
-                                            <dt className="col-sm-4">Customer</dt>
+                                            <dt className="col-sm-4">Pelanggan</dt>
                                             <dd className="col-sm-8">{props.orderSummary.customer.split('-')[0]}</dd>
                                         </Row>
                                         <Table striped bordered hover>
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Item</th>
-                                                    <th>Quantity</th>
-                                                    <th>Price</th>
+                                                    <th>No</th>
+                                                    <th>Barang</th>
+                                                    <th>Kuantitas</th>
+                                                    <th>Harga</th>
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
@@ -76,7 +76,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                                     <td>{GlobalFunction.formatRupiah(props.orderSummary.amount)}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colSpan="4" className="text-right"><strong>Discount</strong></td>
+                                                    <td colSpan="4" className="text-right"><strong>Diskon</strong></td>
                                                     <td>{GlobalFunction.formatRupiah(props.orderSummary.discount)}</td>
                                                 </tr>
                                                 <tr>
@@ -84,7 +84,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                                     <td>{GlobalFunction.formatRupiah(props.orderSummary.pay_able)}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colSpan="4" className="text-right"><strong>Paid Amount</strong></td>
+                                                    <td colSpan="4" className="text-right"><strong>Jumlah pembayaran</strong></td>
                                                     <td>
                                                         <div className='input-group'>
                                                             <div className='input-group-text'>Rp.</div>
@@ -99,11 +99,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colSpan="4" className="text-right"><strong>Due Amount</strong></td>
-                                                    <td>{GlobalFunction.formatRupiah(props.orderSummary.due_amount)}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colSpan="4" className="text-right"><strong>Select Payment Method</strong></td>
+                                                    <td colSpan="4" className="text-right"><strong>Pilih Metode Pembayaran</strong></td>
                                                     <td>
                                                         <select
                                                             className='form-control'
@@ -136,7 +132,8 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                         </Table>
                                     </Card.Body>
                                     <Card.Footer className="text-center">
-                                        <p className='mb-0'>Thank you for dining with us!</p>
+                                        <p className='mb-0'>Terima kasih telah berkunjung ke {branch.name}!</p>
+                                        <p className='mb-0'>Selamat menikmati menu kami!</p>
                                         <p>{localStorage.name}</p>
                                     </Card.Footer>
                                 </Card>

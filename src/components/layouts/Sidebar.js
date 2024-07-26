@@ -11,13 +11,13 @@ const Sidebar = () => {
   
   const handleLogout = () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You will be logged out",
+      title: "Apa Kamu Yakin?",
+      text: "Anda akan keluar",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Logout!"
+      confirmButtonText: "Ya, Keluar!"
     }).then((result) => {
       if (result.isConfirmed) {
         axios.post(`${Constants.BASE_URL}/logout`).then(res => {
@@ -96,7 +96,7 @@ const Sidebar = () => {
                 </li>
               </>
             )}
-            <li className="nav-header">MASTER PRODUCT</li>
+            <li className="nav-header">MASTER PRODUK</li>
             <li className="nav-item">
               <Link to="#" className="nav-link">
                 <i className="fas fa-solid fa-cube nav-icon"></i>
@@ -143,13 +143,13 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to='/profile' className={getNavLinkClass('/profile')}>
                 <i className="fas fa-solid fa-user nav-icon"></i>
-                <p>Profile</p>
+                <p>Profil</p>
               </Link>
             </li>
             <li className="nav-item">
               <Link to='#' onClick={handleLogout} className="nav-link">
                 <i className="fas fa-sign-out-alt nav-icon"></i>
-                <p>Logout</p>
+                <p>Keluar</p>
               </Link>
             </li>
           </ul>

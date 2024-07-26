@@ -25,7 +25,7 @@ const ProductList = () => {
     const [totalItemsCount, setTotalItemsCount] = useState(1)
     const [startFrom, setStartFrom] = useState(1)
     const [activePage, setActivePage] = useState(1)
-
+    
     const getProductColumn = () => {
         axios.get(`${Constants.BASE_URL}/get-product-column`).then(res => {
             setProductColumn(res.data)
@@ -51,13 +51,13 @@ const ProductList = () => {
 
     const handleProductDelete = (id) => {
         Swal.fire({
-          title: "Are you sure?",
-          text: "Product will be deleted",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, Delete it!"
+            title: "Apa kamu yakin?",
+            text: "Produk akan dihapus",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Hapus!"
         }).then((result) => {
           if (result.isConfirmed) {
             axios.delete(`${Constants.BASE_URL}/product/${id}`).then(res => {
@@ -97,7 +97,7 @@ const ProductList = () => {
                                     {isAdmin && (
                                         <CardHeader 
                                             link={'/product/create'} 
-                                            btnText="Add Product"
+                                            btnText="Tambah Produk"
                                             btn="btn btn-warning"
                                             icon="fas fa-plus"
                                         />
@@ -185,14 +185,14 @@ const ProductList = () => {
                                     <table className="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>SL</th>
-                                                <th>Name</th>
-                                                <th>Price</th>
+                                                <th>No</th>
+                                                <th>Nama</th>
+                                                <th>Harga</th>
                                                 <th>Status</th>
-                                                <th>Category</th>
-                                                <th>Photo</th>
-                                                <th>Date Time</th>
-                                                <th>Action</th>
+                                                <th>Kategori</th>
+                                                <th>Foto</th>
+                                                <th>Tanggal / Waktu</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -200,23 +200,23 @@ const ProductList = () => {
                                             <tr key={index}>
                                                 <td>{startFrom + index}</td>
                                                 <td>
-                                                    <p className="mb-0">Name : {product.name}</p>
+                                                    <p className="mb-0">Nama : {product.name}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Sell Price : <strong>{product.sell_price.symbol} {product.sell_price.price} || Discount : {product.sell_price.symbol} {product.sell_price.discount}</strong></p>
-                                                    <p className="mb-0">Price : {product.price}</p>
-                                                    <p className="mb-0">Price : {product.discount_fixed}</p>
-                                                    <p className="mb-0">Price : {product.discount_percent}</p>
-                                                    <p className="mb-0">Price : {product.discount_start}</p>
-                                                    <p className="mb-0">Price : {product.discount_end}</p>
+                                                    <p className="mb-0">Harga Jual : <strong>{product.sell_price.symbol} {product.sell_price.price} || Diskon : {product.sell_price.symbol} {product.sell_price.discount}</strong></p>
+                                                    <p className="mb-0">Harga : {product.price}</p>
+                                                    <p className="mb-0">Harga Diskon : {product.discount_fixed}</p>
+                                                    <p className="mb-0">Diskon : {product.discount_percent}</p>
+                                                    <p className="mb-0">Tanggal Dimulai : {product.discount_start}</p>
+                                                    <p className="mb-0">Tangal Berakhir : {product.discount_end}</p>
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Status : {product.status}</p>
                                                     <p className="text-success mb-0">SKU : {product.sku}</p>
-                                                    <p className="mb-0">Stock : {product.stock}</p>
+                                                    <p className="mb-0">Stok : {product.stock}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Category : {product.category}</p>
+                                                    <p className="mb-0">Kategori : {product.category}</p>
                                                 </td>
                                                 <td>
                                                     <img
@@ -228,10 +228,10 @@ const ProductList = () => {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0"><small>Created : {product.created_at}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated : {product.updated_at}</small></p>
-                                                    <p className="mb-0"><small>Created By : {product.created_by}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated By : {product.updated_by}</small></p>
+                                                    <p className="mb-0"><small>Dibuat : {product.created_at}</small></p>
+                                                    <p className="text-success mb-0"><small>Diubah : {product.updated_at}</small></p>
+                                                    <p className="mb-0"><small>Dibuat Oleh : {product.created_by}</small></p>
+                                                    <p className="text-success mb-0"><small>Diubah Oleh : {product.updated_by}</small></p>
                                                 </td>
                                                 <td className='m-1'>
                                                     <Link to={`/product/details/${product.id}`} ><button className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button></Link>
@@ -249,24 +249,27 @@ const ProductList = () => {
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>SL</th>
-                                                <th>Name</th>
-                                                <th>Price</th>
+                                                <th>No</th>
+                                                <th>Nama</th>
+                                                <th>Harga</th>
                                                 <th>Status</th>
-                                                <th>Category</th>
-                                                <th>Photo</th>
-                                                <th>Date Time</th>
-                                                <th>Action</th>
+                                                <th>Kategori</th>
+                                                <th>Foto</th>
+                                                <th>Tanggal / Waktu</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                                 }
                             </div>
-                            {/* Pagination */}
                             <div className="card-footer d-flex justify-content-between align-items-center">
                                 <div className="data_tables_info">
-                                    Showing {startFrom} to {startFrom + products.length - 1} of {totalItemsCount} entries
+                                {products.length > 0 ? (
+                                    `Showing ${startFrom} to ${startFrom + products.length - 1} of ${totalItemsCount} entries`
+                                ) : (
+                                    'Showing 1 to 1 of 0 entries'
+                                )}
                                 </div>
                                 <nav className="pagination-sm ml-auto">
                                     <Pagination

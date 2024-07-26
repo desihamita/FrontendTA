@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Pagination from 'react-js-pagination';
-import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
 import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import { Link } from 'react-router-dom';
@@ -66,13 +65,13 @@ const ListSupplier = () => {
 
   const handleSupplierDelete = (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "Supplier will be deleted",
+      title: "Apa kamu yakin?",
+      text: "Pemasok akan dihapus",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete it!"
+      confirmButtonText: "Ya, Hapus!"
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${Constants.BASE_URL}/supplier/${id}`).then(res => {
@@ -104,14 +103,14 @@ const ListSupplier = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Supplier List" breadcrumb="supplier" />
+        <Breadcrumb title="Daftar Pemasok" breadcrumb="pemasok" />
       </section>
       <section class="content">
         <div class="card">
           <div class="card-header">
             <CardHeader 
               link={'/supplier/create'} 
-              btnText="Add Supplier"
+              btnText="Tambah Pemasok"
               btn="btn btn-warning"
               icon="fas fa-plus"
             />
@@ -194,13 +193,13 @@ const ListSupplier = () => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Name</th>
-                      <th>Phone / Email</th>
+                      <th>Nama</th>
+                      <th>No.Tlp / Email</th>
                       <th>Status</th>
-                      <th>Photo</th>
-                      <th>Created By</th>
-                      <th>Date Time</th>
-                      <th>Action</th>
+                      <th>Foto</th>
+                      <th>Dibuat Oleh</th>
+                      <th>Tanggal / Waktu</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -210,7 +209,7 @@ const ListSupplier = () => {
                         <td>{supplier.name}</td>
                         <td>
                           <p className="mb-0">Email : {supplier.email}</p>
-                          <p className="text-success">Phone : {supplier.phone}</p>
+                          <p className="text-success">No.Tlp : {supplier.phone}</p>
                         </td>
                         <td>{supplier.status}</td>
                         <td>
@@ -226,10 +225,10 @@ const ListSupplier = () => {
                         <td>{supplier.created_by}</td>
                         <td>
                           <p className="mb-0">
-                            <small>Created : {supplier.created_at}</small>
+                            <small>Dibuat : {supplier.created_at}</small>
                           </p>
                           <p className="text-success">
-                            <small>Updated : {supplier.updated_at}</small>
+                            <small>Diubah : {supplier.updated_at}</small>
                           </p>
                         </td>
                         <td className='m-1'>
@@ -245,27 +244,27 @@ const ListSupplier = () => {
                   <tfoot>
                     <tr>
                       <th>No</th>
-                      <th>Name</th>
-                      <th>Phone / Email</th>
+                      <th>Nama</th>
+                      <th>No.Tlp / Email</th>
                       <th>Status</th>
-                      <th>Photo</th>
-                      <th>Created By</th>
-                      <th>Date Time</th>
-                      <th>Action</th>
+                      <th>Foto</th>
+                      <th>Dibuat Oleh</th>
+                      <th>Tanggal / Waktu</th>
+                      <th>Aksi</th>
                     </tr>
                   </tfoot>
                 </table>
                 <CategoryPhotoModal
                   show={modalLogoShow}
                   onHide={() => setModalLogoShow(false)}
-                  title={'Supplier Logo'}
+                  title={'Logo Pemasok'}
                   size={'800'}
                   photo={modalLogo}
                 />
                 <DetailsSupplier
                   show={modalShow}
                   onHide={() => setModalShow(false)}
-                  title={'Supplier Details'}
+                  title={'Detail Pemasok'}
                   size={''}
                   supplier={supplier}
                 />

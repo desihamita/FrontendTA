@@ -10,6 +10,7 @@ import Breadcrumb from '../../components/partials/Breadcrumb'
 import axios from 'axios'
 import Constants from '../../Constants'
 import Swal from 'sweetalert2'
+import DetailsSalesManager from './DetailsSalesManager'
 
 const ListSalesManager = () => {
     const [input, setInput] = useState({
@@ -64,13 +65,13 @@ const ListSalesManager = () => {
 
     const handleSalesManagerDelete = (id) => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Sales Manager will be deleted",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Delete it!"
+          title: "Apa kamu yakin?",
+          text: "Karyawan akan dihapus",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, Hapus!"
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`${Constants.BASE_URL}/sales-manager/${id}`).then(res => {
@@ -95,7 +96,7 @@ const ListSalesManager = () => {
     return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Daftar Karyawan" breadcrumb="employee" />
+        <Breadcrumb title="Daftar Karyawan" breadcrumb="karyawan" />
       </section>
       <section className="content">
         <div className="container-fluid">
@@ -189,24 +190,24 @@ const ListSalesManager = () => {
                       <table className="table table-hover table-striped table-bordered">
                         <thead>
                           <tr>
-                            <th>SL</th>
-                            <th>Name</th>
-                            <th>Phone / Email</th>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>No.Tlp / Email</th>
                             <th>Status</th>
-                            <th>Photo</th>
-                            <th>Created By</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>Foto</th>
+                            <th>Dibuat Oleh</th>
+                            <th>Tanggal / Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </thead>
                         <tbody>
                           {salesManagers.length > 0 ? salesManagers.map((salesManager, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
-                              <td>{salesManager.name} {salesManager.id}</td>
+                              <td>{salesManager.name}</td>
                               <td>
                                 <p className="mb-0">Email : {salesManager.email}</p>
-                                <p className="text-success">Phone : {salesManager.phone}</p>
+                                <p className="text-success">No.Tlp : {salesManager.phone}</p>
                               </td>
                               <td>
                                 <p className="mb-0">Status : {salesManager.status}</p>
@@ -224,10 +225,10 @@ const ListSalesManager = () => {
                               <td>{salesManager.created_by}</td>
                               <td>
                                 <p className="mb-0">
-                                  <small>Created : {salesManager.created_at}</small>
+                                  <small>Dibuat : {salesManager.created_at}</small>
                                 </p>
                                 <p className="text-success">
-                                  <small>Updated : {salesManager.updated_at}</small>
+                                  <small>Diubah : {salesManager.updated_at}</small>
                                 </p>
                               </td>
                               <td className='m-1'>
@@ -242,30 +243,30 @@ const ListSalesManager = () => {
                         </tbody>
                         <tfoot>
                           <tr>
-                            <th>SL</th>
-                            <th>Name</th>
-                            <th>Phone / Email</th>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>No.Tlp / Email</th>
                             <th>Status</th>
-                            <th>Photo</th>
-                            <th>Created By</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>Foto</th>
+                            <th>Dibuat Oleh</th>
+                            <th>Tanggal / Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </tfoot>
                       </table>
                       <CategoryPhotoModal
                         show={modalLogoShow}
                         onHide={() => setModalLogoShow(false)}
-                        title={'Sales Manager Logo'}
+                        title={'Foto Karyawan'}
                         size={'800'}
                         photo={modalLogo}
                       />
-                      <DetailsSupplier
+                      <DetailsSalesManager
                         show={modalShow}
                         onHide={() => setModalShow(false)}
-                        title={'Sales Manager Details'}
+                        title={'Detail Karyawan'}
                         size={''}
-                        supplier={salesManager}
+                        sales={salesManager}
                       />
                     </div>
                   }

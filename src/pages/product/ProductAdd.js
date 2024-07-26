@@ -8,7 +8,11 @@ import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const ProductAdd = () => {
   const navigate = useNavigate();
-  const [input, setInput] = useState({status: 1})
+  const [input, setInput] = useState({
+    status: 1,
+    category_id: '',
+    sub_category_id: '',
+  })
   const [attribute_input, setAttribute_input] = useState({})
   const [errors, setErrors] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -110,25 +114,17 @@ const ProductAdd = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="card card-warning card-outline">
-                <div className="card-header">
-                  <CardHeader 
-                    link={'/product'} 
-                    btnText="Cancel"
-                    btn="btn btn-info"
-                    icon="fas fa-backspace"
-                  />
-                </div>
                 <form id="quickForm">
                   <div className="card-body row">
                     <div className="form-group col-md-6">
-                      <label>Name</label>
+                      <label>Nama</label>
                       <input
                         className={errors.name !== undefined ? 'form-control  is-invalid' : 'form-control '}
                         type={'text'}
                         name={'name'}
                         value={input.name}
                         onChange={handleInput}
-                        placeholder={'Enter Product name'}
+                        placeholder={'Enter Nama Produk'}
                       />
                       {errors.name && (
                         <div className="invalid-feedback">
@@ -144,7 +140,7 @@ const ProductAdd = () => {
                         name={'slug'}
                         value={input.slug}
                         onChange={handleInput}
-                        placeholder={'Enter Product slug'}
+                        placeholder={'Enter Slug Produk'}
                       />
                       {errors.slug && (
                         <div className="invalid-feedback">
@@ -153,15 +149,15 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Select Category</label>
+                      <label>Kategori</label>
                       <select
                         className={errors.category_id !== undefined ? 'form-control  is-invalid' : 'form-control '}
                         name={'category_id'}
                         value={input.category_id}
                         onChange={handleInput}
-                        placeholder={'Select product category'}
+                        placeholder={'Select Kategori Produk'}
                       >
-                        <option>Select Category</option>
+                        <option>PIlih Kategori</option>
                         {categories.map((category, index) => (
                             <option value={category.id} key={index}>{category.name}</option>
                         ))}
@@ -174,16 +170,15 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Select Sub Category</label>
+                      <label>Sub Kategori</label>
                       <select
                         className={errors.sub_category_id !== undefined ? 'form-control is-invalid' : 'form-control '}
                         name={'sub_category_id'}
                         value={input.sub_category_id}
                         onChange={handleInput}
-                        placeholder={'Select product sub category'}
                         disabled={input.category_id === undefined}
                       >
-                        <option>Select Sub Category</option>
+                        <option>Pilih Sub Kategori</option>
                         {subCategories.map((sub_category, index) => (
                             <option value={sub_category.id} key={index}>{sub_category.name}</option>
                         ))}
@@ -213,14 +208,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Cost</label>
+                      <label>Biaya</label>
                       <input
                           className={errors.cost !== undefined ? 'form-control is-invalid' : 'form-control'}
                           type={'number'}
                           name={'cost'}
                           value={input.cost}
                           onChange={handleInput}
-                          placeholder={'Enter Product cost'}
+                          placeholder={'Enter Biaya Produk'}
                       />
                       {errors.cost && (
                         <div className="invalid-feedback">
@@ -229,14 +224,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Price</label>
+                      <label>Harga</label>
                       <input
                         className={errors.price !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'number'}
                         name={'price'}
                         value={input.price}
                         onChange={handleInput}
-                        placeholder={'Enter Product Price'}
+                        placeholder={'Enter Harga Produk'}
                       />
                       {errors.price && (
                         <div className="invalid-feedback">
@@ -245,14 +240,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Product Stock</label>
+                      <label>Stok</label>
                       <input
-                        className={errors.stock !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.stock !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'number'}
                         name={'stock'}
                         value={input.stock}
                         onChange={handleInput}
-                        placeholder={'Enter Product Stock'}
+                        placeholder={'Enter Stok Produk'}
                       />
                       {errors.stock && (
                         <div className="invalid-feedback">
@@ -261,14 +256,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Discount %</label>
+                      <label>Diskon %</label>
                       <input
-                        className={errors.discount_percent !== undefined ? 'form-control is-invalid' : 'form-control mt-2'}
+                        className={errors.discount_percent !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'number'}
                         name={'discount_percent'}
                         value={input.discount_percent}
                         onChange={handleInput}
-                        placeholder={'Enter Product Discount (%)'}
+                        placeholder={'Enter Diskon (%) Produk'}
                       />
                       {errors.discount_percent && (
                         <div className="invalid-feedback">
@@ -277,14 +272,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Discount Fixed Amount</label>
+                      <label>Diskon Jumlah Tetap</label>
                       <input
-                        className={errors.discount_fixed !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.discount_fixed !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'number'}
                         name={'discount_fixed'}
                         value={input.discount_fixed}
                         onChange={handleInput}
-                        placeholder={'Enter Product Discount Fixed'}
+                        placeholder={'Enter Diskon Jumlah Tetap Produk'}
                       />
                       {errors.discount_fixed && (
                         <div className="invalid-feedback">
@@ -293,14 +288,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Discount Start Date</label>
+                      <label>Tanggal Mulai Diskon</label>
                       <input
-                        className={errors.discount_start !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.discount_start !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'datetime-local'}
                         name={'discount_start'}
                         value={input.discount_start}
                         onChange={handleInput}
-                        placeholder={'Enter Discount Start Date'}
+                        placeholder={'Enter Tanggal Mulai Diskon'}
                       />
                       {errors.discount_start && (
                         <div className="invalid-feedback">
@@ -309,14 +304,14 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Discount End Date</label>
+                      <label>Tanggal Akhir Diskon</label>
                       <input
-                        className={errors.discount_end !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.discount_end !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'datetime-local'}
                         name={'discount_end'}
                         value={input.discount_end}
                         onChange={handleInput}
-                        placeholder={'Enter Discount End Date'}
+                        placeholder={'Enter Tanggal Akhir Diskon'}
                       />
                       {errors.discount_end && (
                         <div className="invalid-feedback">
@@ -327,13 +322,13 @@ const ProductAdd = () => {
                     <div className="form-group col-md-6">
                       <label>SKU</label>
                       <input
-                        className={errors.sku !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.sku !== undefined ? 'form-control is-invalid' : 'form-control'}
                         type={'text'}
                         name={'sku'}
                         value={input.sku}
                         readOnly
                         onChange={handleInput}
-                        placeholder={'Enter Product SKU'}
+                        placeholder={'Enter SKU Produk'}
                       />
                       {errors.sku && (
                         <div className="invalid-feedback">
@@ -342,13 +337,13 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Description</label>
+                      <label>Keterangan</label>
                       <textarea
-                        className={errors.description !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                        className={errors.description !== undefined ? 'form-control is-invalid' : 'form-control'}
                         name={'description'}
                         value={input.description}
                         onChange={handleInput}
-                        placeholder={'Enter product description'}
+                        placeholder={'Enter Keterangan Produk'}
                       />
                       {errors.description && (
                         <div className="invalid-feedback">
@@ -356,26 +351,30 @@ const ProductAdd = () => {
                         </div>
                       )}
                     </div>
-                      <div className="form-group col-md-6">
-                        <label htmlFor="exampleInputFile">Photo</label>
-                        <div className="input-group">
-                          <div className="custom-file">
-                          <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
-                          <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                          </div>
-                          {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+                    <div className="form-group col-md-6">
+                      <label>Foto</label>
+                      <input type="file" name="photo" className={errors.photo !== undefined ? 'form-control is-invalid' : 'form-control'} onChange={handlePhoto} />
+
+                      {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+
+                      {input.photo && (
+                        <div className="card-body">
+                          <img className="img-fluid w-50 h-50" src={input.photo} alt="photo" />
                         </div>
-                        {input.photo && (
-                          <div className="card-body">
-                            <img className="img-fluid w-50 h-50" src={input.photo} alt="photo" />
-                          </div>
-                        )}
-                      </div>
+                      )}
+                    </div>
                   </div>
                   <div className="card-footer">
-                    <button className={'btn btn-warning'} onClick={handleProductCreate}
-                      dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Produk'}}
-                    />
+                    <div className="row justify-content-center">
+                      <CardHeader 
+                        link={'/product'} 
+                        btnText="Batal"
+                        btn="btn btn-info"
+                      />
+                      <button className={'btn btn-warning'} onClick={handleProductCreate}
+                        dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Produk'}}
+                      />
+                    </div>
                   </div>
                 </form>
               </div>

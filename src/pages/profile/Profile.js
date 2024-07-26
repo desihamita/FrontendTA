@@ -82,13 +82,13 @@ const Profile = () => {
 
     const handleShopDelete = (id) => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Shop will be deleted",
+            title: "Apa kamu yakin?",
+            text: "Kafe akan dihapus",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Delete it!"
+            confirmButtonText: "Ya, Hapus!"
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`${Constants.BASE_URL}/shop/${id}`).then(res => {
@@ -128,7 +128,7 @@ const Profile = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Profile" breadcrumb="profile" />
+            <Breadcrumb title="Profil" breadcrumb="profil" />
         </section>
         <section className="content">
             <div className='row'>
@@ -136,11 +136,14 @@ const Profile = () => {
                     <div className="card card-warning card-outline">
                         <div className="card-body box-profile">
                                 <div className="text-center">
-                                {userPhoto ? (
-                                    <img className="profile-user-img img-fluid img-circle" src={`http://localhost:8000/images/uploads/sales_manager_thumb/${userPhoto}`} alt="User profile picture" />
-                                ) : (
-                                    <img src={photoProfile} className="profile-user-img img-fluid img-circle" alt="Default profile" />
-                                )}
+                                    <img
+                                        className="profile-user-img img-fluid img-circle"
+                                        src={`http://localhost:8000/images/uploads/sales_manager_thumb/${userPhoto}` || photoProfile} 
+                                        alt="User profile picture"
+                                        onError={(e) => {
+                                            e.target.src = photoProfile;
+                                        }}
+                                    />  
                                 </div>
                                 <h3 className="profile-username text-center">{userName}</h3>
                                 <ul className="list-group list-group-unbordered mb-3">
@@ -148,7 +151,7 @@ const Profile = () => {
                                         <b>Email</b> <a className="float-right">{userEmail}</a>
                                     </li>
                                     <li className="list-group-item">
-                                        <b>Phone</b> <a className="float-right">{userPhone}</a>
+                                        <b>No.Tlp</b> <a className="float-right">{userPhone}</a>
                                     </li>
                                 </ul>
                         </div>
@@ -161,7 +164,7 @@ const Profile = () => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <CardHeader 
                                         link={'/shop/create'} 
-                                        btnText="Add Shop"
+                                        btnText="Tambah Kafe"
                                         btn="btn btn-warning"
                                         icon="fas fa-plus"
                                     />
@@ -193,9 +196,9 @@ const Profile = () => {
                                                 value={input.order_by}
                                                 onChange={handleInput}
                                             >
-                                                {columns.map((column, index) => (
-                                                <option key={index} value={column}>{column}</option>
-                                                ))}
+                                                <option value={'name'}>Name</option>
+                                                <option value={'created_at'}>Created At</option>
+                                                <option value={'updated_at'}>Updated At</option>
                                             </select>
                                         </label>
                                     </div>
@@ -244,13 +247,13 @@ const Profile = () => {
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Shop Name</th>
-                                            <th>Phone / Email</th>
+                                            <th>Nama</th>
+                                            <th>No.Tlp / Email</th>
                                             <th>Status</th>
-                                            <th>Photo</th>
-                                            <th>Created By</th>
-                                            <th>Date Time</th>
-                                            <th>Action</th>
+                                            <th>Logo</th>
+                                            <th>Dibuat Oleh</th>
+                                            <th>Tanggal / Waktu</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -260,7 +263,7 @@ const Profile = () => {
                                             <td>{shop.name}</td>
                                             <td>
                                                 <p className="mb-0">Email : {shop.email}</p>
-                                                <p className="text-success">Phone : {shop.phone}</p>
+                                                <p className="text-success">No.Tlp : {shop.phone}</p>
                                             </td>
                                             <td>{shop.status}</td>
                                             <td>
@@ -276,10 +279,10 @@ const Profile = () => {
                                             <td>{shop.created_by}</td>
                                             <td>
                                                 <p className="mb-0">
-                                                <small>Created : {shop.created_at}</small>
+                                                <small>Dibuat : {shop.created_at}</small>
                                                 </p>
                                                 <p className="text-success">
-                                                <small>Updated : {shop.updated_at}</small>
+                                                <small>Diubah : {shop.updated_at}</small>
                                                 </p>
                                             </td>
                                             <td className='m-1'>
@@ -299,27 +302,27 @@ const Profile = () => {
                                     <tfoot>
                                         <tr>
                                             <th>No</th>
-                                            <th>Shop Name</th>
-                                            <th>Phone / Email</th>
+                                            <th>Nama</th>
+                                            <th>No.Tlp / Email</th>
                                             <th>Status</th>
-                                            <th>Photo</th>
-                                            <th>Created By</th>
-                                            <th>Date Time</th>
-                                            <th>Action</th>
+                                            <th>Logo</th>
+                                            <th>Dibuat Oleh</th>
+                                            <th>Tanggal / Waktu</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                 </table>
                                 <CategoryPhotoModal
                                     show={modalLogoShow}
                                     onHide={() => setModalLogoShow(false)}
-                                    title={'Shop Logo'}
+                                    title={'Logo Kafe'}
                                     size={'800'}
                                     photo={modalLogo}
                                 />
                                 <DetailsSupplier
                                     show={modalShow}
                                     onHide={() => setModalShow(false)}
-                                    title={'Shop Details'}
+                                    title={'Detail Kafe'}
                                     size={''}
                                     supplier={shop}
                                 />

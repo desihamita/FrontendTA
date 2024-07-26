@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 
-const DetailsSupplier = (props) => {
+const DetailsSalesManager = (props) => {
   return (
     <>
         <Modal
@@ -11,7 +11,7 @@ const DetailsSupplier = (props) => {
             centered
         >
             <Modal.Header>
-                <Modal.Title id="supplier_details_modal">
+                <Modal.Title id="sales_manager_details_modal">
                     {props.title}
                 </Modal.Title>
                 <button className="close" onClick={props.onHide}>
@@ -23,52 +23,52 @@ const DetailsSupplier = (props) => {
                     <tbody>
                         <tr>
                             <th>ID</th>
-                            <td>{props.supplier.id}</td>
+                            <td>{props.sales.id}</td>
                         </tr>
                         <tr>
                             <th>Nama</th>
-                            <td>{props.supplier.name}</td>
+                            <td>{props.sales.name}</td>
                         </tr>
                         <tr>
-                            <th>No.Telepon</th>
-                            <td>{props.supplier.phone}</td>
+                            <th>No Telepon</th>
+                            <td>{props.sales.phone}</td>
                         </tr>
                         <tr>
                             <th>Email</th>
-                            <td>{props.supplier.email}</td>
+                            <td>{props.sales.email}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>{props.supplier.status}</td>
+                            <td>{props.sales.status}</td>
                         </tr>
                         <tr>
                             <th>Dibuat Oleh</th>
-                            <td>{props.supplier.created_by}</td>
+                            <td>{props.sales.created_by}</td>
                         </tr>
                         <tr>
                             <th>Dibuat</th>
-                            <td>{props.supplier.created_at}</td>
+                            <td>{props.sales.created_at}</td>
                         </tr>
                         <tr>
                             <th>Diubah</th>
-                            <td>{props.supplier.updated_at}</td>
+                            <td>{props.sales.updated_at}</td>
                         </tr>
                         <tr>
                             <th>Alamat</th>
                             <td>
                                 {
-                                    `${props.supplier.address?.address}
-                                    ${props.supplier.address?.division}
-                                    ${props.supplier.address?.district}
-                                    ${props.supplier.address?.subDistrict}
-                                    ${props.supplier.address?.area}
-                                    ${props.supplier.address?.landmark}`
+                                    `${props.sales.address?.address}
+                                    ${props.sales.address?.division}
+                                    ${props.sales.address?.district}
+                                    ${props.sales.address?.subDistrict}
+                                    ${props.sales.address?.area}
+                                    ${props.sales.address?.landmark}`
                                 }   
                             </td>
                         </tr>
                         <tr>
-                            <th>Logo</th>
-                            <td><img src={props.supplier.logo} className='img-thumbnail' alt='Logo' /></td>
+                            <th>Foto</th>
+                            <td><img src={props.sales.photo} className='img-thumbnail' alt='Photo' /></td>
                         </tr>
                     </tbody>
                 </table>
@@ -78,4 +78,4 @@ const DetailsSupplier = (props) => {
   )
 }
 
-export default DetailsSupplier
+export default DetailsSalesManager

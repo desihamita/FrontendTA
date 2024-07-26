@@ -63,13 +63,13 @@ const ListSubCategory = () => {
 
     const handleCategoryDelete = (id) => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Category will be deleted",
+            title: "Apa kamu yakin?",
+            text: "Sub Kategori akan dihapus",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Delete it!"
+            confirmButtonText: "Ya, Hapus!"
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios.delete(`${Constants.BASE_URL}/sub-category/${id}`).then(res => {
@@ -101,14 +101,14 @@ const ListSubCategory = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Sub Category List" breadcrumb="Sub Category" />
+            <Breadcrumb title="Daftar Sub Kategori" breadcrumb="sub kategori" />
         </section>
         <section className="content">
             <div className="card">
                 <div className="card-header">
                     <CardHeader 
                         link={'/sub-category/create'} 
-                        btnText="Add Sub Category"
+                        btnText="Tambah Sub Kategori"
                         btn="btn btn-warning"
                         icon="fas fa-plus"
                     />
@@ -138,9 +138,11 @@ const ListSubCategory = () => {
                                     value={input.order_by}
                                     onChange={handleInput}
                                 >
-                                    {columns.map((column, index) => (
-                                        <option key={index} value={column}>{column}</option>
-                                    ))}
+                                    
+                                    <option value={'serial'}>Serial</option>
+                                    <option value={'name'}>Name</option>
+                                    <option value={'created_at'}>Created At</option>
+                                    <option value={'updated_at'}>Updated At</option>
                                 </select>
                                 </label>
                             </div>
@@ -189,12 +191,12 @@ const ListSubCategory = () => {
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Name / SLug / Category</th>
+                                    <th>Nama / Slug / Kategori</th>
                                     <th>Serial / Status</th>
-                                    <th>Photo</th>
-                                    <th>Created By</th>
-                                    <th>Date Time</th>
-                                    <th>Action</th>
+                                    <th>Foto</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th>Tanggal / Waktu</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -202,9 +204,9 @@ const ListSubCategory = () => {
                                 <tr key={index}>
                                     <td>{startFrom + index}</td>
                                     <td>
-                                        <p className="mb-0">Name : {category.name}</p>
+                                        <p className="mb-0">Nama : {category.name}</p>
                                         <p className="text-success mb-0">Slug : {category.slug}</p>
-                                        <p className="text-secondary">Category : {category.category_name}</p>
+                                        <p className="text-secondary">Kategori : {category.category_name}</p>
                                     </td>
                                     <td>
                                         <p className="mb-0">Serial : {category.serial}</p>
@@ -223,10 +225,10 @@ const ListSubCategory = () => {
                                     <td>{category.created_by}</td>
                                     <td>
                                         <p className="mb-0">
-                                        <small>Created : {category.created_at}</small>
+                                        <small>Dibuat : {category.created_at}</small>
                                         </p>
                                         <p className="text-success">
-                                        <small>Updated : {category.updated_at}</small>
+                                        <small>Diubah : {category.updated_at}</small>
                                         </p>
                                     </td>
                                     <td className='m-1'>
@@ -242,26 +244,26 @@ const ListSubCategory = () => {
                             <tfoot>
                                 <tr>
                                     <th>No</th>
-                                    <th>Name / SLug / Category</th>
+                                    <th>Nama / Slug / Kategori</th>
                                     <th>Serial / Status</th>
-                                    <th>Photo</th>
-                                    <th>Created By</th>
-                                    <th>Date Time</th>
-                                    <th>Action</th>
+                                    <th>Foto</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th>Tanggal / Waktu</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </tfoot>
                             </table>
                             <CategoryPhotoModal
                                 show={modalPhotoShow}
                                 onHide={() => setModalPhotoShow(false)}
-                                title={'Sub Category Photo'}
+                                title={'Foto Sub Kategori'}
                                 size={''}
                                 photo={modalPhoto}
                             />
                             <CategoryDetailsModal
                                 show={modalShow}
                                 onHide={() => setModalShow(false)}
-                                title={'Sub Category Details'}
+                                title={'Detail Sub Kategori'}
                                 size={''}
                                 category={category}
                             />

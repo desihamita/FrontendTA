@@ -148,63 +148,55 @@ const EditSupplier = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Edit Supplier" breadcrumb="Form Data" />
+        <Breadcrumb title="Ubah Pemasok" breadcrumb="Form Data" />
       </section>
       <section className="content">
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-12">
               <div className="card card-warning card-outline">
-              <div className="card-header">
-                  <CardHeader 
-                    link={'/supplier'} 
-                    btnText="Cancel"
-                    btn="btn btn-info"
-                    icon="fas fa-backspace"
-                  />
-                </div>
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Supplier Details</h3>
+                          <h3 className="card-title">Detail Pemasok</h3>
                         </div>
                         <form>
                           <div className="card-body">
                             <div className="form-group">
-                              <label>Company Name</label>
+                              <label>Nama</label>
                               <input
                                 type="text"
                                 name="name"
                                 value={input.name}
                                 onChange={handleInput}
                                 className={errors.name ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Supplier Company Name"
+                                placeholder="Enter Nama Toko Pemasok"
                               />
                               {errors.name && <div className="invalid-feedback">{errors.name[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Phone</label>
+                              <label>No.Telepon</label>
                               <input
                                 type="text"
                                 name="phone"
                                 value={input.phone}
                                 onChange={handleInput}
                                 className={errors.phone ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Supplier Phone Number"
+                                placeholder="Enter No.Telepon Pemasok"
                               />
                               {errors.phone && <div className="invalid-feedback">{errors.phone[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Email Address</label>
+                              <label>Email</label>
                               <input
                                 type="text"
                                 name="email"
                                 value={input.email}
                                 onChange={handleInput}
                                 className={errors.email ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Supplier Email Address"
+                                placeholder="Enter Email Pemasok"
                               />
                               {errors.email && <div className="invalid-feedback">{errors.email[0]}</div>}
                             </div>
@@ -216,32 +208,28 @@ const EditSupplier = () => {
                                 onChange={handleInput}
                                 className={errors.status ? 'form-control select2 is-invalid' : 'form-control'}
                               >
-                                <option value="" disabled>Select Supplier Status</option>
+                                <option value="" disabled>Pilih Status</option>
                                 <option value={1}>Active</option>
                                 <option value={0}>Inactive</option>
                               </select>
                               {errors.status && <div className="invalid-feedback">{errors.status[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Details</label>
+                              <label>Detail</label>
                               <textarea
                                 name="details"
                                 value={input.details}
                                 onChange={handleInput}
                                 className={errors.details ? 'form-control is-invalid' : 'form-control'}
-                                placeholder="Enter Supplier Details"
+                                placeholder="Enter Detail Pemasok"
                               />
                               {errors.details && <div className="invalid-feedback">{errors.details[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label htmlFor="exampleInputFile">Logo</label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input type="file" name="logo" className="custom-file-input" id="exampleInputFile" onChange={handleLogo} />
-                                  <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-                                </div>
-                                {errors.logo && <div className="invalid-feedback">{errors.logo[0]}</div>}
-                              </div>
+                              <label>Logo</label>
+                              <input type="file" name="logo" className={errors.logo ? 'form-control is-invalid' : 'form-control'} onChange={handleLogo} />
+                              {errors.logo && <div className="invalid-feedback">{errors.logo[0]}</div>}
+
                               {input.logo !== undefined || input.display_logo !== undefined ?
                                 <div className="card-body">
                                   <img className="img-fluid w-50 h-50" src={input.logo === undefined ? input.display_logo : input.logo} alt="logo" />
@@ -255,12 +243,12 @@ const EditSupplier = () => {
                     <div className="col-md-6">
                       <div className="card card-warning">
                         <div className="card-header">
-                          <h3 className="card-title">Supplier Address</h3>
+                          <h3 className="card-title">Alamat Pemasok</h3>
                         </div>
                         <form>
                           <div className="card-body">
                             <div className="form-group">
-                              <label>Address <small>(House/Road/village etc)</small></label>
+                              <label>Alamat <small>(Rumah/Jalan/Desa dll)</small></label>
                               <input
                                 type="text"
                                 name="address"
@@ -271,83 +259,71 @@ const EditSupplier = () => {
                               />
                               {errors.address && <div className="invalid-feedback">{errors.address[0]}</div>}
                             </div>
-                            <div className="row">
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Province</label>
-                                  <select
+                            <div className='form-group'>
+                                <label>Provinsi</label>
+                                <select
                                     name="division_id"
                                     value={input.division_id}
                                     onChange={handleInput}
                                     className={errors.division_id ? 'form-control select2 is-invalid' : 'form-control'}
-                                  >
-                                    <option value={""} disabled selected>Select Province</option>
-                                    {divisions.map((division,index) => (
-                                      <option key={index} value={division.id}>{division.name}</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Provinsi</option>
+                                    {divisions.map((division, index) => (
+                                        <option key={index} value={division.id}>{division.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.division_id && <div className="invalid-feedback">{errors.division_id[0]}</div>}
-                                </div>
-                              </div>
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>District</label>
-                                  <select
+                                </select>
+                                {errors.division_id && <div className="invalid-feedback">{errors.division_id[0]}</div>}
+                            </div>
+                            <div className='form-group'>
+                                <label>Kabupaten / Kota</label>
+                                <select
                                     name="district_id"
                                     value={input.district_id}
                                     onChange={handleInput}
                                     className={errors.district_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={districts.length < 1}
-                                  >
-                                    <option value={""} disabled selected>Select city/district</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kabupaten / Kota</option>
                                     {districts.map((district, index) => (
                                       <option key={index} value={district.id}>{district.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.district_id && <div className="invalid-feedback">{errors.district_id[0]}</div>}
-                                </div>
-                              </div>
+                                </select>
+                                {errors.district_id && <div className="invalid-feedback">{errors.district_id[0]}</div>}
                             </div>
-                            <div className="row">
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Sub District</label>
-                                  <select
+                            <div className='form-group'>
+                                <label>Kecamatan</label>
+                                <select
                                     name="sub_district_id"
                                     value={input.sub_district_id}
                                     onChange={handleInput}
                                     className={errors.sub_district_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={subDistricts.length < 1}
-                                  >
-                                    <option disabled>Select sub district</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kecamatan</option>
                                     {subDistricts.map((subDistrict, index) => (
                                       <option key={index} value={subDistrict.id}>{subDistrict.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.sub_district_id && <div className="invalid-feedback">{errors.sub_district_id[0]}</div>}
-                                </div>
-                              </div>
-                              <div className='col-md-6'>
-                                <div className='form-group'>
-                                  <label>Postal Code</label>
-                                  <select
+                                </select>
+                                {errors.sub_district_id && <div className="invalid-feedback">{errors.sub_district_id[0]}</div>}
+                            </div>
+                            <div className='form-group'>
+                                <label>Kode Pos</label>
+                                <select
                                     name="area_id"
                                     value={input.area_id}
                                     onChange={handleInput}
                                     className={errors.area_id ? 'form-control select2 is-invalid' : 'form-control'}
                                     disabled={areas.length < 1}
-                                  >
-                                    <option disabled>Select Postal Code</option>
+                                >
+                                    <option value="" disabled={true} selected>Pilih Kode Pos</option>
                                     {areas.map((area, index) => (
                                       <option key={index} value={area.id}>{area.name}</option>
                                     ))}
-                                  </select>
-                                  {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
-                                </div>
-                              </div>
+                                </select>
+                                {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Landmark</label>
+                              <label>Penunjuk/Penanda Jalan (Optional)</label>
                               <input
                                 type="text"
                                 name="landmark"
@@ -366,7 +342,12 @@ const EditSupplier = () => {
                 </div>
                 <div className="card-footer">
                   <div className='row justify-content-center'>
-                    <button className="btn btn-warning pr-5 pl-5" onClick={handleSupplierUpdate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Update Supplier' }} />
+                    <CardHeader 
+                      link={'/supplier'} 
+                      btnText="Batal"
+                      btn="btn btn-info"
+                    />
+                    <button className="btn btn-warning pr-5 pl-5" onClick={handleSupplierUpdate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Ubah Pemasok' }} />
                   </div>
                 </div>
               </div>

@@ -43,10 +43,10 @@ const Home = () => {
     getProducts();
   }, []);
 
+  const isSales = GlobalFunction.isSales();
+
   const lowStockIngredients = ingredients.filter(item => item.stock <= 5);
   const lowStockProducts = products.filter(item => item.stock <= 5);
-
-  const isAdmin = GlobalFunction.isAdmin();
 
   return (
     <div className="content-wrapper">
@@ -75,7 +75,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-box fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Bahan Baku</h6>
+                    <h6 className="mt-0">Total Stock Bahan Baku Tersedia</h6>
                     <h4>{reportAttribute.total_stock}</h4>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-battery-quarter fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Low Stock</h6>
+                    <h6 className="mt-0">Total Stok Bahan Baku Habis</h6>
                     <h4>{reportAttribute.low_stock}</h4>
                   </div>
                 </div>
@@ -101,7 +101,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-dollar-sign fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Value (Order)</h6>
+                    <h6 className="mt-0">Total Stok Pesanan Bahan Baku</h6>
                     <h4>{reportAttribute.buy_value}</h4>
                   </div>
                 </div>
@@ -116,7 +116,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-box-open fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Product</h6>
+                    <h6 className="mt-0">Total Produk</h6>
                     <h4>{reportProduct.total_product}</h4>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-box fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock</h6>
+                    <h6 className="mt-0">Total Stok Produk Tersedia</h6>
                     <h4>{reportProduct.total_stock_product}</h4>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-battery-quarter fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Low Stock</h6>
+                    <h6 className="mt-0">Total Stok Produk Habis</h6>
                     <h4>{reportProduct.low_stock_product}</h4>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-dollar-sign fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Value (sale)</h6>
+                    <h6 className="mt-0">Total Stok Produk Terjual</h6>
                     <h4>{reportProduct.buy_value_product}</h4>
                   </div>
                 </div>
@@ -168,7 +168,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-dollar-sign fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Stock Value</h6>
+                    <h6 className="mt-0">Total Harga Produk (Asli)</h6>
                     <h4>{reportProduct.sale_value_product}</h4>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-dollar-sign fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Possible Profit</h6>
+                    <h6 className="mt-0">Total Keuntungan</h6>
                     <h4>{reportProduct.possible_profit_product}</h4>
                   </div>
                 </div>
@@ -194,7 +194,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-hand-holding-usd fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Expense</h6>
+                    <h6 className="mt-0">Total Pendapatan</h6>
                     <h4>{reportProduct.total_expense_product}</h4>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ const Home = () => {
                 <div className="media align-items-center">
                   <i className="fas fa-money-bill-wave fa-2x"></i>
                   <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Expense Today</h6>
+                    <h6 className="mt-0">Total Pendapatan Hari Ini</h6>
                     <h4>{reportProduct.total_expense_today}</h4>
                   </div>
                 </div>
@@ -260,7 +260,11 @@ const Home = () => {
                 </div>
               </div>
               <div className="card-footer clearfix">
-                <Link to={`/order-bahan-baku/create`}><button className="btn btn-sm btn-info float-left">Place New Order</button></Link>
+
+                {isSales && (
+                  <Link to={`/order-bahan-baku/create`}><button className="btn btn-sm btn-info float-left">Place New Order</button></Link>
+                )}
+
                 <Link to={`/order-bahan-baku`}><button className="btn btn-sm btn-secondary float-right">View All Orders</button></Link>
               </div>
             </div>
@@ -309,9 +313,11 @@ const Home = () => {
                 </div>
               </div>
               <div className="card-footer clearfix">
-                {isAdmin && (
+
+                {isSales && (
                   <Link to={`/order/create`}><button className="btn btn-sm btn-info float-left">Place New Order</button></Link>
                 )}
+
                 <Link to={`/order`}><button className="btn btn-sm btn-secondary float-right">View All Orders</button></Link>
               </div>
             </div>

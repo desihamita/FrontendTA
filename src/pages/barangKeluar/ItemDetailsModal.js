@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const ItemDetailsModal = (props) => {
-    const { items = {} } = props; // Provide a default empty object if items is undefined
+    const { items = {} } = props;
 
     return (
         <>
@@ -25,27 +25,27 @@ const ItemDetailsModal = (props) => {
                         <tbody>
                             <tr>
                                 <th>ID</th>
-                                <td>{items.id || 'N/A'}</td>
+                                <td>{items.id}</td>
                             </tr>
                             <tr>
-                                <th>Quantity</th>
-                                <td>{items.quantity || 'N/A'}</td>
+                                <th>Kuantitas</th>
+                                <td>{items.quantity }</td>
                             </tr>
                             <tr>
-                                <th>Date</th>
-                                <td>{items.date || 'N/A'}</td>
+                                <th>Tanggal</th>
+                                <td>{items.date }</td>
                             </tr>
                             <tr>
                                 <th>Keterangan</th>
-                                <td>{items.keterangan || 'N/A'}</td>
+                                <td>{items.keterangan }</td>
                             </tr>
                             <tr>
                                 <th>Karyawan</th>
-                                <td>{items.sales_manager || 'N/A'}</td>
+                                <td>{items.sales_manager }</td>
                             </tr>
                             <tr>
-                                <th>Cafe</th>
-                                <td>{items.shop || 'N/A'}</td>
+                                <th>Kafe</th>
+                                <td>{items.shop }</td>
                             </tr>
                         </tbody>
                     </table>

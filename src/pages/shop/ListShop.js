@@ -26,6 +26,7 @@ const ListShop = () => {
     const [totalItemsCount, setTotalItemsCount] = useState(1);
     const [startFrom, setStartFrom] = useState(1);
     const [activePage, setActivePage] = useState(1);
+    
     const [modalShow, setModalShow] = useState(false);
     const [modalLogoShow, setModalLogoShow] = useState(false);
     const [shops, setShops] = useState([]);
@@ -107,7 +108,7 @@ const ListShop = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-          <Breadcrumb title="Shop List" breadcrumb="shop" />
+          <Breadcrumb title="Daftar Kafe" breadcrumb="kafe" />
         </section>
         <section className="content">
           <div className="card card-outline card-warning">
@@ -116,7 +117,7 @@ const ListShop = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <CardHeader 
                   link={'/shop/create'} 
-                  btnText="Add Shop"
+                  btnText="Tambah Kafe"
                   btn="btn btn-warning"
                   icon="fas fa-plus"
                 />
@@ -198,14 +199,14 @@ const ListShop = () => {
                   <table className="table table-hover table-striped table-bordered">
                     <thead>
                       <tr>
-                        <th>SL</th>
-                        <th>Shop Name</th>
-                        <th>Phone / Email</th>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>No.Tlp / Email</th>
                         <th>Status</th>
-                        <th>Photo</th>
-                        <th>Created By</th>
-                        <th>Date Time</th>
-                        <th>Action</th>
+                        <th>Logo</th>
+                        <th>Dibuat Oleh:</th>
+                        <th>Tanggal/ Waktu</th>
+                        <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -253,13 +254,14 @@ const ListShop = () => {
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>SL</th>
-                        <th>Shop Name</th>
-                        <th>Serial</th>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>No.Tlp / Email</th>
                         <th>Status</th>
-                        <th>Created By</th>
-                        <th>Date Time</th>
-                        <th>Action</th>
+                        <th>Logo</th>
+                        <th>Dibuat Oleh:</th>
+                        <th>Tanggal/ Waktu</th>
+                        <th>Aksi</th>
                       </tr>
                     </tfoot>
                   </table>

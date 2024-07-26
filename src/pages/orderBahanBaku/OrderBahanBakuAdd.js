@@ -254,7 +254,7 @@ const OrderBahanBakuAdd = () => {
     <>
         <div className="content-wrapper">
             <section className="content-header">
-                <Breadcrumb title="Create Order" breadcrumb="Form Data" />
+                <Breadcrumb title="Buat Pesanan" breadcrumb="Form Data" />
             </section>
             <section className="content">
                 <div className="container-fluid">
@@ -262,9 +262,9 @@ const OrderBahanBakuAdd = () => {
                         <div className="card-header">
                             <CardHeader
                                 link={'/order-bahan-baku'} 
-                                btnText="Cancel"
-                                btn="btn btn-warning"
-                                icon="fas fa-plus"
+                                btnText="Cancel"              
+                                btn="btn btn-info"
+                                icon="fas fa-backspace"
                             />
                         </div>
                         <div className="card-body">
@@ -272,7 +272,7 @@ const OrderBahanBakuAdd = () => {
                                 <div className="col-md-4">
                                     <div className="card card-orange card-outline">
                                         <div className="card-header">
-                                            <h5>Ingredients List</h5>
+                                            <h5>Daftar Bahan Baku</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="form-group">
@@ -305,9 +305,9 @@ const OrderBahanBakuAdd = () => {
                                                         <div className="attachment-pushed">
                                                             <h4 className="attachment-heading text-orange">{attribute.name}</h4>
                                                             <div className="attachment-text">
-                                                                <p className="mb-0"><small>Price : {attribute.sku}</small></p>
+                                                                <p className="mb-0"><small>Harga : {attribute.sku}</small></p>
                                                                 <p className="mb-0"><small>SKU : {attribute.sku}</small></p>
-                                                                <p className="mb-0"><small>Stock : {attribute.stock}</small></p>
+                                                                <p className="mb-0"><small>Stok : {attribute.stock}</small></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -319,29 +319,29 @@ const OrderBahanBakuAdd = () => {
                                 <div className="col-md-4">
                                     <div className="card card-orange card-outline">
                                         <div className="card-header">
-                                            <h5>Orderan</h5>
+                                            <h5>Pesanan</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className='order-summary'>
-                                                <p className='pb-2'><strong className='pr-2'>Supplier :</strong><span className='text-orange text-bold'>{orderSummary.supplier}</span></p>
+                                                <p className='pb-2'><strong className='pr-2'>Pemasok :</strong><span className='text-orange text-bold'>{orderSummary.supplier}</span></p>
                                                 <table className='table table-sm table-hover table-striped table-bordered'>
                                                     <tbody>
                                                         <tr>
-                                                            <th>Total Items</th>
+                                                            <th>Total Barang</th>
                                                             <td className='text-right'>{orderSummary.items}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Price</th>
+                                                            <th>Harga</th>
                                                             <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.amount)}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Payable</th>
+                                                            <th>Pembayaran</th>
                                                             <td className='text-right'>{GlobalFunction.formatRupiah(orderSummary.amount)}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            {Object.keys(carts).length < 0 ? carts.map((key) => (
+                                            {Object.keys(carts).map((key) => (
                                                 <div
                                                     key={key}
                                                     className="attachment-block border-bottom align-items-center py-2"
@@ -355,10 +355,10 @@ const OrderBahanBakuAdd = () => {
                                                     <div className="attachment-pushed">
                                                         <h4 className="attachment-heading text-orange">{carts[key].name}</h4>
                                                         <div className="attachment-text">
-                                                            <p className="mb-0">Price : <small>{carts[key].price}</small></p>
+                                                            <p className="mb-0">Harga : <small>{carts[key].price}</small></p>
                                                             <p className="mb-0"><small>SKU : {carts[key].sku} </small></p>
-                                                            <p className="mb-0"><small>Stock : {carts[key].stock}</small></p>
-                                                            <p className="pt-3"><span className='pr-2'> Quantity :</span>
+                                                            <p className="mb-0"><small>Stok : {carts[key].stock}</small></p>
+                                                            <p className="pt-3"><span className='pr-2'> Kuantitas :</span>
                                                                 <div className="btn-group">
                                                                     <button 
                                                                         onClick={() => handleDecrease(carts[key].id)} 
@@ -384,14 +384,14 @@ const OrderBahanBakuAdd = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            )) : <NoDataFound/> }
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="card card-orange card-outline">
                                         <div className="card-header">
-                                            <h5>Supplier List</h5>
+                                            <h5>Daftar Pemasok</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="form-group">
@@ -429,7 +429,7 @@ const OrderBahanBakuAdd = () => {
                                                     onClick={() => setModalShow(true)} 
                                                     className='btn btn-warning w-100'
                                                 >
-                                                    Place Order
+                                                    Pesan Ditempat
                                                 </button>
                                             </div>
                                         </div>

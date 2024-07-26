@@ -18,7 +18,7 @@ const DetailsBahanBaku = () => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/attribute/${params.id}`)
       .then(res => {
-        setAttributes(res.data.data);
+        setAttributes(res.data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -51,13 +51,13 @@ const DetailsBahanBaku = () => {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header">
-                    <h4>Basic Information</h4>
+                    <h4>Informasi dasar</h4>
                   </div>
                   <div className="card-body">
                     <table className="table table-hover table-striped table-bordered">
                       <tbody>
                         <tr>
-                          <th>Title</th>
+                          <th>Nama</th>
                           <td>{attributes.details.name}</td>
                         </tr>
                         <tr>
@@ -69,7 +69,7 @@ const DetailsBahanBaku = () => {
                           <td>{attributes.details.status}</td>
                         </tr>
                         <tr>
-                          <th>Category</th>
+                          <th>Kategori</th>
                           <td>
                             {GlobalFunction.isAdmin() ? (
                               <Link to={'/category'}>{attributes.details.category}</Link>
@@ -79,7 +79,7 @@ const DetailsBahanBaku = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th>Sub Category</th>
+                          <th>Sub Kategori</th>
                           <td>
                             {GlobalFunction.isAdmin() ? (
                               <Link to={'/sub-category'}>{attributes.details.sub_category}</Link>
@@ -89,7 +89,7 @@ const DetailsBahanBaku = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th>Brand</th>
+                          <th>Merek</th>
                           <td>
                             {GlobalFunction.isAdmin() ? (
                               <Link to={'/brand'}>{attributes.details.brand}</Link>
@@ -99,7 +99,7 @@ const DetailsBahanBaku = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th>Supplier</th>
+                          <th>Pemasok</th>
                           <td>
                             {GlobalFunction.isAdmin() ? (
                               <Link to={'/supplier'}>{attributes.details.supplier}</Link>
@@ -109,11 +109,11 @@ const DetailsBahanBaku = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th>Created At</th>
+                          <th>Dibuat</th>
                           <td>{attributes.details.created_at}</td>
                         </tr>
                         <tr>
-                          <th>Updated At</th>
+                          <th>Diubah</th>
                           <td>{attributes.details.updated_at}</td>
                         </tr>
                       </tbody>
@@ -124,7 +124,7 @@ const DetailsBahanBaku = () => {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header">
-                    <h4>Price & Stock</h4>
+                    <h4>Harga & Stok</h4>
                   </div>
                   <div className="card-body">
                     <table className="table table-hover table-striped table-bordered">
@@ -134,19 +134,19 @@ const DetailsBahanBaku = () => {
                           <td>{attributes.details.sku}</td>
                         </tr>
                         <tr>
-                          <th>Price</th>
+                          <th>Harga</th>
                           <td>{attributes.details.price}</td>
                         </tr>
                         <tr>
-                          <th>Stock</th>
+                          <th>Stok</th>
                           <td>{attributes.details.stock}</td>
                         </tr>
                         <tr>
-                          <th>Created By</th>
+                          <th>Dibuat Oleh</th>
                           <td>{attributes.details.created_by}</td>
                         </tr>
                         <tr>
-                          <th>Updated By</th>
+                          <th>Diubah Oleh</th>
                           <td>{attributes.details.updated_by}</td>
                         </tr>
                       </tbody>

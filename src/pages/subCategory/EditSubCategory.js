@@ -84,25 +84,17 @@ const EditSubCategory = () => {
     return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Sub Category Edit" breadcrumb="Form Data" />
+            <Breadcrumb title="Ubah Sub Kategori" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-warning card-outline">
-                            <div className="card-header">
-                                <CardHeader 
-                                    link={'/sub-category'} 
-                                    btnText="Cancel"
-                                    btn="btn btn-info"
-                                    icon="fas fa-backspace"
-                                />
-                            </div>
                             <form id="quickForm">
                                 <div className="card-body row">
                                     <div className="form-group col-md-6">
-                                        <label>Select Category</label>
+                                        <label>Kategori</label>
                                         <select 
                                             name="category_id"
                                             value={input.category_id}
@@ -110,7 +102,7 @@ const EditSubCategory = () => {
                                             className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                             placeholder="Select Category" 
                                         >
-                                            <option value="" disabled selected>Select Category</option>
+                                            <option value="" disabled selected>Pilih Kategori</option>
                                             {categories.map((category) => (
                                                 <option value={category.id}>{category.name}</option>
                                             ))}
@@ -122,14 +114,14 @@ const EditSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label>Category Name</label>
+                                        <label>Nama</label>
                                         <input 
                                             type="text" 
                                             name="name"
                                             value={input.name}
                                             onChange={handleInput} 
                                             className={errors.name !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Name" 
+                                            placeholder="Enter Nama Sub Kategori" 
                                         />
                                         {errors.name !== undefined && (
                                             <div className="invalid-feedback">
@@ -138,14 +130,14 @@ const EditSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
-                                        <label>Category Slug</label>
+                                        <label>Slug</label>
                                         <input 
                                             type="text" 
                                             name="slug"
                                             value={input.slug}
                                             onChange={handleInput} 
                                             className={errors.slug !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Name" 
+                                            placeholder="Enter Slug Sub Kategori" 
                                         />
                                         {errors.slug !== undefined && (
                                             <div className="invalid-feedback">
@@ -161,7 +153,7 @@ const EditSubCategory = () => {
                                             value={input.serial}
                                             onChange={handleInput} 
                                             className={errors.serial !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Serial" 
+                                            placeholder="Enter Serial Sub Kategori" 
                                         />
                                         {errors.serial !== undefined && (
                                             <div className="invalid-feedback">
@@ -178,7 +170,7 @@ const EditSubCategory = () => {
                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
                                             placeholder="Select Category Status"
                                         >
-                                            <option disableb selected>Select Category Status</option>
+                                            <option disableb selected>Pilih Status</option>
                                             <option value={1}>Active</option>
                                             <option value={2}>Inactive</option>
                                         </select>
@@ -189,13 +181,13 @@ const EditSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6 ">
-                                        <label>Description</label>
+                                        <label>Keterangan</label>
                                         <textarea 
                                             name="description"
                                             value={input.description}
                                             onChange={handleInput} 
                                             className={errors.description !== undefined ? 'form-control is-invalid ' : 'form-control'}
-                                            placeholder="Enter Sub Category Description" 
+                                            placeholder="Enter Keterangan Sub Kategori" 
                                         />
                                         {errors.description !== undefined && (
                                             <div className="invalid-feedback">
@@ -204,18 +196,13 @@ const EditSubCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">File input</label>
-                                        <div className="input-group">
-                                            <div className="custom-file">
-                                                <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
-                                                <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
+                                        <label htmlFor="exampleInputFile">Foto</label>
+                                        <input type="file" name="photo" cclassName={errors.photo !== undefined ? 'form-control is-invalid ' : 'form-control'} onChange={handlePhoto} />
+                                        {errors.photo !== undefined && (
+                                            <div className="invalid-feedback">
+                                                {errors.photo[0]}
                                             </div>
-                                            {errors.photo !== undefined && (
-                                                <div className="invalid-feedback">
-                                                    {errors.photo[0]}
-                                                </div>
-                                            )}
-                                        </div>
+                                        )}
                                         {(input.photo || input.photo_preview !== undefined) && (
                                             <div className="card-body">
                                                 <img className="img-fluid w-50 h-50" src={input.photo === undefined ? input.photo_preview : input.photo} alt="Photo" />
@@ -224,7 +211,14 @@ const EditSubCategory = () => {
                                     </div>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-warning w-30" onClick={handleCategoryUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Update Sub   Category'}} />
+                                    <div className="row justify-content-center">
+                                        <CardHeader 
+                                            link={'/sub-category'} 
+                                            btnText="Batal"
+                                            btn="btn btn-info"
+                                        />
+                                        <button className="btn btn-warning w-30" onClick={handleCategoryUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Ubah Sub Kategori'}} />
+                                    </div>
                                 </div>
                             </form>
                         </div>

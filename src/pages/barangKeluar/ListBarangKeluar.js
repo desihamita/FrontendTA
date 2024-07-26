@@ -176,20 +176,20 @@ const ListBarangKeluar = () => {
                                             <table className="table table-hover table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Quantity</th>
-                                                        <th>Date</th>
+                                                        <th>No</th>
+                                                        <th>Kuantitas</th>
+                                                        <th>Tanggal</th>
                                                         <th>Karyawan</th>
                                                         <th>Keterangan</th>
-                                                        <th>Cafe</th>
-                                                        <th>Action</th>
+                                                        <th>Kafe</th>
+                                                        <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {items.length > 0 ? items.map((item, index) => (
                                                         <tr key={index}>
                                                             <td>{startFrom + index}</td>
-                                                            <td>{item.quantity} item</td>
+                                                            <td>{item.quantity} Barang</td>
                                                             <td>{item.date}</td>
                                                             <td>{item.sales_manager}</td>
                                                             <td>{item.keterangan}</td>
@@ -203,27 +203,26 @@ const ListBarangKeluar = () => {
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Quantity</th>
-                                                        <th>Date</th>
+                                                        <th>No</th>
+                                                        <th>Kuantitas</th>
+                                                        <th>Tanggal</th>
                                                         <th>Karyawan</th>
                                                         <th>Keterangan</th>
-                                                        <th>Toko</th>
-                                                        <th>Action</th>
+                                                        <th>Kafe</th>
+                                                        <th>Aksi</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
                                             <ItemDetailsModal
                                                 show={modalShow}
                                                 onHide={() => setModalShow(false)}
-                                                title={'Item Details'}
+                                                title={'Detail Barang Keluar'}
                                                 size={''}
                                                 items={selectedItem || {}}
                                             />
                                         </div>
                                     }
                                 </div>
-                                {/* Pagination */}
                                 <div className="card-footer d-flex justify-content-between align-items-center">
                                     <div className="data_tables_info">
                                         Showing {startFrom} to {startFrom + items.length - 1} of {totalItemsCount} entries

@@ -48,16 +48,16 @@ const OrderBahanBakuDetails = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Order Ingredient Details" breadcrumb="Order Ingredient Details" />
+        <Breadcrumb title="Detail Pesanan Bahan Baku" breadcrumb="Detail" />
       </section>
       <section className="content">
         <div className="card">
           <div className="card-header">
             <CardHeader
               link={'/order-bahan-baku'} 
-              btnText="Cancel"
+              btnText="Batal"
               btn="btn btn-primary"
-              icon="fas fa-plus"
+              icon="fas fa-backspace"
             />
           </div>
           <div className="card-body">
@@ -65,17 +65,17 @@ const OrderBahanBakuDetails = () => {
               <div className='col-md-6'>
                 <div className='card card-danger'>
                   <div className='card-header'>
-                    <h5>Supplier Details</h5>
+                    <h5>Detail Pemasok</h5>
                   </div>
                   <div className='card-body'>
                     <table className='table table-hover table-striped table-bordered'>
                       <tbody>
                         <tr>
-                          <th>Name</th>
+                          <th>Nama</th>
                           <td>{order?.supplier.name}</td>
                         </tr>
                         <tr>
-                          <th>Phone</th>
+                          <th>No.Telepon</th>
                           <td>{order?.supplier.phone}</td>
                         </tr>
                         <tr>
@@ -90,21 +90,21 @@ const OrderBahanBakuDetails = () => {
               <div className='col-md-6'>
                 <div className='card card-danger'>
                   <div className='card-header'>
-                    <h5>Shop Details</h5>
+                    <h5>Detail Kafe</h5>
                   </div>
                   <div className='card-body'>
                     <table className='table table-bordered table-striped'>
                       <tbody>
                         <tr>
-                          <th>Name</th>
+                          <th>Nama Kafe</th>
                           <td>{order?.shop.name}</td>
                         </tr>
                         <tr>
-                          <th>Cashier</th>
+                          <th>Nama Sales</th>
                           <td>{order?.sales_manager.name}</td>
                         </tr>
                         <tr>
-                          <th>Email</th>
+                          <th>Email Kafe</th>
                           <td>{order?.shop.email}</td>
                         </tr>
                       </tbody>
@@ -115,21 +115,21 @@ const OrderBahanBakuDetails = () => {
               <div className='col-md-12 mt-4'>
                 <div className='card'>
                   <div className='card-header'>
-                    <h5>Order Summary</h5>
+                    <h5>Ringkasan Pesanan</h5>
                   </div>
                   <div className='card-body'>
                     <table className='table table-hover table-bordered table-striped'>
                       <tbody>
                         <tr>
-                          <th>Order Number</th>
+                          <th>No.Pesanan</th>
                           <td><strong>{order?.order_number}</strong></td>
-                          <th>Total Items</th>
+                          <th>Total Barang</th>
                           <td>{order?.quantity}</td>
                         </tr>
                         <tr>
-                          <th>Order Status</th>
+                          <th>Status Pesanan</th>
                           <td>{order?.order_status}</td>
-                          <th>Payment Status</th>
+                          <th>Status Pembayaran</th>
                           <td>
                             <button className={getPaymentStatusButtonClass(order?.payment_status)}>
                                 {order?.payment_status}
@@ -137,9 +137,9 @@ const OrderBahanBakuDetails = () => {
                           </td>
                         </tr>
                         <tr>
-                          <th>Payment Method</th>
+                          <th>Cara Pembayaran</th>
                           <td>{order?.payment_method.name}</td>
-                          <th>Account Number</th>
+                          <th>No.Akun</th>
                           <td>{order?.payment_method.account_number}</td>
                         </tr>
                         <tr>
@@ -149,7 +149,7 @@ const OrderBahanBakuDetails = () => {
                           <td>Rp.{order?.total}</td>
                         </tr>
                         <tr>
-                          <th>Order Placed</th>
+                          <th>Pesanan Ditempatkan</th>
                           <td>{order?.created_at}</td>
                         </tr>
                       </tbody>
@@ -160,18 +160,18 @@ const OrderBahanBakuDetails = () => {
               <div className='col-md-12 mt-4'>
                 <div className='card'>
                   <div className='card-header'>
-                    <h5>Order Items Details</h5>
+                    <h5>Detail Barang Pesanan</h5>
                   </div>
                   <div className='card-body'>
                     <table className='table table-hover table-bordered table-striped'>
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Name</th>
-                          <th>Info</th>
-                          <th>Quantity</th>
-                          <th>Photo</th>
-                          <th>Amounts</th>
+                          <th>No</th>
+                          <th>Nama</th>
+                          <th>Informasi</th>
+                          <th>Kuantitias</th>
+                          <th>Foto</th>
+                          <th>Jumlah</th>
                           <th>Sub Total</th>
                         </tr>
                       </thead>
@@ -185,13 +185,13 @@ const OrderBahanBakuDetails = () => {
                                 <p>SKU : {product.sku}</p>
                               </td>
                               <td>
-                                <p>Category : {product.category}</p>
-                                <p>Sub Category : {product.sub_category}</p>
+                                <p>Kategori : {product.category}</p>
+                                <p>Sub Kategori : {product.sub_category}</p>
                               </td>
                               <td>{product.quantity}</td>
                               <td><img src={product.photo} alt='product photo' className='img-thumbnail' /></td>
                               <td>
-                                <p>Price : {GlobalFunction.formatRupiah(product.price)}</p>
+                                <p>Harga : {GlobalFunction.formatRupiah(product.price)}</p>
                               </td>
                               <td>{GlobalFunction.formatRupiah(product.price * product.quantity)}</td>
                             </tr>
@@ -205,19 +205,19 @@ const OrderBahanBakuDetails = () => {
               <div className='col-md-12 mt-4'>
                 <div className='card'>
                   <div className='card-header'>
-                    <h5>Transactions</h5>
+                    <h5>Transaksi</h5>
                   </div>
                   <div className='card-body'>
                     <table className='table table-hover table-bordered table-striped'>
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>ID Transaction</th>
-                          <th>Amount</th>
-                          <th>Supplier</th>
-                          <th>Payment Method</th>
-                          <th>Transaction</th>
-                          <th>Created At</th>
+                          <th>No</th>
+                          <th>ID Transaksi</th>
+                          <th>Jumlah</th>
+                          <th>Pemasok</th>
+                          <th>Cara Pembayaran</th>
+                          <th>Transaksi</th>
+                          <th>Dibuat</th>
                           <th>Status</th>
                         </tr>
                       </thead>
@@ -226,19 +226,19 @@ const OrderBahanBakuDetails = () => {
                           order?.transactions.map((transaction, index) => (
                             <tr key={index}>
                               <td>{index + 1}</td>
-                              <td>{transaction.trxIngredients_id}</td>
+                              <td>{transaction.trxIngredients_id ? transaction.trxIngredients_id : 'Tidak Ada ID Transaksi'}</td>
                               <td>{GlobalFunction.formatRupiah(transaction.amount)}</td>
                               <td>
-                                <p>Name : {transaction.supplier_name}</p>
-                                <p>Phone : {transaction.supplier_phone}</p>
+                                <p>Nama : {transaction.supplier_name}</p>
+                                <p>No.Telepon : {transaction.supplier_phone}</p>
                               </td>
                               <td>
-                                <p>Name : {transaction.payment_method_name}</p>
-                                <p>Account No : {transaction.account_number}</p>
+                                <p>Nama : {transaction.payment_method_name}</p>
+                                <p>No.  Akun: {transaction.account_number ? transaction.account_number : 'Tidak Ada No.Akun'}</p>
                               </td>
                               <td>
-                                <p>Trx Type :{transaction.transaction_type}</p>
-                                <p>Trx By: {transaction.transaction_by}</p>
+                                <p>Jenis Transaksi :{transaction.transaction_type}</p>
+                                <p>Transaksi Oleh : {transaction.transaction_by}</p>
                               </td>
                               <td>{transaction.created_at}</td>
                               <td>

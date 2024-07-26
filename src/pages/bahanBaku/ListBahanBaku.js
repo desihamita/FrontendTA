@@ -22,10 +22,10 @@ const ListBahanBaku = () => {
     const [attributes, setAttributes] = useState([])
     const [attributeColumns, setAttributeColumn] = useState([])
 
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
-    const [totalItemsCount, setTotalItemsCount] = useState(1)
-    const [startFrom, setStartFrom] = useState(1)
-    const [activePage, setActivePage] = useState(1)
+    const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
+    const [totalItemsCount, setTotalItemsCount] = useState(1);
+    const [startFrom, setStartFrom] = useState(1);
+    const [activePage, setActivePage] = useState(1);
 
     const getAttributeColumn = () => {
         axios.get(`${Constants.BASE_URL}/get-attribute-column`).then(res => {
@@ -52,13 +52,13 @@ const ListBahanBaku = () => {
 
     const handleAttributeDelete = (id) => {
         Swal.fire({
-          title: "Are you sure?",
-          text: "Ingredients will be deleted",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, Delete it!"
+            title: "Apa kamu yakin?",
+            text: "Bahan Baku akan dihapus",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Hapus!"
         }).then((result) => {
           if (result.isConfirmed) {
             axios.delete(`${Constants.BASE_URL}/attribute/${id}`).then(res => {
@@ -98,7 +98,7 @@ const ListBahanBaku = () => {
                                     {isAdmin && (
                                         <CardHeader 
                                             link={'/bahan-baku/create'} 
-                                            btnText="Add Ingredients"
+                                            btnText="Tambah Bahan Baku"
                                             btn="btn btn-warning"
                                             icon="fas fa-plus"
                                         />
@@ -136,9 +136,9 @@ const ListBahanBaku = () => {
                                                     value={input.order_by}
                                                     onChange={handleInput}
                                                 >
-                                                    {attributeColumns.map((column, index) => (
-                                                        <option key={index} value={column.id}>{column.name}</option>
-                                                    ))}
+                                                    <option value={'name'}>Name</option>
+                                                    <option value={'created_at'}>Created At</option>
+                                                    <option value={'updated_at'}>Updated At</option>
                                                 </select>
                                             </label>
                                         </div>
@@ -187,14 +187,14 @@ const ListBahanBaku = () => {
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Photo</th>
-                                                <th>Name</th>
-                                                <th>Price</th>
+                                                <th>Foto</th>
+                                                <th>Nama</th>
+                                                <th>Harga</th>
                                                 <th>Status</th>
-                                                <th>Category</th>
-                                                <th>Brand / Supplier</th>
-                                                <th>Date Time</th>
-                                                <th>Action</th>
+                                                <th>Kategori</th>
+                                                <th>Merek / Pemasok</th>
+                                                <th>Tanggal / Waktu</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -211,29 +211,29 @@ const ListBahanBaku = () => {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Name : {attribute.name}</p>
+                                                    <p className="mb-0">Nama : {attribute.name}</p>
                                                     <p className="text-success mb-0">SKU : {attribute.sku}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Price : {attribute.price}</p>
+                                                    <p className="mb-0">Harga : {attribute.price}</p>
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Status : {attribute.status}</p>
-                                                    <p className="mb-0">Stock : {attribute.stock}</p>
+                                                    <p className="mb-0">Stok : {attribute.stock}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Category : {attribute.category}</p>
-                                                    <p className="mb-0">Sub Category : {attribute.sub_category}</p>
+                                                    <p className="mb-0">Kategori : {attribute.category}</p>
+                                                    <p className="mb-0">Sub Kategori : {attribute.sub_category}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0">Brand : {attribute.brand}</p>
-                                                    <p className="mb-0">Supplier : {attribute.supplier}</p>
+                                                    <p className="mb-0">Merek : {attribute.brand}</p>
+                                                    <p className="mb-0">Pemasok : {attribute.supplier}</p>
                                                 </td>
                                                 <td>
-                                                    <p className="mb-0"><small>Created : {attribute.created_at}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated : {attribute.updated_at}</small></p>
-                                                    <p className="mb-0"><small>Created By : {attribute.created_by}</small></p>
-                                                    <p className="text-success mb-0"><small>Updated By : {attribute.updated_by}</small></p>
+                                                    <p className="mb-0"><small>Dibuat : {attribute.created_at}</small></p>
+                                                    <p className="text-success mb-0"><small>Diubah : {attribute.updated_at}</small></p>
+                                                    <p className="mb-0"><small>Dibuat Oleh : {attribute.created_by}</small></p>
+                                                    <p className="text-success mb-0"><small>Diubah Oleh : {attribute.updated_by}</small></p>
                                                 </td>
                                                 <td className='m-1'>
                                                     <Link to={`/bahan-baku/details/${attribute.id}`} ><button className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button></Link>
@@ -252,24 +252,27 @@ const ListBahanBaku = () => {
                                         <tfoot>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Photo</th>
-                                                <th>Name</th>
-                                                <th>Price</th>
+                                                <th>Foto</th>
+                                                <th>Nama</th>
+                                                <th>Harga</th>
                                                 <th>Status</th>
-                                                <th>Category</th>
-                                                <th>Brand / Supplier</th>
-                                                <th>Date Time</th>
-                                                <th>Action</th>
+                                                <th>Kategori</th>
+                                                <th>Merek / Pemasok</th>
+                                                <th>Tanggal / Waktu</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                                 }
                             </div>
-                            {/* Pagination */}
                             <div className="card-footer d-flex justify-content-between align-items-center">
                                 <div className="data_tables_info">
-                                    Showing {startFrom} to {startFrom + attributes.length - 1} of {totalItemsCount} entries
+                                {attributes.length > 0 ? (
+                                    `Showing ${startFrom} to ${startFrom + attributes.length - 1} of ${totalItemsCount} entries`
+                                ) : (
+                                    'Showing 1 to 1 of 0 entries'
+                                )}
                                 </div>
                                 <nav className="pagination-sm ml-auto">
                                     <Pagination

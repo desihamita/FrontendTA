@@ -35,14 +35,14 @@ const ProductDetails = () => {
   return (
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Detail Produk" breadcrumb="product details" />
+        <Breadcrumb title="Detail Produk" breadcrumb="detail" />
       </section>
       <section className="content">
         <div className="card">
           <div className="card-header">
             <CardHeader 
               link={'/product'} 
-              btnText="Cancel"
+              btnText="Batal"
               btn="btn btn-info"
               icon="fas fa-backspace"
             />
@@ -52,13 +52,13 @@ const ProductDetails = () => {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header">
-                    <h4>Basic Information</h4>
+                    <h4>Informasi Dasar</h4>
                   </div>
                   <div className="card-body">
                     <table className="table table-hover table-striped table-bordered">
                       <tbody>
                         <tr>
-                          <th>Title</th>
+                          <th>Nama</th>
                           <td>{products.details.name}</td>
                         </tr>
                         <tr>
@@ -74,27 +74,27 @@ const ProductDetails = () => {
                           <td>{products.details.status}</td>
                         </tr>
                         <tr>
-                          <th>Category</th>
+                          <th>Kategori</th>
                           <td>{GlobalFunction.isAdmin() ? <Link to={'/category'}>{products.details.category}</Link> : products.details.category}</td>
                         </tr>
                         <tr>
-                          <th>Sub Category</th>
+                          <th>Sub Kategori</th>
                           <td>{GlobalFunction.isAdmin() ? <Link to={'/sub-category'}>{products.details.sub_category}</Link> : products.sub_category}</td>
                         </tr>
                         <tr>
-                          <th>Created By</th>
+                          <th>Dibuat Oleh</th>
                           <td>{products.details.created_by}</td>
                         </tr>
                         <tr>
-                          <th>Updated By</th>
+                          <th>Diupdate Oleh</th>
                           <td>{products.details.updated_by}</td>
                         </tr>
                         <tr>
-                          <th>Created At</th>
+                          <th>Dibuat</th>
                           <td>{products.details.created_at}</td>
                         </tr>
                         <tr>
-                          <th>Updated At</th>
+                          <th>Diubah</th>
                           <td>{products.details.updated_at}</td>
                         </tr>
                       </tbody>
@@ -105,57 +105,57 @@ const ProductDetails = () => {
               <div className="col-md-6">
                 <div className="card">
                   <div className="card-header">
-                    <h4>Price & Stock</h4>
+                    <h4>Harga & Stok</h4>
                   </div>
                   <div className="card-body">
                     <table className="table table-hover table-striped table-bordered">
                       <tbody>
                         <tr>
-                          <th>Cost</th>
+                          <th>Biaya</th>
                           <td>{products.details.cost}</td>
                         </tr>
                         <tr>
-                          <th>Original Sale Price</th>
+                          <th>Harga Jual Asli</th>
                           <td>{products.details.price}</td>
                         </tr>
                         <tr>
-                          <th>Sale Price</th>
+                          <th>Harga Jual Setelah diskon</th>
                           <td>{products.details.sell_price?.price}</td>
                         </tr>
                         <tr>
-                          <th>Discount</th>
+                          <th>Diskon</th>
                           <td>{products?.details.sell_price?.discount}</td>
                         </tr>
                         <tr>
-                          <th>Discount Percent</th>
+                          <th>Diskon Persen</th>
                           <td>{products.details.discount_percent}</td>
                         </tr>
                         <tr>
-                          <th>Discount Fixed</th>
+                          <th>Diskon Tetap</th>
                           <td>{products?.details.discount_fixed}</td>
                         </tr>
                         <tr>
-                          <th>Discount Start</th>
+                          <th>Diskon Mulai</th>
                           <td>{products.details.discount_start}</td>
                         </tr>
                         <tr>
-                          <th>Discount End</th>
+                          <th>Diskon Akhir</th>
                           <td>{products.details.discount_end}</td>
                         </tr>
                         <tr>
-                          <th>Discount Remaining Days</th>
-                          <td>{products.details.discount_remaining_days} Days</td>
+                          <th>Diskon Sisa Hari</th>
+                          <td>{products.details.discount_remaining_days} Hari</td>
                         </tr>
                         <tr>
-                          <th>Stock</th>
+                          <th>Stok</th>
                           <td>{products.details.stock}</td>
                         </tr>
                         <tr>
-                          <th>Profit</th>
+                          <th>Keuntungan</th>
                           <td>{products.details.profit}</td>
                         </tr>
                         <tr>
-                          <th>Profit Percentage</th>
+                          <th>Persentase Keuntungan</th>
                           <td>{products.details.profit_percentage}%</td>
                         </tr>
                       </tbody>
