@@ -8,11 +8,12 @@ import AddCustomer from '../../components/partials/modal/AddCustomer';
 import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConfirmation';
 import GlobalFunction from '../../GlobalFunction';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
+import useScanDetection from 'use-scan-detection';
 
 const AddOrder = () => {
   const navigate = useNavigate()
   const [input, setInput] = useState({
-    order_by: 'created_at',
+    order_by: 'id',
     per_page: 10,
     direction: 'asc',
     search: ''
@@ -46,6 +47,22 @@ const AddOrder = () => {
     payment_method_id: 1,
     trx_id: '',
   });
+
+  const [barcode, setBarcode] = useState('');
+
+  useScanDetection({
+    onComplete: setBarcode,
+    minLength: 2
+  })
+
+  useEffect(() => {
+    console.log('Scanned Barcode:', barcode);
+    setInput((prevState) => ({ ...prevState, search: barcode }));
+  }, [barcode]);
+
+  useEffect(() => {
+    getProducts(1)
+}, [input.search])
 
   const getPaymentMethods = () => {
     axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {

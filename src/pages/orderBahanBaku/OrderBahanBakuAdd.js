@@ -6,13 +6,13 @@ import Swal from 'sweetalert2';
 import GlobalFunction from '../../GlobalFunction';
 import ShowOrderConfirmation from './ShowOrderConfirmation';
 import { useNavigate } from 'react-router-dom';
-import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
+import useScanDetection from 'use-scan-detection';
 
 const OrderBahanBakuAdd = () => {
     const navigate = useNavigate()
     const [input, setInput] = useState({
-        order_by: 'created_at',
+        order_by: 'id',
         per_page: 10,
         direction: 'asc',
         search: ''
@@ -43,6 +43,22 @@ const OrderBahanBakuAdd = () => {
         payment_method_id: 1,
         trxIngredients_id: '',
     });
+
+    const [barcode, setBarcode] = useState('');
+
+    useScanDetection({
+      onComplete: setBarcode,
+      minLength: 2,
+    });
+  
+    useEffect(() => {
+      console.log('Scanned Barcode:', barcode);
+      setInput((prevState) => ({ ...prevState, search: barcode }));
+    }, [barcode]);
+    
+    useEffect(() => {
+        getAttributes(1)
+    }, [input.search])
 
     const handleInput = (e) => {
         setInput((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -255,6 +271,10 @@ const OrderBahanBakuAdd = () => {
         <div className="content-wrapper">
             <section className="content-header">
                 <Breadcrumb title="Buat Pesanan" breadcrumb="Form Data" />
+                <div>
+                    <h1>Barcode Scanner</h1>
+                    <p>Scanned Barcode: {barcode}</p>
+                </div>
             </section>
             <section className="content">
                 <div className="container-fluid">
