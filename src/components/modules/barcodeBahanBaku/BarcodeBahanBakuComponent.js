@@ -21,7 +21,7 @@ const BarcodeBahanBakuComponent = () => {
     const [paperSize, setPaperSize] = useState({
         a4: {
             width: 595,
-            height: 842
+            height: 82
         }
     });
 

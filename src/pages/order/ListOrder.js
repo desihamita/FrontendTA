@@ -27,9 +27,6 @@ const ListOrder = () => {
   const [startFrom, setStartFrom] = useState(1);
   const [activePage, setActivePage] = useState(1);
 
-  const [modalShow, setModalShow] = useState(false);
-  const [modalPhotoShow, setModalPhotoShow] = useState(false);
-
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
@@ -48,39 +45,8 @@ const ListOrder = () => {
     );
   };
 
-  const handleDetailsModal = (order) => {
-    setOrder(order);
-    setModalShow(true);
-  };
-
-  const handleOrderDelete = (id) => {
-    Swal.fire({
-      title: "Apa kamu yakin?",
-      text: "Pesanan akan dihapus",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Hapus!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/order/${id}`).then(res => {
-          Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
-          });
-          getOrders(activePage);
-        });
-      }
-    });
-  };
-
   const handleExportOrders = () => {
-    axios.get(`${Constants.BASE_URL}/export-order`, {
+    axios.get(`${Constants.BASE_URL}/export-orders`, {
       responseType: 'blob',
     })
     .then(response => {

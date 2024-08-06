@@ -249,14 +249,14 @@ const CategoryList = () => {
                 <CategoryPhotoModal
                   show={modalPhotoShow}
                   onHide={() => setModalPhotoShow(false)}
-                  title={'Category Photo'}
+                  title={'Foto Kategori'}
                   size={''}
                   photo={modalPhoto}
                 />
                 <CategoryDetailsModal
                   show={modalShow}
                   onHide={() => setModalShow(false)}
-                  title={'Category Details'}
+                  title={'Detail Kategori'}
                   size={''}
                   category={category}
                 />

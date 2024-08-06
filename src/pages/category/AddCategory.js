@@ -34,7 +34,7 @@ const AddCategory = () => {
     let reader = new FileReader();
     reader.onloadend = () => {
         setInput(prevState => ({...prevState, photo: reader.result}));
-        document.getElementById('fileLabel').innerText = file.name;
+        //document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
   };
@@ -63,7 +63,7 @@ const AddCategory = () => {
   return (
     <div className="content-wrapper">
         <section className="content-header">
-            <Breadcrumb title="Add Category" breadcrumb="Form Data" />
+            <Breadcrumb title="Tambah Kategori" breadcrumb="Form Data" />
         </section>
         <section className="content">
             <div className="container-fluid">

@@ -117,7 +117,7 @@ const EditSalesManager = () => {
       let reader = new FileReader();
       reader.onloadend = () => {
         setInput((prevState) => ({ ...prevState, [e.target.name]: reader.result }));
-        document.getElementById('fileLabel').innerText = file.name;
+        //document.getElementById('fileLabel').innerText = file.name;
       };
       reader.readAsDataURL(file);
     }

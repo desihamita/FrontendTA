@@ -271,10 +271,6 @@ const OrderBahanBakuAdd = () => {
         <div className="content-wrapper">
             <section className="content-header">
                 <Breadcrumb title="Buat Pesanan" breadcrumb="Form Data" />
-                <div>
-                    <h1>Barcode Scanner</h1>
-                    <p>Scanned Barcode: {barcode}</p>
-                </div>
             </section>
             <section className="content">
                 <div className="container-fluid">

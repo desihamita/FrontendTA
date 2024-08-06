@@ -62,7 +62,7 @@ const AddOrder = () => {
 
   useEffect(() => {
     getProducts(1)
-}, [input.search])
+  }, [input.search])
 
   const getPaymentMethods = () => {
     axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
@@ -234,7 +234,7 @@ const AddOrder = () => {
         ...prevState,
         payment_method_id: e.target.value,
       }));
-      if(e.traget.value == 1) {
+      if(e.target.value == 1) {
         setOrderSummary(prevState => ({
           ...prevState,
           trx_id: '',

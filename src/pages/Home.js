@@ -188,32 +188,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-hand-holding-usd fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Pendapatan</h6>
-                    <h4>{reportProduct.total_expense_product}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div className='card report-card'>
-              <div className='card-body'>
-                <div className="media align-items-center">
-                  <i className="fas fa-money-bill-wave fa-2x"></i>
-                  <div className="media-body ml-3">
-                    <h6 className="mt-0">Total Pendapatan Hari Ini</h6>
-                    <h4>{reportProduct.total_expense_today}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div className='row m-2'>
           <div className='col-md-6'>

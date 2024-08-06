@@ -72,7 +72,7 @@ const ProductEdit = () => {
     let reader = new FileReader();
     reader.onloadend = () => {
         setInput((prevState) => ({ ...prevState, photo: reader.result }));
-        document.getElementById('fileLabel').innerText = file.name;
+        //document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
   };
