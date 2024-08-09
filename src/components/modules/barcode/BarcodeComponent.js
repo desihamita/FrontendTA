@@ -3,7 +3,7 @@ import Breadcrumb from '../../partials/Breadcrumb'
 import axios from 'axios'
 import Constants from '../../../Constants'
 import './barcode.css'
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
+import { useReactToPrint } from 'react-to-print'
 import BarcodePage from './BarcodePage'
 import CardHeader from '../../partials/miniComponent/CardHeader'
 

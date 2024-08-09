@@ -41,8 +41,8 @@ const OrderBahanBakuAdd = () => {
         paid_amount: 0,
         due_amount: 0,
         payment_method_id: 1,
-        trxIngredients_id: '',
-    });
+        trxIngredients_id: '', // Pastikan ini diinisialisasi dengan benar
+      });
 
     const [barcode, setBarcode] = useState('');
 
@@ -52,7 +52,6 @@ const OrderBahanBakuAdd = () => {
     });
   
     useEffect(() => {
-      console.log('Scanned Barcode:', barcode);
       setInput((prevState) => ({ ...prevState, search: barcode }));
     }, [barcode]);
     
@@ -204,30 +203,30 @@ const OrderBahanBakuAdd = () => {
         }));
     };
 
-    const handleOrderSummaryInput = (e) => {
-        const { name, value } = e.target;
-        setOrderSummary((prevState) => {
-            if (name === 'paid_amount' && prevState.pay_able >= value) {
-                return {
-                    ...prevState,
-                    paid_amount: parseFloat(value).toFixed(2),
-                    due_amount: (prevState.pay_able - value).toFixed(2),
-                };
-            } else if (name === 'payment_method_id') {
-                return {
-                    ...prevState,
-                    payment_method_id: value,
-                    trxIngredients_id: value == 1 ? '' : prevState.trxIngredients_id,
-                };
-            } else if (name === 'trxIngredients_id') {
-                return {
-                    ...prevState,
-                    trxIngredients_id: value,
-                };
-            }
-            return prevState;
-        });
+    const generateTransactionId = () => {
+        return `TRX-${Date.now()}`;
     };
+
+    const handleOrderSummaryInput = (e) => {
+        if (e.target.name === 'paid_amount' && orderSummary.pay_able >= e.target.value) {
+          setOrderSummary(prevState => ({
+            ...prevState,
+            paid_amount: e.target.value,
+            due_amount: orderSummary.pay_able - e.target.value,
+          }));
+        } else if (e.target.name === 'payment_method_id') {
+          setOrderSummary(prevState => ({
+            ...prevState,
+            payment_method_id: e.target.value,
+            trxIngredients_id: e.target.value == 1 ? '' : generateTransactionId(),
+          }));
+        } else if (e.target.name === 'trxIngredients_id') {
+          setOrderSummary(prevState => ({
+            ...prevState,
+            trxIngredients_id: e.target.value,
+          }));
+        }
+    };  
 
     const getPaymentMethods = () => {
         axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {

@@ -40,8 +40,8 @@ const AddBahanBaku = () => {
         })
     }
 
-    const getSubCategories = (category_id) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
+    const getSubCategories = (category_name) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
             setSubCategories(res.data)
         })
     }
@@ -86,7 +86,6 @@ const AddBahanBaku = () => {
           let reader = new FileReader();
           reader.onloadend = () => {
             setInput((prevState) => ({ ...prevState, photo: reader.result }));
-            //document.getElementById('fileLabel').innerText = file.name;
           };
           reader.readAsDataURL(file);
         }

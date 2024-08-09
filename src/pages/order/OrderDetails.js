@@ -231,7 +231,7 @@ const OrderDetails = () => {
                           order.transactions.map((transaction, index) => (
                             <tr key={index}>
                               <td>{index + 1}</td>
-                              <td>{transaction.trxIngredients_id ? transaction.trxIngredients_id : 'Tidak Ada ID Transaksi'}</td>
+                              <td>{transaction.trx_id ? transaction.trx_id : 'Tidak Ada ID Transaksi'}</td>
                               <td>{GlobalFunction.formatRupiah(transaction.amount)}</td>
                               <td>
                                 <p>Nama : {transaction.customer_name}</p>

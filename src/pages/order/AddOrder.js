@@ -56,7 +56,6 @@ const AddOrder = () => {
   })
 
   useEffect(() => {
-    console.log('Scanned Barcode:', barcode);
     setInput((prevState) => ({ ...prevState, search: barcode }));
   }, [barcode]);
 
@@ -222,6 +221,10 @@ const AddOrder = () => {
     }));
   }
 
+  const generateTransactionId = () => {
+    return `TRX-${Date.now()}`;
+  };
+
   const handleOrderSummaryInput = (e) => {
     if(e.target.name == 'paid_amount' && orderSummary.pay_able >= e.target.value) {
       setOrderSummary(prevState => ({
@@ -233,13 +236,8 @@ const AddOrder = () => {
       setOrderSummary(prevState => ({
         ...prevState,
         payment_method_id: e.target.value,
+        trx_id: e.target.value == 1 ? '' : generateTransactionId(),
       }));
-      if(e.target.value == 1) {
-        setOrderSummary(prevState => ({
-          ...prevState,
-          trx_id: '',
-        }));
-      }
     } else if(e.target.name == 'trx_id') {
       setOrderSummary(prevState => ({
         ...prevState,

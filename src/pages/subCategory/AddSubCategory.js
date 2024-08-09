@@ -7,12 +7,12 @@ import Breadcrumb from '../../components/partials/Breadcrumb';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const AddSubCategory = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [input, setInput] = useState({
+        status: 1,
         name: '',
         slug: '',
         serial: '',
-        status: 1,
         description: '',
         photo: ''
   });
@@ -41,7 +41,6 @@ const AddSubCategory = () => {
     let reader = new FileReader();
     reader.onloadend = () => {
         setInput(prevState => ({...prevState, photo: reader.result}));
-        //document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
   };
@@ -49,24 +48,35 @@ const AddSubCategory = () => {
   const handleCategoryCreate = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    axios.post(`${Constants.BASE_URL}/sub-category`, input).then(res => {
-        setIsLoading(false);
-        Swal.fire({
-            position: "top-end",
-            icon: res.data.cls,
-            title: res.data.msg,
-            showConfirmButton: false,
-            toast: true,
-            timer: 1500
+    
+    const selectedCategory = categories.find(category => category.id === parseInt(input.category_id));
+    
+    if (selectedCategory) {
+        const inputData = {
+            ...input,
+            category_name: selectedCategory.name
+        };
+
+        axios.post(`${Constants.BASE_URL}/sub-category`, inputData).then(res => {
+            setIsLoading(false);
+            Swal.fire({
+                position: "top-end",
+                icon: res.data.cls,
+                title: res.data.msg,
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500
+            });
+            navigate('/sub-category');
+        }).catch(errors => {
+            setIsLoading(false);
+            if (errors.response.status === 422) {
+                setErrors(errors.response.data.errors);
+            }
         });
-        navigate('/sub-category');
-    }).catch(errors => {
-        setIsLoading(false);
-        if(errors.response.status === 422) {
-          setErrors(errors.response.data.errors);
-        }
-    });
-  };
+    }
+};
+
 
   useEffect(() => {
     getCategories()

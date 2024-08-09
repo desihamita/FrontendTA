@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Card, Col, Container, Row, Table } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
 import GlobalFunction from '../../../GlobalFunction';
+import { useReactToPrint } from 'react-to-print';
 
-const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...props }) => {
+const ShowOrderConfirmation = forwardRef(({ handleOrderPlace, handleOrderSummaryInput, ...props }, ref) => {
     const [branch, setBranch] = useState({});
-    const [transactionId, setTransactionId] = useState('');
+    const componentRef = useRef();
+
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
 
     useEffect(() => {
         const storedBranch = localStorage.getItem('branch');
         if (storedBranch) {
             setBranch(JSON.parse(storedBranch));
         }
-
-        // Generate a new transaction ID each time the modal is shown
-        if (props.show) {
-            setTransactionId(`TRX-${Date.now()}`);
-        }
-    }, [props.show]);
+    });
 
     return (
         <>
@@ -128,7 +128,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                                                                 className='form-control'
                                                                 type='text'
                                                                 name='trx_id'
-                                                                value={transactionId}
+                                                                value={props.orderSummary.trx_id}
                                                                 onChange={handleOrderSummaryInput}
                                                             />
                                                         </td>
@@ -150,6 +150,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
                 <Modal.Footer>
                     <div className='px-4'>
                         <button className='btn btn-sm btn-danger' onClick={props.onHide}>Close</button>
+                        <button className="btn btn-sm btn-primary ml-3" onClick={handlePrint}>Print</button>
                         <button 
                             className='btn btn-sm btn-warning ml-3'
                             onClick={handleOrderPlace}
@@ -161,6 +162,6 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
             </Modal>
         </>
     );
-}
+});
 
 export default ShowOrderConfirmation;
