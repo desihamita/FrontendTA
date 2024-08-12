@@ -27,7 +27,7 @@ const ProductEdit = () => {
     try {
         const res = await axios.get(`${Constants.BASE_URL}/product/${params.id}`);
         setInput(res.data.edit); 
-        getSubCategories(res.data.edit.sub_category_id);
+        getSubCategories(res.data.edit.category_id);
     } catch (error) {
         console.error('Error fetching attribute:', error);
     }
@@ -72,7 +72,6 @@ const ProductEdit = () => {
     let reader = new FileReader();
     reader.onloadend = () => {
         setInput((prevState) => ({ ...prevState, photo: reader.result }));
-        //document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
   };

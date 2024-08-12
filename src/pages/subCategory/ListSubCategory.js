@@ -206,7 +206,7 @@ const ListSubCategory = () => {
                                     <td>
                                         <p className="mb-0">Nama : {category.name}</p>
                                         <p className="text-success mb-0">Slug : {category.slug}</p>
-                                        <p className="text-secondary">Kategori : {category.category_name}</p>
+                                        <p className="text-secondary">Kategori : {category.category_id}</p>
                                     </td>
                                     <td>
                                         <p className="mb-0">Serial : {category.serial}</p>

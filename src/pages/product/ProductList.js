@@ -217,6 +217,7 @@ const ProductList = () => {
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Kategori : {product.category}</p>
+                                                    <p className="mb-0">Sub Kategori : {product.sub_category}</p>
                                                 </td>
                                                 <td>
                                                     <img

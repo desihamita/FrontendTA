@@ -40,8 +40,8 @@ const AddBahanBaku = () => {
         })
     }
 
-    const getSubCategories = (category_name) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+    const getSubCategories = (category_id) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
             setSubCategories(res.data)
         })
     }
