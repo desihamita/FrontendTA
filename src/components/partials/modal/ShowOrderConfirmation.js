@@ -18,7 +18,7 @@ const ShowOrderConfirmation = forwardRef(({ handleOrderPlace, handleOrderSummary
         if (storedBranch) {
             setBranch(JSON.parse(storedBranch));
         }
-    });
+    }, []);
 
     return (
         <>

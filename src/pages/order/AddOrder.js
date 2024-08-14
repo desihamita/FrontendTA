@@ -9,6 +9,7 @@ import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConf
 import GlobalFunction from '../../GlobalFunction';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import useScanDetection from 'use-scan-detection';
+import CardHeader from '../../components/partials/miniComponent/CardHeader';
 
 const AddOrder = () => {
   const navigate = useNavigate()
@@ -178,7 +179,8 @@ const AddOrder = () => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
       .then((res) => {
-        setProducts(res.data.data);
+        const activeProducts = res.data.data.filter(product => product.status === 'Active');
+        setProducts(activeProducts);
         setItemsCountPerPage(res.data.meta.per_page);
         setStartFrom(res.data.meta.from);
         setTotalItemsCount(res.data.meta.total);
@@ -196,6 +198,7 @@ const AddOrder = () => {
         setIsLoading(false);
       });
   };
+  
 
   const calculateOrderSummary = () => {
     let items = 0;
@@ -264,6 +267,14 @@ const AddOrder = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="card card-warning card-outline">
+              <div className="card-header">
+                <CardHeader
+                  link={'/order'} 
+                  btnText="Kembali"              
+                  btn="btn btn-info"
+                  icon="fas fa-backspace"
+                />
+              </div>
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-4">

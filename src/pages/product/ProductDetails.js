@@ -42,7 +42,7 @@ const ProductDetails = () => {
           <div className="card-header">
             <CardHeader 
               link={'/product'} 
-              btnText="Batal"
+              btnText="Kembali"
               btn="btn btn-info"
               icon="fas fa-backspace"
             />

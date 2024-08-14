@@ -117,7 +117,6 @@ const EditSalesManager = () => {
       let reader = new FileReader();
       reader.onloadend = () => {
         setInput((prevState) => ({ ...prevState, [e.target.name]: reader.result }));
-        //document.getElementById('fileLabel').innerText = file.name;
       };
       reader.readAsDataURL(file);
     }
@@ -156,6 +155,7 @@ const EditSalesManager = () => {
     getDivisions();
     getShops();
   },[])
+
   return (
     <div className="content-wrapper">
       <section className="content-header">
@@ -201,6 +201,7 @@ const EditSalesManager = () => {
                             </div>
                             <div className="form-group">
                               <label>Password</label>
+                              <div className="invalid-feedback">Biarkan kosong untuk menyimpan kata sandi saat ini</div>
                               <input
                                 type='password'
                                 name="password"
@@ -209,7 +210,6 @@ const EditSalesManager = () => {
                                 className={errors.password ? 'form-control is-invalid' : 'form-control'}
                                 placeholder="Enter new password"
                               />
-                              <div className="invalid-feedback">Biarkan kosong untuk menyimpan kata sandi saat ini</div>
                               
                               {errors.password && <div className="invalid-feedback">{errors.password[0]}</div>}
                             </div>
@@ -228,16 +228,19 @@ const EditSalesManager = () => {
                             <div className="form-group">
                               <label>Status</label>
                               <select
-                                name="status"
+                                className={errors.status !== undefined ? 'form-control is-invalid' : 'form-control'}
+                                name={'status'}
                                 value={input.status}
                                 onChange={handleInput}
-                                className={errors.status ? 'form-control select2 is-invalid' : 'form-control'}
                               >
-                                <option value="" disabled={true} selected>Pilih Status</option>
                                 <option value={1}>Active</option>
                                 <option value={0}>Inactive</option>
                               </select>
-                              {errors.status && <div className="invalid-feedback">{errors.status[0]}</div>}
+                              {errors.status && (
+                                <div className="invalid-feedback">
+                                  {errors.status[0]}
+                                </div>
+                              )}
                             </div>
                             <div className="form-group">
                               <label>Kafe</label>
@@ -266,14 +269,11 @@ const EditSalesManager = () => {
                               {errors.bio && <div className="invalid-feedback">{errors.bio[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label htmlFor="exampleInputFile">Foto</label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input type="file" name="photo" className="custom-file-input" id="exampleInputFile" onChange={handlePhoto} />
-                                  <label id="fileLabel" className="custom-file-label" htmlFor="exampleInputFile">Pilih Berkas</label>
-                                </div>
-                                {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
-                              </div>
+                              <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
+                              
+                              <input type="file" name="photo" className={errors.photo ? 'form-control is-invalid' : 'form-control'} onChange={handlePhoto} />
+                              {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+
                               {(input.photo || input.photo_preview !== undefined) && (
                                 <div className="card-body">
                                   <img className="img-fluid w-50 h-50" src={input.photo === undefined ? input.photo_preview : input.photo} alt="logo" />
@@ -388,10 +388,10 @@ const EditSalesManager = () => {
                   <div className='row justify-content-center'>
                     <CardHeader 
                       link={'/sales-manager'} 
-                      btnText="Cancel"
+                      btnText="Batal"
                       btn="btn btn-info"
                     />
-                    <button className="btn btn-warning pr-5 pl-5" onClick={handleSalesManagerUpdate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Add Sales Manager' }} />
+                    <button className="btn btn-warning pr-5 pl-5" onClick={handleSalesManagerUpdate} dangerouslySetInnerHTML={{ __html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Ubah Karyawan' }} />
                   </div>
                 </div>
               </div>

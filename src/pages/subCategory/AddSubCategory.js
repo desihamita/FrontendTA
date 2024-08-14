@@ -22,7 +22,8 @@ const AddSubCategory = () => {
 
   const getCategories = () => {
     axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-        setCategories(res.data)
+        const activeCategories = res.data.filter(categories => categories.status === 1);
+        setCategories(activeCategories)
     })
   }
 
@@ -75,8 +76,7 @@ const AddSubCategory = () => {
             }
         });
     }
-};
-
+  };
 
   useEffect(() => {
     getCategories()
@@ -171,7 +171,7 @@ const AddSubCategory = () => {
                                             className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
                                         >
                                             <option value={1}>Active</option>
-                                            <option value={2}>Inactive</option>
+                                            <option value={0}>Inactive</option>
                                         </select>
                                         {errors.status !== undefined && (
                                             <div className="invalid-feedback">

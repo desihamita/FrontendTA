@@ -36,7 +36,8 @@ const ProductEdit = () => {
   const getCategories = async () => {
     try {
         const res = await axios.get(`${Constants.BASE_URL}/get-category-list`);
-        setCategories(res.data);
+        const activeCategories = res.data.filter(categories => categories.status === 1);
+        setCategories(activeCategories)
     } catch (error) {
         console.error('Error fetching categories:', error);
     }

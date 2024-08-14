@@ -63,30 +63,44 @@ const ListSalesManager = () => {
         setModalShow(true);
     };
 
-    const handleSalesManagerDelete = (id) => {
-        Swal.fire({
-          title: "Apa kamu yakin?",
-          text: "Karyawan akan dihapus",
+    const handleAttributeStatusUpdate = (id, currentStatus) => {
+      const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+      const statusValue = newStatus === "Active" ? 1 : 0; 
+  
+      Swal.fire({
+          title: "Update Status?",
+          text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Ya, Hapus!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`${Constants.BASE_URL}/sales-manager/${id}`).then(res => {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: res.data.cls,
-                        title: res.data.msg,
-                        showConfirmButton: false,
-                        toast: true,
-                        timer: 1500
-                    });
-                    getSalesManagers(activePage);
-                });
-            }
-        });
+          confirmButtonText: "Ya, Update!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.put(`${Constants.BASE_URL}/sales-manager/${id}/status`, { status: statusValue })
+          .then(res => {
+            Swal.fire({
+              position: "top-end",
+              icon: res.data.cls,
+              title: res.data.msg,
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+            getSalesManagers(activePage);
+          })
+          .catch(error => {
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Gagal mengubah status",
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+          });
+        }
+      });
     };
 
     useEffect(() => {
@@ -235,8 +249,10 @@ const ListSalesManager = () => {
                                 <button onClick={() => handleDetailsModal(salesManager)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                                 
                                 <Link to={`/sales-manager/edit/${salesManager.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                                
-                                <button onClick={() => handleSalesManagerDelete(salesManager.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+
+                                <button onClick={() => handleAttributeStatusUpdate(salesManager.id, salesManager.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                                  <i className="fas fa-solid fa-sync"></i>
+                                </button>
                               </td>
                             </tr>
                           )) : <NoDataFound colSpan={8} /> }

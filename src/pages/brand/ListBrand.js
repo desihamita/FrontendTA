@@ -12,89 +12,95 @@ import CategoryDetailsModal from '../../components/partials/modal/CategoryDetail
 import Pagination from 'react-js-pagination';
 
 const ListBrand = () => {
-    const [input, setInput] = useState({
-        order_by: 'serial',
-        per_page: 10,
-        direction: 'asc',
-        search: ''
-    })
-    const [isLoading, setIsLoading] = useState(false);
-    const [brand, setBrand] = useState([])
-    const [brands, setBrands] = useState([])
-    const [columns, setColumns] = useState([])
+  const [input, setInput] = useState({
+      order_by: 'serial',
+      per_page: 10,
+      direction: 'asc',
+      search: ''
+  })
+  const [isLoading, setIsLoading] = useState(false);
+  const [brand, setBrand] = useState([])
+  const [brands, setBrands] = useState([])
 
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
-    const [totalItemsCount, setTotalItemsCount] = useState(1)
-    const [startFrom, setStartFrom] = useState(1)
-    const [activePage, setActivePage] = useState(1)
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
+  const [totalItemsCount, setTotalItemsCount] = useState(1)
+  const [startFrom, setStartFrom] = useState(1)
+  const [activePage, setActivePage] = useState(1)
 
-    const [modalShow, setModalShow] = useState(false)
-    const [modalPhotoShow, setModalPhotoShow] = useState(false)
-    const [modalPhoto, setModalPhoto] = useState('')
-    
-    const handleInput = (e) => {
-        setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
-    };
-    
-    const getCategories = (pageNumber = 1) => {
-        setIsLoading(true);
-        axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-        .then(res => {
-            setBrands(res.data.data);
-            setItemsCountPerPage(res.data.meta.per_page);
-            setStartFrom(res.data.meta.from);
-            setTotalItemsCount(res.data.meta.total);
-            setActivePage(res.data.meta.current_page);
-            setIsLoading(false);
-        });
-    };
-    
-    const handlePhotoModal = (photo) => {
-        setModalPhoto(photo);
-        setModalPhotoShow(true);
-    };
-    
-    const handleDetailsModal = (brand) => {
-        setBrand(brand);
-        setModalShow(true);
-    };
-    
-    const handleBrandDelete = (id) => {
-        Swal.fire({
-          title: "Apa kamu yakin?",
-          text: "Merek akan dihapus",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ya, Hapus!"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.delete(`${Constants.BASE_URL}/brand/${id}`).then(res => {
-              Swal.fire({
-                position: "top-end",
-                icon: res.data.cls,
-                title: res.data.msg,
-                showConfirmButton: false,
-                toast: true,
-                timer: 1500
-              });
-              getCategories(activePage);
-            });
-          }
-        });
-    }
-
-    const getColumns = () => {
-      axios.get(`${Constants.BASE_URL}/get-brand-column`).then(res => {
-          setColumns(res.data)
+  const [modalShow, setModalShow] = useState(false)
+  const [modalPhotoShow, setModalPhotoShow] = useState(false)
+  const [modalPhoto, setModalPhoto] = useState('')
+  
+  const handleInput = (e) => {
+      setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
+  };
+  
+  const getBrands = (pageNumber = 1) => {
+      setIsLoading(true);
+      axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+      .then(res => {
+          setBrands(res.data.data);
+          setItemsCountPerPage(res.data.meta.per_page);
+          setStartFrom(res.data.meta.from);
+          setTotalItemsCount(res.data.meta.total);
+          setActivePage(res.data.meta.current_page);
+          setIsLoading(false);
       });
-    }
-    
-    useEffect(() => {
-        getCategories()
-        getColumns()
-    }, []);
+  };
+  
+  const handlePhotoModal = (photo) => {
+      setModalPhoto(photo);
+      setModalPhotoShow(true);
+  };
+  
+  const handleDetailsModal = (brand) => {
+      setBrand(brand);
+      setModalShow(true);
+  };
+
+  const handleStatusUpdate = (id, currentStatus) => {
+    const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+    const statusValue = newStatus === "Active" ? 1 : 0; 
+
+    Swal.fire({
+      title: "Update Status?",
+      text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Update!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.put(`${Constants.BASE_URL}/brand/${id}/status`, { status: statusValue })
+        .then(res => {
+          Swal.fire({
+            position: "top-end",
+            icon: res.data.cls,
+            title: res.data.msg,
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
+          getBrands(activePage);
+        })
+        .catch(error => {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Gagal mengubah status",
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
+        });
+      }
+    });
+  }
+  
+  useEffect(() => {
+      getBrands()
+  }, []);
 
   return (
     <div className="content-wrapper">
@@ -175,7 +181,7 @@ const ListBrand = () => {
                 </div>
                 <div className='col-md-2'>
                   <div className='d-grid mt-4'>
-                    <button className='btn btn-warning w-100' onClick={() => getCategories(1)}>
+                    <button className='btn btn-warning w-100' onClick={() => getBrands(1)}>
                       <i className="fas fa-search"></i> Search
                     </button>
                   </div>
@@ -231,8 +237,10 @@ const ListBrand = () => {
                           <button onClick={() => handleDetailsModal(brand)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                           
                           <Link to={`/brand/edit/${brand.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                          
-                          <button onClick={() => handleBrandDelete(brand.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+
+                          <button onClick={() => handleStatusUpdate(brand.id, brand.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                            <i className="fas fa-solid fa-sync"></i>
+                          </button>
                         </td>
                       </tr>
                     )) : <NoDataFound colSpan={7} /> }
@@ -276,7 +284,7 @@ const ListBrand = () => {
                 itemsCountPerPage={itemsCountPerPage}
                 totalItemsCount={totalItemsCount}
                 pageRangeDisplayed={10}
-                onChange={getCategories}
+                onChange={getBrands}
                 nextPageText={'Next'}
                 prevPageText={'Previous'}
                 itemClass="page-item"

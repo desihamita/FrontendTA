@@ -93,7 +93,6 @@ const AddSalesManager = () => {
         let reader = new FileReader();
         reader.onloadend = () => {
           setInput((prevState) => ({ ...prevState, [e.target.name]: reader.result }));
-          //document.getElementById('fileLabel').innerText = file.name;
         };
         reader.readAsDataURL(file);
       }
@@ -146,7 +145,7 @@ const AddSalesManager = () => {
                         <div className="card-header">
                           <h3 className="card-title">Detail Karyawan</h3>
                         </div>
-                        <form>
+                        <form method='POST' encType="multipart/form-data">
                           <div className="card-body">
                             <div className="form-group">
                               <label>Nama</label>
@@ -237,9 +236,10 @@ const AddSalesManager = () => {
                               {errors.bio && <div className="invalid-feedback">{errors.bio[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Foto</label>
-                              <input type="file" name="photo" className={errors.photo ? 'form-control is-invalid' : 'form-control'} onChange={handlePhoto} />
+                              <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
+                              <input type="file" name="photo" className={errors.photo ? 'form-control is-invalid' : 'form-control'} onChange={handlePhoto} accept=".png, .jpg, .jpeg, .webp" />
                               {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
+
                               {input.photo && (
                                 <div className="card-body">
                                   <img className="img-fluid w-50 h-50" src={input.photo} alt="photo" />

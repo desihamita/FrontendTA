@@ -10,7 +10,7 @@ const EditBahanBaku = () => {
     const params = useParams();
     const navigate = useNavigate();
     const [input, setInput] = useState({
-        status: 1,
+        status: '',
         name: '',
         slug: '',
         category_id: '',
@@ -44,7 +44,8 @@ const EditBahanBaku = () => {
     const getBrands = async () => {
         try {
             const res = await axios.get(`${Constants.BASE_URL}/get-brand-list`);
-            setBrands(res.data);
+            const activeBrands = res.data.filter(brand => brand.status === 1);
+            setBrands(activeBrands)
         } catch (error) {
             console.error('Error fetching brands:', error);
         }
@@ -53,7 +54,8 @@ const EditBahanBaku = () => {
     const getSuppliers = async () => {
         try {
             const res = await axios.get(`${Constants.BASE_URL}/get-supplier-list`);
-            setSuppliers(res.data);
+            const activeSuppliers = res.data.filter(supplier => supplier.status === 1);
+            setSuppliers(activeSuppliers)
         } catch (error) {
             console.error('Error fetching suppliers:', error);
         }
@@ -62,7 +64,8 @@ const EditBahanBaku = () => {
     const getCategories = async () => {
         try {
             const res = await axios.get(`${Constants.BASE_URL}/get-category-list`);
-            setCategories(res.data);
+            const activeCategories = res.data.filter(categories => categories.status === 1);
+            setCategories(activeCategories)
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -80,18 +83,19 @@ const EditBahanBaku = () => {
     const handleInput = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-
-        if (name === 'brand_id' || name === 'supplier_id' || name === 'category_id' || name === 'sub_category_id') {
+    
+        if (name === 'status') {
             newValue = parseInt(value, 10);
         }
-
+    
         if (name === 'name') {
             const slug = value.toLowerCase().replaceAll(' ', '-');
             setInput((prevState) => ({ ...prevState, slug }));
         }
-
+    
         setInput((prevState) => ({ ...prevState, [name]: newValue }));
     };
+    
 
     const handlePhoto = (e) => {
         let file = e.target.files[0];
@@ -187,7 +191,7 @@ const EditBahanBaku = () => {
                                             onChange={handleInput}
                                             className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                         >
-                                            <option disabled selected>Pilih Kategori</option>
+                                            <option>Pilih Kategori</option>
                                             {categories.map((category, index) => (
                                                 <option value={category.id} key={index}>{category.name}</option>
                                             ))}
@@ -207,7 +211,7 @@ const EditBahanBaku = () => {
                                             className={errors.sub_category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                             disabled={input.category_id === undefined}
                                         >
-                                            <option disabled selected>Pilih Sub Kategori</option>
+                                            <option>Pilih Sub Kategori</option>
                                             {subCategories.map((subCategory, index) => (
                                                 <option value={subCategory.id} key={index}>{subCategory.name}</option>
                                             ))}
@@ -226,7 +230,7 @@ const EditBahanBaku = () => {
                                             onChange={handleInput}
                                             className={errors.brand_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                         >
-                                            <option disabled selected>Pilih Merek</option>
+                                            <option>Pilih Merek</option>
                                             {brands.map((brand, index) => (
                                                 <option value={brand.id} key={index}>{brand.name}</option>
                                             ))}
@@ -245,7 +249,7 @@ const EditBahanBaku = () => {
                                             onChange={handleInput}
                                             className={errors.supplier_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                         >
-                                            <option disabled selected>Pilih Pemasok</option>
+                                            <option>Pilih Pemasok</option>
                                             {suppliers.map((supplier, index) => (
                                                 <option value={supplier.id} key={index}>{supplier.name}</option>
                                             ))}

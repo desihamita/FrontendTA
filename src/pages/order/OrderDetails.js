@@ -54,7 +54,7 @@ const OrderDetails = () => {
           <div className="card-header">
             <CardHeader
               link={'/order'} 
-              btnText="Batal"
+              btnText="Kembali"
               btn="btn btn-primary"
               icon="fas fa-backspace"
             />

@@ -72,7 +72,7 @@ const BarcodeBahanBakuComponent = () => {
                         <div className="card-header">
                         <CardHeader 
                             link={'/bahan-baku'} 
-                            btnText="Cancel"
+                            btnText="Kembali"
                             btn="btn btn-info"
                             icon="fas fa-backspace"
                         />

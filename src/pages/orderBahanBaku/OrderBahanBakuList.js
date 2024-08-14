@@ -71,6 +71,7 @@ const OrderBahanBakuList = () => {
   }, []);
 
   const isSales = GlobalFunction.isSales();
+  const isAdmin = GlobalFunction.isAdmin();
 
   return (
     <div className="content-wrapper">
@@ -92,9 +93,11 @@ const OrderBahanBakuList = () => {
                         icon="fas fa-plus"
                     />
                   )}
+                  {isAdmin && (
                     <button className="btn btn-success ml-2" onClick={handleExportOrders}>
-                          <i className="fas fa-download"></i> Export
+                      <i className="fas fa-download"></i> Export
                     </button>
+                  )}
                   </div>
                 </div>
                 <div className="card-body">

@@ -53,9 +53,9 @@ const ListOrder = () => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'Pesanan.csv');
+        link.setAttribute('download', 'PesananProduk.csv');
         document.body.appendChild(link);
-        link.click();
+        link.click(); 
     })
     .catch(error => {
         console.error('Error exporting orders:', error);
@@ -72,6 +72,7 @@ const ListOrder = () => {
   }, []);
 
   const isSales = GlobalFunction.isSales();
+  const isAdmin = GlobalFunction.isAdmin();
 
   return (
     <div className="content-wrapper">
@@ -93,9 +94,11 @@ const ListOrder = () => {
                           icon="fas fa-plus"
                       />
                     )}
-                    <button className="btn btn-success ml-2" onClick={handleExportOrders}>
-                          <i className="fas fa-download"></i> Export
-                    </button>
+                    {isAdmin && (
+                      <button className="btn btn-success ml-2" onClick={handleExportOrders}>
+                        <i className="fas fa-download"></i> Export
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="card-body">

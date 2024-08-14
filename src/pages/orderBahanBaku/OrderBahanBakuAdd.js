@@ -41,7 +41,7 @@ const OrderBahanBakuAdd = () => {
         paid_amount: 0,
         due_amount: 0,
         payment_method_id: 1,
-        trxIngredients_id: '', // Pastikan ini diinisialisasi dengan benar
+        trxIngredients_id: '',
       });
 
     const [barcode, setBarcode] = useState('');
@@ -82,7 +82,8 @@ const OrderBahanBakuAdd = () => {
         setIsLoading(true);
         axios.get(`${Constants.BASE_URL}/supplier?&search=${supplierInput}`)
             .then((res) => {
-                setSuppliers(res.data.data);
+                const activeSuppliers = res.data.data.filter(supplier => supplier.status === 'Active');
+                setSuppliers(activeSuppliers);
                 setIsLoading(false);
             });
     };
@@ -91,7 +92,8 @@ const OrderBahanBakuAdd = () => {
         setIsLoading(true);
         axios.get(`${Constants.BASE_URL}/attribute?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
             .then((res) => {
-                setAttributes(res.data.data);
+                const activeAttributes = res.data.data.filter(attribute => attribute.status === 'Active');
+                setAttributes(activeAttributes);
                 setItemsCountPerPage(res.data.meta.per_page);
                 setStartFrom(res.data.meta.from);
                 setTotalItemsCount(res.data.meta.total);
@@ -277,7 +279,7 @@ const OrderBahanBakuAdd = () => {
                         <div className="card-header">
                             <CardHeader
                                 link={'/order-bahan-baku'} 
-                                btnText="Cancel"              
+                                btnText="Kembali"              
                                 btn="btn btn-info"
                                 icon="fas fa-backspace"
                             />

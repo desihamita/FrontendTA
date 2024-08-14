@@ -27,12 +27,6 @@ const ListBahanBaku = () => {
     const [startFrom, setStartFrom] = useState(1);
     const [activePage, setActivePage] = useState(1);
 
-    const getAttributeColumn = () => {
-        axios.get(`${Constants.BASE_URL}/get-attribute-column`).then(res => {
-            setAttributeColumn(res.data)
-        });
-    }
-    
     const handleInput = (e) => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
@@ -47,6 +41,46 @@ const ListBahanBaku = () => {
             setTotalItemsCount(res.data.meta.total);
             setActivePage(res.data.meta.current_page);
             setIsLoading(false);
+        });
+    };
+
+    const handleAttributeStatusUpdate = (id, currentStatus) => {
+        const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+        const statusValue = newStatus === "Active" ? 1 : 2; 
+    
+        Swal.fire({
+            title: "Update Status?",
+            text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Update!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.put(`${Constants.BASE_URL}/attribute/${id}/status`, { status: statusValue })
+                    .then(res => {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: res.data.cls,
+                            title: res.data.msg,
+                            showConfirmButton: false,
+                            toast: true,
+                            timer: 1500
+                        });
+                        getAttributes(activePage); 
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Gagal mengubah status",
+                            showConfirmButton: false,
+                            toast: true,
+                            timer: 1500
+                        });
+                    });
+            }
         });
     };
 
@@ -75,6 +109,12 @@ const ListBahanBaku = () => {
           }
         });
     };
+
+    const getAttributeColumn = () => {
+        axios.get(`${Constants.BASE_URL}/get-attribute-column`).then(res => {
+            setAttributeColumn(res.data)
+        });
+    }
     
     useEffect(() => {
         getAttributes()
@@ -136,9 +176,9 @@ const ListBahanBaku = () => {
                                                     value={input.order_by}
                                                     onChange={handleInput}
                                                 >
-                                                    <option value={'name'}>Name</option>
-                                                    <option value={'created_at'}>Created At</option>
-                                                    <option value={'updated_at'}>Updated At</option>
+                                                    {attributeColumns.map((column, index) => (
+                                                        <option key={index} value={column.id}>{column.name}</option>
+                                                    ))}
                                                 </select>
                                             </label>
                                         </div>
@@ -241,8 +281,11 @@ const ListBahanBaku = () => {
                                                     {isAdmin && (
                                                         <>
                                                             <Link to={`/bahan-baku/edit/${attribute.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+
+                                                            <button onClick={() => handleAttributeStatusUpdate(attribute.id, attribute.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                                                                <i className="fas fa-solid fa-sync"></i>
+                                                            </button>
                                                             
-                                                            <button onClick={() => handleAttributeDelete(attribute.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
                                                         </>
                                                     )}
                                                 </td>

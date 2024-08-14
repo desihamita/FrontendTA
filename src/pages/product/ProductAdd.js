@@ -21,14 +21,18 @@ const ProductAdd = () => {
 
   const getCategories = () => {
     axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-      setCategories(res.data)
+      const activeCategories = res.data.filter(categories => categories.status === 1);
+      setCategories(activeCategories)
     })
   }
 
-  const getSubCategories = (category_id) => {
-    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-      setSubCategories(res.data)
-    })
+  const getSubCategories = (category_name) => {
+    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+      const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
+      setSubCategories(activeSubCategories);
+    }).catch(error => {
+      console.error('Error fetching sub categories:', error);
+    });
   }
 
   const generateSku = (category_id) => {

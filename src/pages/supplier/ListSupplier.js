@@ -63,18 +63,22 @@ const ListSupplier = () => {
     setModalShow(true);
   };
 
-  const handleSupplierDelete = (id) => {
+  const handleStatusUpdate = (id, currentStatus) => {
+    const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+    const statusValue = newStatus === "Active" ? 1 : 0; 
+
     Swal.fire({
-      title: "Apa kamu yakin?",
-      text: "Pemasok akan dihapus",
+      title: "Update Status?",
+      text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Hapus!"
+      confirmButtonText: "Ya, Update!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/supplier/${id}`).then(res => {
+        axios.put(`${Constants.BASE_URL}/supplier/${id}/status`, { status: statusValue })
+        .then(res => {
           Swal.fire({
             position: "top-end",
             icon: res.data.cls,
@@ -84,20 +88,23 @@ const ListSupplier = () => {
             timer: 1500
           });
           getSuppliers(activePage);
+        })
+        .catch(error => {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Gagal mengubah status",
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
         });
       }
-    });
-  };
-
-  const getColumns = () => {
-    axios.get(`${Constants.BASE_URL}/get-supplier-column`).then(res => {
-        setColumns(res.data)
     });
   }
 
   useEffect(() => {
     getSuppliers()
-    getColumns()
   }, []);
 
   return (
@@ -141,10 +148,10 @@ const ListSupplier = () => {
                       onChange={handleInput}
                     >
                       <option value={'name'}>Name</option>
-                      <option value={'created_at'}>Created At</option>
-                      <option value={'updated_at'}>Updated At</option>
                       <option value={'phone'}>Phone</option>
                       <option value={'email'}>Email</option>
+                      <option value={'created_at'}>Created At</option>
+                      <option value={'updated_at'}>Updated At</option>
                     </select>
                   </label>
                 </div>
@@ -235,8 +242,10 @@ const ListSupplier = () => {
                           <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                           
                           <Link to={`/supplier/edit/${supplier.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                          
-                          <button onClick={() => handleSupplierDelete(supplier.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+
+                          <button onClick={() => handleStatusUpdate(supplier.id, supplier.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                            <i className="fas fa-solid fa-sync"></i>
+                          </button>
                         </td>
                       </tr>
                     )) : <NoDataFound colSpan={8} /> }

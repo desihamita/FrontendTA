@@ -22,17 +22,22 @@ const EditSubCategory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [categories, setCategories] = useState([]);
 
-    const getCategory = () => {
-        axios.get(`${Constants.BASE_URL}/sub-category/${params.id}`).then(res => {
-            setInput(res.data.data);
-        });
+    const getCategory = async () => {
+        try {
+            const res = await axios.get(`${Constants.BASE_URL}/sub-category/${params.id}`);
+            setInput(res.data.data); 
+            getCategories(res.data.data.category_id); 
+        } catch (error) {
+            console.error('Error fetching attribute:', error);
+        }
     };
 
     const getCategories = () => {
         axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-            setCategories(res.data);
-        });
-    };
+            const activeCategories = res.data.filter(categories => categories.status === 1);
+            setCategories(activeCategories)
+        })
+      }
 
     const handleInput = (e) => {
         if (e.target.name === 'name') {
@@ -53,36 +58,59 @@ const EditSubCategory = () => {
         reader.readAsDataURL(file);
     };
 
-    const handleCategoryUpdate = (e) => {
+    const handleCategoryUpdate = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-
-        const selectedCategory = categories.find(category => category.id === parseInt(input.category_id));
-        
-        if (selectedCategory) {
-            const inputData = {
-                ...input,
-                category_name: selectedCategory.name
-            };
-            axios.put(`${Constants.BASE_URL}/sub-category/${params.id}`, inputData).then(res => {
-                setIsLoading(false);
-                Swal.fire({
-                    position: "top-end",
-                    icon: res.data.cls,
-                    title: res.data.msg,
-                    showConfirmButton: false,
-                    toast: true,
-                    timer: 3000
-                });
-                navigate('/sub-category');
-            }).catch(errors => {
-                setIsLoading(false);
-                if (errors.response.status === 422) {
-                    setErrors(errors.response.data.errors);
-                }
+        try {
+            const res = await axios.put(`${Constants.BASE_URL}/sub-category/${params.id}`, input);
+            setIsLoading(false);
+            Swal.fire({
+                position: 'top-end',
+                icon: res.data.cls,
+                title: res.data.msg,
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500,
             });
+            navigate('/sub-category');
+        } catch (error) {
+            setIsLoading(false);
+            if (error.response.status === 422) {
+                setErrors(error.response.data.errors);
+            }
         }
     };
+
+    // const handleCategoryUpdate = (e) => {
+    //     e.preventDefault();
+    //     setIsLoading(true);
+
+    //     const selectedCategory = categories.find(category => category.id === parseInt(input.category_id));
+        
+    //     if (selectedCategory) {
+    //         const inputData = {
+    //             ...input,
+    //             category_name: selectedCategory.name
+    //         };
+    //         axios.put(`${Constants.BASE_URL}/sub-category/${params.id}`, inputData).then(res => {
+    //             setIsLoading(false);
+    //             Swal.fire({
+    //                 position: "top-end",
+    //                 icon: res.data.cls,
+    //                 title: res.data.msg,
+    //                 showConfirmButton: false,
+    //                 toast: true,
+    //                 timer: 3000
+    //             });
+    //             navigate('/sub-category');
+    //         }).catch(errors => {
+    //             setIsLoading(false);
+    //             if (errors.response.status === 422) {
+    //                 setErrors(errors.response.data.errors);
+    //             }
+    //         });
+    //     }
+    // };
 
     useEffect(() => {
         getCategory();
@@ -180,7 +208,7 @@ const EditSubCategory = () => {
                                             >
                                                 <option value="" disabled>Pilih Status</option>
                                                 <option value={1}>Active</option>
-                                                <option value={2}>Inactive</option>
+                                                <option value={0}>Inactive</option>
                                             </select>
                                             {errors.status && (
                                                 <div className="invalid-feedback">

@@ -57,18 +57,22 @@ const CategoryList = () => {
     setModalShow(true);
   };
 
-  const handleCategoryDelete = (id) => {
+  const handleStatusUpdate = (id, currentStatus) => {
+    const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+    const statusValue = newStatus === "Active" ? 1 : 0; 
+
     Swal.fire({
-      title: "Apa kamu yakin?",
-      text: "Kategori akan dihapus",
+      title: "Update Status?",
+      text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, Hapus!"
+      confirmButtonText: "Ya, Update!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${Constants.BASE_URL}/category/${id}`).then(res => {
+        axios.put(`${Constants.BASE_URL}/category/${id}/status`, { status: statusValue })
+        .then(res => {
           Swal.fire({
             position: "top-end",
             icon: res.data.cls,
@@ -78,20 +82,23 @@ const CategoryList = () => {
             timer: 1500
           });
           getCategories(activePage);
+        })
+        .catch(error => {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Gagal mengubah status",
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500
+          });
         });
       }
-    });
-  };
-
-  const getColumns = () => {
-    axios.get(`${Constants.BASE_URL}/get-category-column`).then(res => {
-        setColumns(res.data)
     });
   }
 
   useEffect(() => {
     getCategories()
-    getColumns()
   }, []);
 
   return (
@@ -229,7 +236,10 @@ const CategoryList = () => {
                           <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                           
                           <Link to={`/category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-                          <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+
+                          <button onClick={() => handleStatusUpdate(category.id, category.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                            <i className="fas fa-solid fa-sync"></i>
+                          </button>
                         </td>
                       </tr>
                     )) : <NoDataFound colSpan={7}/> }

@@ -18,7 +18,7 @@ const ShowOrderConfirmation = ({ handleOrderPlace, handleOrderSummaryInput, ...p
           setBranch(JSON.parse(storedBranch));
       }
 
-  });
+  },[]);
 
   return (
     <Modal

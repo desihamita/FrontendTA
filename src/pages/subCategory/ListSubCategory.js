@@ -21,7 +21,6 @@ const ListSubCategory = () => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [category, setCategory] = useState([])
-    const [columns, setColumns] = useState([])
 
     const [itemsCountPerPage, setitemsCountPerPage] = useState(0)
     const [totalItemsCount, setTotalItemsCount] = useState(1)
@@ -61,41 +60,48 @@ const ListSubCategory = () => {
         setModalShow(true);
     };
 
-    const handleCategoryDelete = (id) => {
+    const handleStatusUpdate = (id, currentStatus) => {
+        const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+        const statusValue = newStatus === "Active" ? 1 : 0; 
+    
         Swal.fire({
-            title: "Apa kamu yakin?",
-            text: "Sub Kategori akan dihapus",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Hapus!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`${Constants.BASE_URL}/sub-category/${id}`).then(res => {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: res.data.cls,
-                        title: res.data.msg,
-                        showConfirmButton: false,
-                        toast: true,
-                        timer: 1500
-                    });
-                    getCategories(activePage);
-                })
-            }
+          title: "Update Status?",
+          text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, Update!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.put(`${Constants.BASE_URL}/sub-category/${id}/status`, { status: statusValue })
+            .then(res => {
+              Swal.fire({
+                position: "top-end",
+                icon: res.data.cls,
+                title: res.data.msg,
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500
+              });
+              getCategories(activePage);
+            })
+            .catch(error => {
+              Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "Gagal mengubah status",
+                showConfirmButton: false,
+                toast: true,
+                timer: 1500
+              });
+            });
+          }
         });
     }
 
-    const getColumns = () => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-column`).then(res => {
-            setColumns(res.data)
-        });
-    }
-    
     useEffect(() => {
         getCategories()
-        getColumns()
     }, []);
 
     return (
@@ -236,7 +242,9 @@ const ListSubCategory = () => {
 
                                         <Link to={`/sub-category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
 
-                                        <button onClick={() => handleCategoryDelete(category.id)} className='btn btn-danger btn-sm my-1'><i className="fas fa-solid fa-trash"></i></button>
+                                        <button onClick={() => handleStatusUpdate(category.id, category.status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                                            <i className="fas fa-solid fa-sync"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             )) : <NoDataFound colSpan={7} /> }

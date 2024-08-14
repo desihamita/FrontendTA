@@ -22,7 +22,6 @@ const OrderBahanBakuDetails = () => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/order-bahan-baku/${params.id}`)
       .then(res => {
-        console.log(res.data.data);
         setOrder(res.data.data);
         setIsLoading(false);
       })
@@ -55,7 +54,7 @@ const OrderBahanBakuDetails = () => {
           <div className="card-header">
             <CardHeader
               link={'/order-bahan-baku'} 
-              btnText="Batal"
+              btnText="Kembali"
               btn="btn btn-primary"
               icon="fas fa-backspace"
             />

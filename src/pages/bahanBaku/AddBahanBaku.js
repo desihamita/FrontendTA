@@ -24,26 +24,32 @@ const AddBahanBaku = () => {
 
     const getSuppliers = () => {
         axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
-            setSuppliers(res.data)
+            const activeSuppliers = res.data.filter(supplier => supplier.status === 1);
+            setSuppliers(activeSuppliers)
         })
     }
 
     const getCategories = () => {
         axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-            setCategories(res.data)
+            const activeCategories = res.data.filter(categories => categories.status === 1);
+            setCategories(activeCategories)
         })
     }
 
     const getBrands = () => {
         axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
-            setBrands(res.data)
+            const activeBrands = res.data.filter(brand => brand.status === 1);
+            setBrands(activeBrands)
         })
     }
 
-    const getSubCategories = (category_id) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-            setSubCategories(res.data)
-        })
+    const getSubCategories = (category_name) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+            const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
+            setSubCategories(activeSubCategories);
+        }).catch(error => {
+            console.error('Error fetching sub categories:', error);
+        });
     }
 
     const generateSku = (category_id, brand_id) => {
@@ -58,27 +64,28 @@ const AddBahanBaku = () => {
     }
 
     const handleInput = (e) => {
-        if (e.target.name == 'name') {
-            let slug = e.target.value
+        const { name, value } = e.target;
+        setInput(prevState => ({ ...prevState, [name]: value }));
+
+        if (name == 'name') {
+            let slug = value
             slug = slug.toLowerCase()
             slug = slug.replaceAll(' ', '-')
             setInput(prevState => ({ ...prevState, slug: slug }))
-        } else if (e.target.name == 'category_id') {
-            let category_id = parseInt(e.target.value);
+        }else if (name === 'category_id') {
+            const category_id = parseInt(value);
             if (!Number.isNaN(category_id)) {
-                getSubCategories(e.target.value)
+                getSubCategories(category_id);
             }
         }
-
-        if (['category_id', 'brand_id'].includes(e.target.name)) {
-            const category_id = e.target.name === 'category_id' ? parseInt(e.target.value) : input.category_id
-            const brand_id = e.target.name === 'brand_id' ? parseInt(e.target.value) : input.brand_id
-            const sku = generateSku(category_id, brand_id)
-            setInput(prevState => ({ ...prevState, sku }))
+    
+        if (['category_id', 'brand_id'].includes(name)) {
+            const category_id = name === 'category_id' ? parseInt(value) : input.category_id;
+            const brand_id = name === 'brand_id' ? parseInt(value) : input.brand_id;
+            const sku = generateSku(category_id, brand_id);
+            setInput(prevState => ({ ...prevState, sku }));
         }
-
-        setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }))
-    }
+    };
 
     const handlePhoto = (e) => {
         let file = e.target.files[0];
@@ -178,7 +185,7 @@ const AddBahanBaku = () => {
                                                 onChange={handleInput}
                                                 className={errors.category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                             >
-                                                <option disabled selected>Pilih Kategori</option>
+                                                <option>Pilih Kategori</option>
                                                 {categories.map((category, index) => (
                                                     <option value={category.id} key={index}>{category.name}</option>
                                                 ))}
@@ -198,7 +205,7 @@ const AddBahanBaku = () => {
                                                 className={errors.sub_category_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                                 disabled={input.category_id === undefined}
                                             >
-                                                <option disabled selected>Pilih Sub Kategori</option>
+                                                <option>Pilih Sub Kategori</option>
                                                 {subCategories.map((subCategory, index) => (
                                                     <option value={subCategory.id} key={index}>{subCategory.name}</option>
                                                 ))}
@@ -217,7 +224,7 @@ const AddBahanBaku = () => {
                                                 onChange={handleInput}
                                                 className={errors.brand_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                             >
-                                                <option disabled selected>Pilih Merek</option>
+                                                <option>Pilih Merek</option>
                                                 {brands.map((brand, index) => (
                                                     <option value={brand.id} key={index}>{brand.name}</option>
                                                 ))}
@@ -236,7 +243,7 @@ const AddBahanBaku = () => {
                                                 onChange={handleInput}
                                                 className={errors.supplier_id !== undefined ? 'form-control is-invalid ' : 'form-control'}
                                             >
-                                                <option disabled selected>Pilih Pemasok</option>
+                                                <option>Pilih Pemasok</option>
                                                 {suppliers.map((supplier, index) => (
                                                     <option value={supplier.id} key={index}>{supplier.name}</option>
                                                 ))}
@@ -320,7 +327,7 @@ const AddBahanBaku = () => {
                                             >
                                                 <option disabled={true}>Select Product Status</option>
                                                 <option value={1}>Active</option>
-                                                <option value={2}>Inactive</option>
+                                                <option value={0}>Inactive</option>
                                             </select>
                                             {errors.status !== undefined && (
                                                 <div className="invalid-feedback">
@@ -329,7 +336,7 @@ const AddBahanBaku = () => {
                                             )}
                                         </div>
                                         <div className="form-group col-md-6">
-                                            <label>Foto</label>
+                                            <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                             <input type="file" name="photo"  className={errors.photo !== undefined ? 'form-control select2 is-invalid ' : 'form-control'} onChange={handlePhoto} />
                                             {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
 
