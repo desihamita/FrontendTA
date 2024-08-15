@@ -33,7 +33,7 @@ const ShowOrderConfirmation = forwardRef(({ handleOrderPlace, handleOrderSummary
                     <Container>
                         <Row className="justify-content-md-center">
                             <Col md="10">
-                                <Card>
+                                <Card ref={componentRef}>
                                     <Card.Header className="text-center">
                                         {Object.keys(branch).length > 0 && branch.address ? (
                                             <>

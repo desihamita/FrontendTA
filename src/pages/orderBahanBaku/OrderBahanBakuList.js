@@ -175,13 +175,13 @@ const OrderBahanBakuList = () => {
                       <table className="table table-hover table-striped table-bordered">
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Order Details</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Sales</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>No</th>
+                            <th>Detail Pesanan</th>
+                            <th>Supplier</th>
+                            <th>Harga</th>
+                            <th>Karyawan</th>
+                            <th>Tanggal/Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -189,31 +189,27 @@ const OrderBahanBakuList = () => {
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
-                                <p>Order No. <strong>{order.order_number}</strong></p>
-                                <p className='text-success'>Order Status : {order.order_status_string}</p>
-                                <p>Payment Status : {order.payment_status}</p>
+                                <p>No.Pesanan <strong>{order.order_number}</strong></p>
+                                <p className='text-success'>Status Pesanan : {order.order_status_string}</p>
+                                <p>Status Pembayaran : {order.payment_status}</p>
                               </td>
                               <td>
                                 <p>{order.supplier_name}</p>
                                 <p className='text-success'>{order.supplier_phone}</p>
                               </td>
                               <td>
-                                <p>Quantity : {order.quantity}</p>
+                                <p>Kuantitas : {order.quantity}</p>
                                 <p className='text-success'>Sub Total : {order.sub_total}</p>
-                                <p className='text-success'>Total : {order.total}</p>
-                                <p>Due Amount : {order.due_amount}</p>
-                                <p className='text-success'>Paid Amount : {order.paid_amount}</p>
+                                <p>Total : {order.total}</p>
+                                <p className='text-success'>Harga : {order.paid_amount}</p>
                               </td>
                               <td>
-                                <p>Shop : {order.shop}</p>
-                                <p className='text-success'>Sales Manager : {order.sales_manager}</p>
+                                <p>Kafe : {order.shop}</p>
+                                <p className='text-success'>Kasir : {order.sales_manager}</p>
                               </td>
                               <td>
                                 <p className="mb-0">
-                                  <small>Created : {order.created_at}</small>
-                                </p>
-                                <p className="text-success">
-                                  <small>Updated : {order.updated_at}</small>
+                                  <small>Dibuat : {order.created_at}</small>
                                 </p>
                               </td>
                               <td>
@@ -225,13 +221,13 @@ const OrderBahanBakuList = () => {
                         </tbody>
                         <tfoot>
                           <tr>
-                            <th>#</th>
-                            <th>Order Details</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Sales</th>
-                            <th>Date Time</th>
-                            <th>Action</th>
+                            <th>No</th>
+                            <th>Detail Pesanan</th>
+                            <th>Supplier</th>
+                            <th>Harga</th>
+                            <th>Karyawan</th>
+                            <th>Tanggal/Waktu</th>
+                            <th>Aksi</th>
                           </tr>
                         </tfoot>
                       </table>
