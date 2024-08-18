@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
 import Loader from '../../components/partials/miniComponent/Loader';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
-
 const CategoryList = () => {
   const [input, setInput] = useState({
     order_by: 'serial',
@@ -32,7 +31,6 @@ const CategoryList = () => {
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
-
   const getCategories = (pageNumber = 1) => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/category?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
@@ -45,21 +43,17 @@ const CategoryList = () => {
             setIsLoading(false);
         });
   };
-
   const handlePhotoModal = (photo) => {
     setModalPhoto(photo);
     setModalPhotoShow(true);
   };
-
   const handleDetailsModal = (category) => {
     setCategory(category);
     setModalShow(true);
   };
-
   const handleStatusUpdate = (id, currentStatus) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     const statusValue = newStatus === "Active" ? 1 : 0; 
-
     Swal.fire({
       title: "Update Status?",
       text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
@@ -97,8 +91,8 @@ const CategoryList = () => {
   }
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
+    getCategories()
+  }, []);
 
   return (
     <div className="content-wrapper">
@@ -233,7 +227,9 @@ const CategoryList = () => {
                         </td>
                         <td className='m-1'>
                           <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+
                           <Link to={`/category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+
                           <button onClick={() => handleStatusUpdate(category.id, category.status)} className='btn btn-primary btn-sm my-1 mx-1'>
                             <i className="fas fa-solid fa-sync"></i>
                           </button>
@@ -293,5 +289,4 @@ const CategoryList = () => {
     </div>
   );
 };
-
 export default CategoryList;

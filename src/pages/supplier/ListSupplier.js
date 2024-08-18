@@ -17,20 +17,20 @@ const ListSupplier = () => {
     per_page: 10,
     direction: 'desc',
     search: ''
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [supplier, setSupplier] = useState([]);
-  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
-  const [totalItemsCount, setTotalItemsCount] = useState(1);
-  const [startFrom, setStartFrom] = useState(1);
-  const [activePage, setActivePage] = useState(1);
-  const [modalShow, setModalShow] = useState(false);
-  const [modalLogoShow, setModalLogoShow] = useState(false);
-  const [suppliers, setSuppliers] = useState([]);
-  const [modalLogo, setModalLogo] = useState('');
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [supplier, setSupplier] = useState([])
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
+  const [totalItemsCount, setTotalItemsCount] = useState(1)
+  const [startFrom, setStartFrom] = useState(1)
+  const [activePage, setActivePage] = useState(1)
+  const [modalShow, setModalShow] = useState(false)
+  const [modalLogoShow, setModalLogoShow] = useState(false)
+  const [suppliers, setSuppliers] = useState([])
+  const [modalLogo, setModalLogo] = useState('')
 
   const handleInput = (e) => {
-    setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+    setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
 
   const getSuppliers = (pageNumber = 1) => {
@@ -44,28 +44,24 @@ const ListSupplier = () => {
           setStartFrom(meta.from);
           setTotalItemsCount(meta.total);
           setActivePage(meta.current_page);
-        }
+        } 
         setIsLoading(false);
       })
       .catch(error => {
         setIsLoading(false);
       });
   };
-
   const handleLogoModal = (logo) => {
     setModalLogo(logo);
     setModalLogoShow(true);
   };
-
   const handleDetailsModal = (supplier) => {
     setSupplier(supplier);
     setModalShow(true);
   };
-
   const handleStatusUpdate = (id, currentStatus) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     const statusValue = newStatus === "Active" ? 1 : 0; 
-
     Swal.fire({
       title: "Update Status?",
       text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
@@ -100,20 +96,20 @@ const ListSupplier = () => {
         });
       }
     });
-  };
+  }
 
   useEffect(() => {
-    getSuppliers();
-  }, [getSuppliers]);
+    getSuppliers()
+  }, []);
 
   return (
     <div className="content-wrapper">
       <section className="content-header">
         <Breadcrumb title="Daftar Pemasok" breadcrumb="pemasok" />
       </section>
-      <section className="content">
-        <div className="card">
-          <div className="card-header">
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
             <CardHeader 
               link={'/supplier/create'} 
               btnText="Tambah Pemasok"
@@ -238,15 +234,9 @@ const ListSupplier = () => {
                           </p>
                         </td>
                         <td className='m-1'>
-                          <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'>
-                            <i className="fas fa-solid fa-eye"></i>
-                          </button>
-                          
-                          <Link to={`/supplier/edit/${supplier.id}`}>
-                            <button className='btn btn-warning btn-sm my-1 mx-1'>
-                              <i className="fas fa-solid fa-edit"></i>
-                            </button>
-                          </Link>
+                          <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+
+                          <Link to={`/supplier/edit/${supplier.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
 
                           <button onClick={() => handleStatusUpdate(supplier.id, supplier.status)} className='btn btn-primary btn-sm my-1 mx-1'>
                             <i className="fas fa-solid fa-sync"></i>

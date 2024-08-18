@@ -216,7 +216,8 @@ const AddSubCategory = () => {
                                             btnText="Batal"
                                             btn="btn btn-info"
                                         />
-                                        <button className="btn btn-warning w-30" onClick={handleCategoryCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Sub Kategori'}} />
+                                        <button className="btn btn-warning w-30" onClick={handleCategoryCreate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Tambah Sub Kategori'}} >
+                                        </button>
                                     </div>
                                 </div>
                             </form>
