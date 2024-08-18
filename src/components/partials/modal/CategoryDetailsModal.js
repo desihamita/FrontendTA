@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const CategoryDetailsModal = (props) => {
@@ -65,7 +65,7 @@ const CategoryDetailsModal = (props) => {
                         </tr>
                         <tr>
                             <th>Foto</th>
-                            <td><img src={props.category.photo} className='img-thumbnail' alt='Photo' /></td>
+                            <td><img src={props.category.photo} className='img-thumbnail' alt='' /></td>
                         </tr>
                     </tbody>
                 </table>

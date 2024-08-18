@@ -28,7 +28,6 @@ const CategoryList = () => {
   const [modalPhotoShow, setModalPhotoShow] = useState(false);
   const [categories, setCategories] = useState([]);
   const [modalPhoto, setModalPhoto] = useState('');
-  const [columns, setColumns] = useState([])
 
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
@@ -98,13 +97,13 @@ const CategoryList = () => {
   }
 
   useEffect(() => {
-    getCategories()
-  }, []);
+    getCategories();
+  }, [getCategories]);
 
   return (
     <div className="content-wrapper">
       <section className="content-header">
-      <Breadcrumb title="Daftar Kategori" breadcrumb="kategori" />
+        <Breadcrumb title="Daftar Kategori" breadcrumb="kategori" />
       </section>
       <section className="content">
         <div className="card">
@@ -234,9 +233,7 @@ const CategoryList = () => {
                         </td>
                         <td className='m-1'>
                           <button onClick={() => handleDetailsModal(category)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
-                          
                           <Link to={`/category/edit/${category.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
-
                           <button onClick={() => handleStatusUpdate(category.id, category.status)} className='btn btn-primary btn-sm my-1 mx-1'>
                             <i className="fas fa-solid fa-sync"></i>
                           </button>
@@ -273,24 +270,24 @@ const CategoryList = () => {
               </div>
             }
           </div>
-              <div className="card-footer d-flex justify-content-between align-items-center">
-                <div className="data_tables_info">
-                    Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
-                </div>
-                <nav className="pagination-sm ml-auto">
-                    <Pagination
-                    activePage={activePage}
-                    itemsCountPerPage={itemsCountPerPage}
-                    totalItemsCount={totalItemsCount}
-                    pageRangeDisplayed={10}
-                    onChange={getCategories}
-                    nextPageText={'Next'}
-                    prevPageText={'Previous'}
-                    itemClass="page-item"
-                    linkClass="page-link"
-                    />
-                </nav>
-              </div>
+          <div className="card-footer d-flex justify-content-between align-items-center">
+            <div className="data_tables_info">
+                Showing {startFrom} to {startFrom + categories.length - 1} of {totalItemsCount} entries
+            </div>
+            <nav className="pagination-sm ml-auto">
+                <Pagination
+                activePage={activePage}
+                itemsCountPerPage={itemsCountPerPage}
+                totalItemsCount={totalItemsCount}
+                pageRangeDisplayed={10}
+                onChange={getCategories}
+                nextPageText={'Next'}
+                prevPageText={'Previous'}
+                itemClass="page-item"
+                linkClass="page-link"
+                />
+            </nav>
+          </div>
         </div>
       </section>
     </div>

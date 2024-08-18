@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback  } from 'react';
 import Pagination from 'react-js-pagination';
 import Constants from '../../Constants';
 import Breadcrumb from '../../components/partials/Breadcrumb';
@@ -31,7 +31,7 @@ const ListBarangKeluar = () => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
 
-    const getItems = (pageNumber = 1) => {
+    const getItems = useCallback((pageNumber = 1) => {
         setIsLoading(true);
         axios.get(`${Constants.BASE_URL}/outbound-items?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
             .then(res => {
@@ -42,7 +42,7 @@ const ListBarangKeluar = () => {
                 setActivePage(res.data.meta.current_page);
                 setIsLoading(false);
             });
-    };
+    }, [input]);
 
     const handleDetailsModal = (item) => {
         setSelectedItem(item);
@@ -73,7 +73,7 @@ const ListBarangKeluar = () => {
 
     useEffect(() => {
         getItems();
-    }, []);
+    }, [getItems]);
 
     const isSales = GlobalFunction.isSales();
     const isAdmin = GlobalFunction.isAdmin();

@@ -94,7 +94,7 @@ const Header = () => {
               <img
                 className="profile-user-img img-fluid img-circle"
                 src={`http://localhost:8000/images/uploads/sales_manager_thumb/${userPhoto}` || photoProfile} 
-                alt="User profile picture"
+                alt={userName || "User"}
                 onError={(e) => {
                   e.target.src = photoProfile;
                 }}

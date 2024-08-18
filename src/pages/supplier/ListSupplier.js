@@ -17,21 +17,20 @@ const ListSupplier = () => {
     per_page: 10,
     direction: 'desc',
     search: ''
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [supplier, setSupplier] = useState([])
-  const [itemsCountPerPage, setItemsCountPerPage] = useState(0)
-  const [totalItemsCount, setTotalItemsCount] = useState(1)
-  const [startFrom, setStartFrom] = useState(1)
-  const [activePage, setActivePage] = useState(1)
-  const [modalShow, setModalShow] = useState(false)
-  const [modalLogoShow, setModalLogoShow] = useState(false)
-  const [suppliers, setSuppliers] = useState([])
-  const [modalLogo, setModalLogo] = useState('')
-  const [columns, setColumns] = useState([])
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [supplier, setSupplier] = useState([]);
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
+  const [totalItemsCount, setTotalItemsCount] = useState(1);
+  const [startFrom, setStartFrom] = useState(1);
+  const [activePage, setActivePage] = useState(1);
+  const [modalShow, setModalShow] = useState(false);
+  const [modalLogoShow, setModalLogoShow] = useState(false);
+  const [suppliers, setSuppliers] = useState([]);
+  const [modalLogo, setModalLogo] = useState('');
 
   const handleInput = (e) => {
-    setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
+    setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
   const getSuppliers = (pageNumber = 1) => {
@@ -45,7 +44,7 @@ const ListSupplier = () => {
           setStartFrom(meta.from);
           setTotalItemsCount(meta.total);
           setActivePage(meta.current_page);
-        } 
+        }
         setIsLoading(false);
       })
       .catch(error => {
@@ -101,20 +100,20 @@ const ListSupplier = () => {
         });
       }
     });
-  }
+  };
 
   useEffect(() => {
-    getSuppliers()
-  }, []);
+    getSuppliers();
+  }, [getSuppliers]);
 
   return (
     <div className="content-wrapper">
       <section className="content-header">
         <Breadcrumb title="Daftar Pemasok" breadcrumb="pemasok" />
       </section>
-      <section class="content">
-        <div class="card">
-          <div class="card-header">
+      <section className="content">
+        <div className="card">
+          <div className="card-header">
             <CardHeader 
               link={'/supplier/create'} 
               btnText="Tambah Pemasok"
@@ -122,7 +121,7 @@ const ListSupplier = () => {
               icon="fas fa-plus"
             />
           </div>
-          <div class="card-body">
+          <div className="card-body">
             <div className='search-area mb-2'>
               <div className='row'>
                 <div className='col-md-3'>
@@ -239,9 +238,15 @@ const ListSupplier = () => {
                           </p>
                         </td>
                         <td className='m-1'>
-                          <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
+                          <button onClick={() => handleDetailsModal(supplier)} className='btn btn-info btn-sm my-1'>
+                            <i className="fas fa-solid fa-eye"></i>
+                          </button>
                           
-                          <Link to={`/supplier/edit/${supplier.id}`}><button className='btn btn-warning btn-sm my-1 mx-1'><i className="fas fa-solid fa-edit"></i></button></Link>
+                          <Link to={`/supplier/edit/${supplier.id}`}>
+                            <button className='btn btn-warning btn-sm my-1 mx-1'>
+                              <i className="fas fa-solid fa-edit"></i>
+                            </button>
+                          </Link>
 
                           <button onClick={() => handleStatusUpdate(supplier.id, supplier.status)} className='btn btn-primary btn-sm my-1 mx-1'>
                             <i className="fas fa-solid fa-sync"></i>
@@ -286,15 +291,15 @@ const ListSupplier = () => {
             </div>
             <nav className="pagination-sm ml-auto">
                 <Pagination
-                activePage={activePage}
-                itemsCountPerPage={itemsCountPerPage}
-                totalItemsCount={totalItemsCount}
-                pageRangeDisplayed={10}
-                onChange={getSuppliers}
-                nextPageText={'Next'}
-                prevPageText={'Previous'}
-                itemClass="page-item"
-                linkClass="page-link"
+                  activePage={activePage}
+                  itemsCountPerPage={itemsCountPerPage}
+                  totalItemsCount={totalItemsCount}
+                  pageRangeDisplayed={10}
+                  onChange={getSuppliers}
+                  nextPageText={'Next'}
+                  prevPageText={'Previous'}
+                  itemClass="page-item"
+                  linkClass="page-link"
                 />
             </nav>
           </div>
@@ -302,6 +307,6 @@ const ListSupplier = () => {
       </section>
     </div>
   );
-}
+};
 
 export default ListSupplier;

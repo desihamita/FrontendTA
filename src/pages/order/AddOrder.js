@@ -139,8 +139,8 @@ const AddOrder = () => {
 
   const handleCart = (id) => {
     products.map((product, index) => {
-      if(product.id == id) {
-        if (carts[id] == undefined) {
+      if(product.id === id) {
+        if (carts[id] === undefined) {
           setCarts(prevState => ({...prevState, [id] : product}))
           setCarts(prevState => ({
             ...prevState,
@@ -159,6 +159,7 @@ const AddOrder = () => {
           }
         }
       }
+      return product;
     })
   };
 
@@ -235,13 +236,13 @@ const AddOrder = () => {
         paid_amount: e.target.value,
         due_amount: orderSummary.pay_able - e.target.value,
       }));
-    } else if(e.target.name == 'payment_method_id') {
+    } else if(e.target.name === 'payment_method_id') {
       setOrderSummary(prevState => ({
         ...prevState,
         payment_method_id: e.target.value,
         trx_id: e.target.value == 1 ? '' : generateTransactionId(),
       }));
-    } else if(e.target.name == 'trx_id') {
+    } else if(e.target.name === 'trx_id') {
       setOrderSummary(prevState => ({
         ...prevState,
         trx_id: e.target.value,
@@ -250,13 +251,12 @@ const AddOrder = () => {
   }
 
   useEffect(() => {
-    getProducts();
-    getPaymentMethods();
-  }, []);
-
+    getProducts(1);
+  }, [input.search, getProducts]);
+  
   useEffect(() => {
     calculateOrderSummary();
-  }, [carts]);
+  }, [carts, calculateOrderSummary]);
 
   return (
     <>

@@ -24,9 +24,9 @@ const OrderBahanBakuAdd = () => {
 
     const [supplierInput, setSupplierInput] = useState('');
     const [suppliers, setSuppliers] = useState([]);
-    const [orders, setOrders] = useState({});
     const [carts, setCarts] = useState({});
 
+    const [orders, setOrders] = useState({});
     const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(1);
     const [startFrom, setStartFrom] = useState(1);
@@ -220,7 +220,7 @@ const OrderBahanBakuAdd = () => {
           setOrderSummary(prevState => ({
             ...prevState,
             payment_method_id: e.target.value,
-            trxIngredients_id: e.target.value == 1 ? '' : generateTransactionId(),
+            trxIngredients_id: e.target.value === 1 ? '' : generateTransactionId(),
           }));
         } else if (e.target.name === 'trxIngredients_id') {
           setOrderSummary(prevState => ({
@@ -250,7 +250,7 @@ const OrderBahanBakuAdd = () => {
             timer: 1500
         });
 
-        if(res.data.flag != undefined) {
+        if(res.data.flag !== undefined) {
             setModalShow(false)
             navigate(`/order-bahan-baku/details/${res.data.order_id}`) 
         }
@@ -261,11 +261,11 @@ const OrderBahanBakuAdd = () => {
     useEffect(() => {
         getAttributes();
         getPaymentMethods();
-    }, []);
+    }, [getAttributes, getPaymentMethods]);
 
     useEffect(() => {
         calculateOrderSummary();
-    }, [carts]);
+    }, [carts, calculateOrderSummary]);
 
     return (
     <>
@@ -432,7 +432,7 @@ const OrderBahanBakuAdd = () => {
                                             <ul className='list-unstyled ml-2'>
                                                 {suppliers.map((supplier, index) => (
                                                     <li
-                                                        className={orderSummary.supplier_id == supplier.id ? 'text-success text-bold px-2' : 'px-2'}
+                                                        className={orderSummary.supplier_id === supplier.id ? 'text-success text-bold px-2' : 'px-2'}
                                                         key={index}
                                                         onClick={() => handleSelectSupplier(supplier)}
                                                     >
@@ -442,7 +442,7 @@ const OrderBahanBakuAdd = () => {
                                             </ul>
                                             <div className='d-grid mt-4'>
                                                 <button 
-                                                    disabled={orderSummary.items == 0 || orderSummary.supplier_id == 0} 
+                                                    disabled={orderSummary.items === 0 || orderSummary.supplier_id === 0} 
                                                     onClick={() => setModalShow(true)} 
                                                     className='btn btn-warning w-100'
                                                 >

@@ -68,7 +68,8 @@ const DetailsSalesManager = (props) => {
                         </tr>
                         <tr>
                             <th>Foto</th>
-                            <td><img src={props.sales.photo} className='img-thumbnail' alt='Photo' /></td>
+                            <td><img src={props.sales.photo} className='img-thumbnail' alt={props.sales.name} />
+                            </td>
                         </tr>
                     </tbody>
                 </table>

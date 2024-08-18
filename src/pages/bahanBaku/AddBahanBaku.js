@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Constants from '../../Constants'
 import Swal from 'sweetalert2'
@@ -22,37 +22,37 @@ const AddBahanBaku = () => {
     const [brands, setBrands] = useState([])
     const [suppliers, setSuppliers] = useState([])
 
-    const getSuppliers = () => {
+    const getSuppliers = useCallback(() => {
         axios.get(`${Constants.BASE_URL}/get-supplier-list`).then(res => {
             const activeSuppliers = res.data.filter(supplier => supplier.status === 1);
             setSuppliers(activeSuppliers)
         })
-    }
+    }, [])
 
-    const getCategories = () => {
+    const getCategories = useCallback(() => {
         axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-            const activeCategories = res.data.filter(categories => categories.status === 1);
+            const activeCategories = res.data.filter(category => category.status === 1);
             setCategories(activeCategories)
         })
-    }
+    }, [])
 
-    const getBrands = () => {
+    const getBrands = useCallback(() => {
         axios.get(`${Constants.BASE_URL}/get-brand-list`).then(res => {
             const activeBrands = res.data.filter(brand => brand.status === 1);
             setBrands(activeBrands)
         })
-    }
+    }, [])
 
-    const getSubCategories = (category_name) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
-            const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
+    const getSubCategories = useCallback((category_id) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
+            const activeSubCategories = res.data.filter(subCategory => subCategory.status === 1);
             setSubCategories(activeSubCategories);
         }).catch(error => {
             console.error('Error fetching sub categories:', error);
         });
-    }
+    }, [])
 
-    const generateSku = (category_id, brand_id) => {
+    const generateSku = useCallback((category_id, brand_id) => {
         const category = categories.find(cat => cat.id === category_id)
         const brand = brands.find(br => br.id === brand_id)
 
@@ -61,18 +61,18 @@ const AddBahanBaku = () => {
         const uniqueIdentifier = Math.random().toString(36).substring(2, 7).toUpperCase()
 
         return `${categoryCode}${brandCode}-${uniqueIdentifier}`
-    }
+    }, [categories, brands])
 
     const handleInput = (e) => {
         const { name, value } = e.target;
         setInput(prevState => ({ ...prevState, [name]: value }));
 
-        if (name == 'name') {
+        if (name === 'name') {
             let slug = value
             slug = slug.toLowerCase()
             slug = slug.replaceAll(' ', '-')
             setInput(prevState => ({ ...prevState, slug: slug }))
-        }else if (name === 'category_id') {
+        } else if (name === 'category_id') {
             const category_id = parseInt(value);
             if (!Number.isNaN(category_id)) {
                 getSubCategories(category_id);
@@ -96,7 +96,7 @@ const AddBahanBaku = () => {
           };
           reader.readAsDataURL(file);
         }
-      };
+    };
 
     const handleAttributeCreate = (e) => {
         e.preventDefault();
@@ -114,7 +114,7 @@ const AddBahanBaku = () => {
             navigate('/bahan-baku')
         }).catch(errors => {
             setIsLoading(false)
-            if (errors.response.status == 422) {
+            if (errors.response.status === 422) {
                 setErrors(errors.response.data.errors)
             }
         })
@@ -124,14 +124,14 @@ const AddBahanBaku = () => {
         getCategories()
         getBrands()
         getSuppliers()
-    }, []);
+    }, [getCategories, getBrands, getSuppliers])
 
     useEffect(() => {
         if (input.category_id && input.brand_id) {
             const sku = generateSku(input.category_id, input.brand_id)
             setInput(prevState => ({ ...prevState, sku }))
         }
-    }, [categories, brands, input.category_id, input.brand_id])
+    }, [categories, brands, input.category_id, input.brand_id, generateSku])
 
     return (
         <div className="content-wrapper">
@@ -148,7 +148,7 @@ const AddBahanBaku = () => {
                                         <div className="form-group col-md-6">
                                             <label>Nama</label>
                                             <input
-                                                className={errors.name != undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                                                className={errors.name !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
                                                 type={'text'}
                                                 name={'name'}
                                                 value={input.name}
@@ -164,7 +164,7 @@ const AddBahanBaku = () => {
                                         <div className="form-group col-md-6 ">
                                             <label>Slug</label>
                                             <input
-                                                className={errors.slug != undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
+                                                className={errors.slug !== undefined ? 'form-control mt-2 is-invalid' : 'form-control mt-2'}
                                                 type={'text'}
                                                 name={'slug'}
                                                 value={input.slug}
@@ -248,16 +248,16 @@ const AddBahanBaku = () => {
                                                     <option value={supplier.id} key={index}>{supplier.name}</option>
                                                 ))}
                                             </select>
-                                            {errors.country_id !== undefined && (
+                                            {errors.supplier_id !== undefined && (
                                                 <div className="invalid-feedback">
-                                                    {errors.country_id[0]}
+                                                    {errors.supplier_id[0]}
                                                 </div>
                                             )}
                                         </div>
                                         <div className="form-group col-md-6 ">
                                             <label>Harga</label>
                                             <input
-                                                className={errors.price != undefined ? 'form-control is-invalid' : 'form-control'}
+                                                className={errors.price !== undefined ? 'form-control is-invalid' : 'form-control'}
                                                 type={'number'}
                                                 name={'price'}
                                                 value={input.price}
@@ -273,7 +273,7 @@ const AddBahanBaku = () => {
                                         <div className="form-group col-md-6 ">
                                             <label>Stok</label>
                                             <input
-                                                className={errors.stock != undefined ? 'form-control is-invalid' : 'form-control'}
+                                                className={errors.stock !== undefined ? 'form-control is-invalid' : 'form-control'}
                                                 type={'number'}
                                                 name={'stock'}
                                                 value={input.stock}
@@ -318,31 +318,13 @@ const AddBahanBaku = () => {
                                             )}
                                         </div>
                                         <div className="form-group col-md-6 ">
-                                            <label>Status</label>
-                                            <select
-                                                name='status'
-                                                value={input.status}
-                                                onChange={handleInput}
-                                                className={errors.status !== undefined ? 'form-control select2 is-invalid ' : 'form-control'}
-                                            >
-                                                <option disabled={true}>Select Product Status</option>
-                                                <option value={1}>Active</option>
-                                                <option value={0}>Inactive</option>
-                                            </select>
-                                            {errors.status !== undefined && (
-                                                <div className="invalid-feedback">
-                                                {errors.status[0]}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="form-group col-md-6">
                                             <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                             <input type="file" name="photo"  className={errors.photo !== undefined ? 'form-control select2 is-invalid ' : 'form-control'} onChange={handlePhoto} />
                                             {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}
 
                                             {input.photo && (
                                                 <div className="card-body">
-                                                    <img className="img-fluid w-50 h-50" src={input.photo} alt="photo" />
+                                                    <img className="img-fluid w-50 h-50" src={input.photo} alt={`Photo of ${input.name}`} />
                                                 </div>
                                             )}
                                         </div>

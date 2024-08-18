@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound'
 import Pagination from 'react-js-pagination'
 import { Link } from 'react-router-dom'
@@ -36,7 +36,7 @@ const ProductList = () => {
         setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
     
-    const getProducts = (pageNumber = 1) => {
+    const getProducts = useCallback((pageNumber = 1) => {
         setIsLoading(true);
         axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
         .then(res => {
@@ -47,7 +47,7 @@ const ProductList = () => {
             setActivePage(res.data.meta.current_page);
             setIsLoading(false);
         });
-    };
+    }, [input]);    
 
     const handleAttributeStatusUpdate = (id, currentStatus) => {
         const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
@@ -88,38 +88,11 @@ const ProductList = () => {
             }
         });
     };
-
-
-    const handleProductDelete = (id) => {
-        Swal.fire({
-            title: "Apa kamu yakin?",
-            text: "Produk akan dihapus",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Hapus!"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.delete(`${Constants.BASE_URL}/product/${id}`).then(res => {
-              Swal.fire({
-                position: "top-end",
-                icon: res.data.cls,
-                title: res.data.msg,
-                showConfirmButton: false,
-                toast: true,
-                timer: 1500
-              });
-              getProducts(activePage);
-            });
-          }
-        });
-    };
     
     useEffect(() => {
-        getProducts()
-        getProductColumn()
-    }, []);
+        getProducts();
+        getProductColumn();
+    }, [getProducts]);
 
     const isAdmin = GlobalFunction.isAdmin();
 

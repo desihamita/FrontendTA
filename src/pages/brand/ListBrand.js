@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
 import Breadcrumb from '../../components/partials/Breadcrumb';
@@ -35,18 +35,18 @@ const ListBrand = () => {
       setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
   
-  const getBrands = (pageNumber = 1) => {
-      setIsLoading(true);
-      axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-      .then(res => {
-          setBrands(res.data.data);
-          setItemsCountPerPage(res.data.meta.per_page);
-          setStartFrom(res.data.meta.from);
-          setTotalItemsCount(res.data.meta.total);
-          setActivePage(res.data.meta.current_page);
-          setIsLoading(false);
-      });
-  };
+  const getBrands = useCallback((pageNumber = 1) => {
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+    .then(res => {
+        setBrands(res.data.data);
+        setItemsCountPerPage(res.data.meta.per_page);
+        setStartFrom(res.data.meta.from);
+        setTotalItemsCount(res.data.meta.total);
+        setActivePage(res.data.meta.current_page);
+        setIsLoading(false);
+    });
+  }, [input]);
   
   const handlePhotoModal = (photo) => {
       setModalPhoto(photo);
@@ -99,8 +99,8 @@ const ListBrand = () => {
   }
   
   useEffect(() => {
-      getBrands()
-  }, []);
+    getBrands()
+  }, [getBrands]);
 
   return (
     <div className="content-wrapper">

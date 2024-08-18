@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Constants from '../../../Constants';
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
+import { useReactToPrint } from 'react-to-print'
 import BarcodeBahanBakuPage from './BarcodeBahanBakuPage';
 import Breadcrumb from '../../partials/Breadcrumb';
 import CardHeader from '../../partials/miniComponent/CardHeader';
