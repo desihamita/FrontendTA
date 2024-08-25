@@ -79,7 +79,7 @@ const ProductDetails = () => {
                         </tr>
                         <tr>
                           <th>Sub Kategori</th>
-                          <td>{GlobalFunction.isAdmin() ? <Link to={'/sub-category'}>{products.details.sub_category}</Link> : products.sub_category}</td>
+                          <td>{GlobalFunction.isAdmin() ? <Link to={'/sub-category'}>{products.details.sub_category}</Link> : products.details.sub_category}</td>
                         </tr>
                         <tr>
                           <th>Dibuat Oleh</th>

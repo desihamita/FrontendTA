@@ -81,37 +81,6 @@ const EditSubCategory = () => {
         }
     };
 
-    // const handleCategoryUpdate = (e) => {
-    //     e.preventDefault();
-    //     setIsLoading(true);
-
-    //     const selectedCategory = categories.find(category => category.id === parseInt(input.category_id));
-        
-    //     if (selectedCategory) {
-    //         const inputData = {
-    //             ...input,
-    //             category_name: selectedCategory.name
-    //         };
-    //         axios.put(`${Constants.BASE_URL}/sub-category/${params.id}`, inputData).then(res => {
-    //             setIsLoading(false);
-    //             Swal.fire({
-    //                 position: "top-end",
-    //                 icon: res.data.cls,
-    //                 title: res.data.msg,
-    //                 showConfirmButton: false,
-    //                 toast: true,
-    //                 timer: 3000
-    //             });
-    //             navigate('/sub-category');
-    //         }).catch(errors => {
-    //             setIsLoading(false);
-    //             if (errors.response.status === 422) {
-    //                 setErrors(errors.response.data.errors);
-    //             }
-    //         });
-    //     }
-    // };
-
     useEffect(() => {
         getCategory();
         getCategories();
@@ -258,13 +227,8 @@ const EditSubCategory = () => {
                                                 btnText="Batal"
                                                 btn="btn btn-info"
                                             />
-                                            <button 
-                                                className="btn btn-warning w-30" 
-                                                onClick={handleCategoryUpdate} 
-                                                disabled={isLoading}
-                                            >
-                                                {isLoading ? <span className="spinner-border spinner-border-sm" aria-hidden="true"></span> : 'Ubah Sub Kategori'}
-                                            </button>
+                                            <button className="btn btn-warning w-30" onClick={handleCategoryUpdate} dangerouslySetInnerHTML={{__html: isLoading ? '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...' : 'Ubah Sub Kategori'}} >
+                                        </button>
                                         </div>
                                     </div>
                                 </form>

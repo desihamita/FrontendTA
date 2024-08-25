@@ -200,7 +200,7 @@ const EditSalesManager = () => {
                               {errors.phone && <div className="invalid-feedback">{errors.phone[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Password</label>
+                              <label>Password <small>(Kosongkan jika tidak ingin mengubah password)</small></label>
                               <div className="invalid-feedback">Biarkan kosong untuk menyimpan kata sandi saat ini</div>
                               <input
                                 type='password'

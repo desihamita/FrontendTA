@@ -39,7 +39,6 @@ const AddCustomer = ({setModalShow, ...props}) => {
     <>
         <Modal
         {...props}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         >
@@ -52,7 +51,7 @@ const AddCustomer = ({setModalShow, ...props}) => {
                 </button>
             </Modal.Header>
             <Modal.Body>
-                <div className="form-group col-md-6">
+                <div className="form-group">
                     <label>Name</label>
                     <input
                         className={errors.name !== undefined ? 'form-control  is-invalid' : 'form-control '}
@@ -68,7 +67,7 @@ const AddCustomer = ({setModalShow, ...props}) => {
                     </div>
                     )}
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group">
                     <label>Phone</label>
                     <input
                         className={errors.phone !== undefined ? 'form-control  is-invalid' : 'form-control '}
@@ -84,7 +83,7 @@ const AddCustomer = ({setModalShow, ...props}) => {
                     </div>
                     )}
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group">
                     <label>Email</label>
                     <input
                         className={errors.email !== undefined ? 'form-control  is-invalid' : 'form-control '}

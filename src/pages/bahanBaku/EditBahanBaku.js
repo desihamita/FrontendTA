@@ -137,8 +137,7 @@ const EditBahanBaku = () => {
         getSuppliers();
         getBrands();
     }, []);
-
-
+    
     return (
     <div className="content-wrapper">
         <section className="content-header">

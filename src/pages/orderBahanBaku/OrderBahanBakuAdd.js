@@ -8,6 +8,7 @@ import ShowOrderConfirmation from './ShowOrderConfirmation';
 import { useNavigate } from 'react-router-dom';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
 import useScanDetection from 'use-scan-detection';
+import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 
 const OrderBahanBakuAdd = () => {
     const navigate = useNavigate()
@@ -21,6 +22,8 @@ const OrderBahanBakuAdd = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [modalShow, setModalShow] = React.useState(false);
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const [modalPhoto, setModalPhoto] = useState('');
+    const [modalPhotoShow, setModalPhotoShow] = useState(false);
 
     const [supplierInput, setSupplierInput] = useState('');
     const [suppliers, setSuppliers] = useState([]);
@@ -42,7 +45,39 @@ const OrderBahanBakuAdd = () => {
         due_amount: 0,
         payment_method_id: 1,
         trxIngredients_id: '',
-      });
+    });  
+
+    const getAttributes = (pageNumber = 1) => {
+        setIsLoading(true);
+        axios.get(`${Constants.BASE_URL}/attribute?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+        .then((res) => {
+            const activeAttributes = res.data.data.filter(attribute => attribute.status === 'Active');
+            setAttributes(activeAttributes);
+            setItemsCountPerPage(res.data.meta.per_page);
+            setStartFrom(res.data.meta.from);
+            setTotalItemsCount(res.data.meta.total);
+            setActivePage(res.data.meta.current_page);
+        })
+        .catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong while fetching attributes!',
+            });
+            console.error('Error fetching attributes:', error);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    };
+
+    const getPaymentMethods = () => {
+        axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
+        setPaymentMethods(res.data);
+        }).catch((error) => {
+        console.error('Error fetching payment methods:', error);
+        });
+    }
 
     const [barcode, setBarcode] = useState('');
 
@@ -78,36 +113,18 @@ const OrderBahanBakuAdd = () => {
         getSuppliers(e.target.value);
     };
 
+    const handlePhotoModal = (photo) => {
+        setModalPhoto(photo);
+        setModalPhotoShow(true);
+      
+    };
+
     const getSuppliers = () => {
         setIsLoading(true);
         axios.get(`${Constants.BASE_URL}/supplier?&search=${supplierInput}`)
             .then((res) => {
                 const activeSuppliers = res.data.data.filter(supplier => supplier.status === 'Active');
                 setSuppliers(activeSuppliers);
-                setIsLoading(false);
-            });
-    };
-
-    const getAttributes = (pageNumber = 1) => {
-        setIsLoading(true);
-        axios.get(`${Constants.BASE_URL}/attribute?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-            .then((res) => {
-                const activeAttributes = res.data.data.filter(attribute => attribute.status === 'Active');
-                setAttributes(activeAttributes);
-                setItemsCountPerPage(res.data.meta.per_page);
-                setStartFrom(res.data.meta.from);
-                setTotalItemsCount(res.data.meta.total);
-                setActivePage(res.data.meta.current_page);
-            })
-            .catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while fetching attributes!',
-                });
-                console.error('Error fetching attributes:', error);
-            })
-            .finally(() => {
                 setIsLoading(false);
             });
     };
@@ -228,15 +245,7 @@ const OrderBahanBakuAdd = () => {
             trxIngredients_id: e.target.value,
           }));
         }
-    };  
-
-    const getPaymentMethods = () => {
-        axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
-          setPaymentMethods(res.data);
-        }).catch((error) => {
-          console.error('Error fetching payment methods:', error);
-        });
-    }
+    };
 
     const handleOrderPlace = () => {
         setIsLoading(true)
@@ -261,11 +270,11 @@ const OrderBahanBakuAdd = () => {
     useEffect(() => {
         getAttributes();
         getPaymentMethods();
-    }, [getAttributes, getPaymentMethods]);
+    }, []);
 
     useEffect(() => {
         calculateOrderSummary();
-    }, [carts, calculateOrderSummary]);
+    }, [carts]);
 
     return (
     <>
@@ -284,14 +293,14 @@ const OrderBahanBakuAdd = () => {
                                 icon="fas fa-backspace"
                             />
                         </div>
-                        <div className="card-body">
+                        <div className="card-body" >
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="card card-orange card-outline">
                                         <div className="card-header">
                                             <h5>Daftar Bahan Baku</h5>
                                         </div>
-                                        <div className="card-body">
+                                        <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                             <div className="form-group">
                                                 <div className="input-group input-group-lg">
                                                     <input
@@ -315,7 +324,8 @@ const OrderBahanBakuAdd = () => {
                                                         style={{ backgroundColor: 'transparent', border: 'none' }}
                                                     >
                                                         <div className='py-2'>
-                                                            <button className='btn btn-xs btn-success m-1'><i className='fas fa-solid fa-eye'></i></button>
+                                                            <button className='btn btn-xs btn-success m-1' onClick={() => handlePhotoModal(attribute.photo_full)}><i className='fas fa-solid fa-eye'></i></button>
+
                                                             <button className='btn btn-xs btn-primary m-1' onClick={() => handleCart(attribute.id)}><i className='fas fa-solid fa-plus'></i></button>
                                                         </div>
                                                         <img className="attachment-img" src={attribute.photo} alt={attribute.name} />
@@ -338,7 +348,7 @@ const OrderBahanBakuAdd = () => {
                                         <div className="card-header">
                                             <h5>Pesanan</h5>
                                         </div>
-                                        <div className="card-body">
+                                        <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                             <div className='order-summary'>
                                                 <p className='pb-2'><strong className='pr-2'>Pemasok :</strong><span className='text-orange text-bold'>{orderSummary.supplier}</span></p>
                                                 <table className='table table-sm table-hover table-striped table-bordered'>
@@ -365,7 +375,8 @@ const OrderBahanBakuAdd = () => {
                                                     style={{ backgroundColor: 'transparent', border: 'none' }}
                                                 >
                                                     <div className='py-2'>
-                                                        <button className='btn btn-xs btn-info m-1'><i className='fas fa-solid fa-eye'></i></button>
+                                                        <button className='btn btn-xs btn-success m-1' onClick={() => handlePhotoModal(carts[key].photo_full)}><i className='fas fa-solid fa-eye'></i></button>
+
                                                         <button className='btn btn-xs btn-danger m-1' onClick={() => handleRemoveCart(key)}><i className="fas fa-solid fa-times"></i></button>
                                                     </div>
                                                     <img className="attachment-img" src={carts[key].photo} alt={carts[key].name} />
@@ -410,7 +421,7 @@ const OrderBahanBakuAdd = () => {
                                         <div className="card-header">
                                             <h5>Daftar Pemasok</h5>
                                         </div>
-                                        <div className="card-body">
+                                        <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                             <div className="form-group">
                                                 <div className="input-group input-group-lg">
                                                     <input
@@ -458,6 +469,13 @@ const OrderBahanBakuAdd = () => {
                 </div>
             </section>
         </div>
+        <CategoryPhotoModal
+            show={modalPhotoShow}
+            onHide={() => setModalPhotoShow(false)}
+            title={'Foto Produk'}
+            size={''}
+            photo={modalPhoto}
+        />
         <ShowOrderConfirmation
             show={modalShow}
             onHide={() => setModalShow(false)}

@@ -51,7 +51,7 @@ const ProductList = () => {
 
     const handleAttributeStatusUpdate = (id, currentStatus) => {
         const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
-        const statusValue = newStatus === "Active" ? 1 : 2; 
+        const statusValue = newStatus === "Active" ? 1 : 0; 
     
         Swal.fire({
             title: "Update Status?",
@@ -214,7 +214,7 @@ const ProductList = () => {
                                             <tr key={index}>
                                                 <td>{startFrom + index}</td>
                                                 <td>
-                                                    <p className="mb-0">Nama : {product.name}</p>
+                                                    <p className="mb-0">{product.name}</p>
                                                 </td>
                                                 <td>
                                                     <p className="mb-0">Harga Jual : <strong>{product.sell_price.symbol} {product.sell_price.price} || Diskon : {product.sell_price.symbol} {product.sell_price.discount}</strong></p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Breadcrumb from '../../components/partials/Breadcrumb';
 import Constants from '../../Constants';
 import Swal from 'sweetalert2';
@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import AddCustomer from '../../components/partials/modal/AddCustomer';
 import ShowOrderConfirmation from '../../components/partials/modal/ShowOrderConfirmation';
 import GlobalFunction from '../../GlobalFunction';
-import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
 import useScanDetection from 'use-scan-detection';
 import CardHeader from '../../components/partials/miniComponent/CardHeader';
+import CategoryPhotoModal from '../../components/partials/modal/CategoryPhotoModal';
 
 const AddOrder = () => {
   const navigate = useNavigate()
@@ -30,6 +30,8 @@ const AddOrder = () => {
   const [modalShow, setModalShow] = useState(false);
   const [showOrderConfirmationModel, setShowOrderConfirmationModel] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState([]);
+  const [modalPhoto, setModalPhoto] = useState('');
+  const [modalPhotoShow, setModalPhotoShow] = useState(false);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
   const [totalItemsCount, setTotalItemsCount] = useState(1);
@@ -49,6 +51,38 @@ const AddOrder = () => {
     trx_id: '',
   });
 
+  const getProducts = useCallback((pageNumber = 1) => {
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
+      .then((res) => {
+        const activeProducts = res.data.data.filter(product => product.status === 'Active');
+        setProducts(activeProducts);
+        setItemsCountPerPage(res.data.meta.per_page);
+        setStartFrom(res.data.meta.from);
+        setTotalItemsCount(res.data.meta.total);
+        setActivePage(res.data.meta.current_page);
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong while fetching products!',
+        });
+        console.error('Error fetching products:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  },[input]);
+  
+  const getPaymentMethods = useCallback(() => {
+    axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
+      setPaymentMethods(res.data);
+    }).catch((error) => {
+      console.error('Error fetching payment methods:', error);
+    });
+  },[]);
+
   const [barcode, setBarcode] = useState('');
 
   useScanDetection({
@@ -62,15 +96,12 @@ const AddOrder = () => {
 
   useEffect(() => {
     getProducts(1)
-  }, [input.search])
+  }, [input.search, getProducts])
 
-  const getPaymentMethods = () => {
-    axios.get(`${Constants.BASE_URL}/get-payment-methods`).then((res) => {
-      setPaymentMethods(res.data);
-    }).catch((error) => {
-      console.error('Error fetching payment methods:', error);
-    });
-  }
+  const handlePhotoModal = (photo) => {
+    setModalPhoto(photo);
+    setModalPhotoShow(true);
+  };
 
   const handleOrderPlace = () => {
     setIsLoading(true)
@@ -84,7 +115,7 @@ const AddOrder = () => {
         timer: 1500
       });
 
-      if(res.data.flag != undefined) {
+      if(res.data.flag !== undefined) {
         setShowOrderConfirmationModel(false)
         navigate(`/order/details/${res.data.order_id}`) 
       }
@@ -176,37 +207,11 @@ const AddOrder = () => {
     });
   };
 
-  const getProducts = (pageNumber = 1) => {
-    setIsLoading(true);
-    axios.get(`${Constants.BASE_URL}/product?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-      .then((res) => {
-        const activeProducts = res.data.data.filter(product => product.status === 'Active');
-        setProducts(activeProducts);
-        setItemsCountPerPage(res.data.meta.per_page);
-        setStartFrom(res.data.meta.from);
-        setTotalItemsCount(res.data.meta.total);
-        setActivePage(res.data.meta.current_page);
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong while fetching products!',
-        });
-        console.error('Error fetching products:', error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-  
-
   const calculateOrderSummary = () => {
     let items = 0;
     let amount = 0;
     let discount = 0;
     let pay_able = 0;
-    let paid_amount = 0;
 
     Object.keys(carts).map((key) => {
       items += carts[key].quantity;
@@ -223,14 +228,14 @@ const AddOrder = () => {
       pay_able: pay_able,
       paid_amount: pay_able,
     }));
-  }
+  };
 
   const generateTransactionId = () => {
     return `TRX-${Date.now()}`;
   };
 
   const handleOrderSummaryInput = (e) => {
-    if(e.target.name == 'paid_amount' && orderSummary.pay_able >= e.target.value) {
+    if(e.target.name === 'paid_amount' && orderSummary.pay_able >= e.target.value) {
       setOrderSummary(prevState => ({
         ...prevState,
         paid_amount: e.target.value,
@@ -240,7 +245,7 @@ const AddOrder = () => {
       setOrderSummary(prevState => ({
         ...prevState,
         payment_method_id: e.target.value,
-        trx_id: e.target.value == 1 ? '' : generateTransactionId(),
+        trx_id: e.target.value === 1 ? '' : generateTransactionId(),
       }));
     } else if(e.target.name === 'trx_id') {
       setOrderSummary(prevState => ({
@@ -251,12 +256,13 @@ const AddOrder = () => {
   }
 
   useEffect(() => {
-    getProducts(1);
-  }, [input.search, getProducts]);
+    getProducts();
+    getPaymentMethods();
+  }, []);
   
   useEffect(() => {
     calculateOrderSummary();
-  }, [carts, calculateOrderSummary]);
+  }, [carts]);
 
   return (
     <>
@@ -275,14 +281,14 @@ const AddOrder = () => {
                   icon="fas fa-backspace"
                 />
               </div>
-              <div className="card-body">
+              <div className="card-body" >
                 <div className="row">
                   <div className="col-md-4">
                     <div className="card card-orange card-outline">
                       <div className="card-header">
                         <h5>Daftar Produk</h5>
                       </div>
-                      <div className="card-body">
+                      <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         <div className="form-group">
                           <div className="input-group input-group-lg">
                             <input
@@ -307,7 +313,8 @@ const AddOrder = () => {
                             style={{ backgroundColor: 'transparent', border: 'none' }}
                           >
                             <div className='py-2'>
-                              <button className='btn btn-xs btn-success m-1'><i className='fas fa-solid fa-eye'></i></button>
+                              <button className='btn btn-xs btn-success m-1' onClick={() => handlePhotoModal(product.photo_full)}><i className='fas fa-solid fa-eye'></i></button>
+
                               <button className='btn btn-xs btn-primary m-1' onClick={() => handleCart(product.id)}><i className='fas fa-solid fa-plus'></i></button>
                             </div>
                             <img className="attachment-img" src={product.photo} alt={product.name} />
@@ -331,7 +338,7 @@ const AddOrder = () => {
                       <div className="card-header">
                         <h5>Pesanan</h5>
                       </div>
-                      <div className="card-body">
+                      <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         <div className='order-summary'>
                           <p className='pb-2'><strong className='pr-2'>Pelanggan :</strong><span className='text-orange text-bold'>{orderSummary.customer}</span></p>
                           <table className='table table-sm table-hover table-striped table-bordered'>
@@ -362,7 +369,8 @@ const AddOrder = () => {
                             style={{ backgroundColor: 'transparent', border: 'none' }}
                           >
                             <div className='py-2'>
-                              <button className='btn btn-xs btn-info m-1'><i className='fas fa-solid fa-eye'></i></button>
+                               <button className='btn btn-xs btn-success m-1' onClick={() => handlePhotoModal(carts[key].photo_full)}><i className='fas fa-solid fa-eye'></i></button>
+
                               <button className='btn btn-xs btn-danger m-1' onClick={() => handleRemoveCart(key)}><i className="fas fa-solid fa-times"></i></button>
                             </div>
                             <img className="attachment-img" src={carts[key].photo} alt={carts[key].name} />
@@ -416,7 +424,7 @@ const AddOrder = () => {
                           <button onClick={() => setModalShow(true)} className='btn btn-sm btn-success'><i className='fas fa-solid fa-plus'></i></button>
                         </div>
                       </div>
-                      <div className="card-body">
+                      <div className="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         <div className="form-group">
                           <div className="input-group input-group-lg">
                             <input
@@ -437,12 +445,12 @@ const AddOrder = () => {
                         </div>
                         <ul className='list-unstyled ml-2'>
                           {customers.map((customer, index) => (
-                            <li className={orderSummary.customer_id == customer.id ? 'text-success text-bold px-2' : 'px-2'} key={index} onClick={handleSelectCustomer(customer)}>{customer.name}</li>
+                            <li className={orderSummary.customer_id === customer.id ? 'text-success text-bold px-2' : 'px-2'} key={index} onClick={handleSelectCustomer(customer)}>{customer.name}</li>
                           ))}
                         </ul>
                         <div className='d-grid mt-4'>
                           <button 
-                            disabled={orderSummary.items == 0 || orderSummary.customer_id == 0} 
+                            disabled={orderSummary.items === 0 || orderSummary.customer_id === 0} 
                             onClick={() => setShowOrderConfirmationModel(true)} 
                             className='btn btn-warning w-100'
                           >
@@ -458,6 +466,14 @@ const AddOrder = () => {
           </div>
         </section>
       </div>
+      
+      <CategoryPhotoModal
+        show={modalPhotoShow}
+        onHide={() => setModalPhotoShow(false)}
+        title={'Foto Produk'}
+        size={''}
+        photo={modalPhoto}
+      />
       <AddCustomer
         show={modalShow}
         onHide={() => setModalShow(false)}

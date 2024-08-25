@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Constants from '../../../Constants';
 import { useReactToPrint } from 'react-to-print'
 import BarcodeBahanBakuPage from './BarcodeBahanBakuPage';
@@ -35,17 +35,21 @@ const BarcodeBahanBakuComponent = () => {
         setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     };
 
-    const getCategories = () => {
+    const getCategories = useCallback(() => {
         axios.get(`${Constants.BASE_URL}/get-category-list`).then(res => {
-            setCategories(res.data);
-        });
-    };
+          const activeCategories = res.data.filter(categories => categories.status === 1);
+          setCategories(activeCategories)
+        })
+    },[]);
 
-    const getSubCategories = (category_id) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
-            setSubCategories(res.data);
+    const getSubCategories = (category_name) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+            const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
+            setSubCategories(activeSubCategories);
+        }).catch(error => {
+            console.error('Error fetching sub categories:', error);
         });
-    };
+    }
 
     const handleBahanBakuSearch = () => {
         axios.get(`${Constants.BASE_URL}/get-bahan-baku-list-for-barcode?name=${input?.name}&category_id=${input?.category_id}&sub_category_id=${input?.sub_category_id}`).then(res => {
@@ -59,7 +63,7 @@ const BarcodeBahanBakuComponent = () => {
 
     useEffect(() => {
         getCategories();
-    }, []);
+    }, [getCategories]);
 
     return (
         <>
