@@ -332,7 +332,7 @@ const EditBahanBaku = () => {
                                         >
                                             <option disabled={true}>Select Product Status</option>
                                             <option value={1}>Active</option>
-                                            <option value={2}>Inactive</option>
+                                            <option value={0}>Inactive</option>
                                         </select>
                                         {errors.status !== undefined && (
                                             <div className="invalid-feedback">
@@ -341,7 +341,7 @@ const EditBahanBaku = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label>Foto</label>
+                                        <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                         <input type="file" name="photo" className={errors.photo !== undefined ? 'form-control select2 is-invalid ' : 'form-control'} onChange={handlePhoto} />
 
                                         {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}

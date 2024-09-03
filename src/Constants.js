@@ -1,5 +1,5 @@
 const Constants = {
-    BASE_URL : 'http://localhost:8000/api'
+    BASE_URL : 'https://www.api.inventarisapp.my.id/api'
 }
 
 export default Constants;

@@ -22,10 +22,6 @@ const DetailsSalesManager = (props) => {
                 <table className='table table-hover table-lg table-striped table-bordered'>
                     <tbody>
                         <tr>
-                            <th>ID</th>
-                            <td>{props.sales.id}</td>
-                        </tr>
-                        <tr>
                             <th>Nama</th>
                             <td>{props.sales.name}</td>
                         </tr>

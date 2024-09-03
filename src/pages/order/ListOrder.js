@@ -19,7 +19,6 @@ const ListOrder = () => {
     search: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [order, setOrder] = useState([]);
   const [orders, setOrders] = useState([]);
 
   const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
@@ -41,8 +40,7 @@ const ListOrder = () => {
         setTotalItemsCount(res.data.meta.total);
         setActivePage(res.data.meta.current_page);
         setIsLoading(false);
-      }
-    );
+      });
   };
 
   const handleExportOrders = () => {
@@ -66,6 +64,57 @@ const ListOrder = () => {
         });
     });
   }
+
+  const handleStatusUpdate = (id, currentStatus) => {
+    const newStatus = currentStatus === "Completed" ? "Pending" : "Completed";
+    const statusValue = newStatus === "Completed" ? 1 : 0; 
+  
+    Swal.fire({
+      title: "Update Status?",
+      text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Update!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.put(`${Constants.BASE_URL}/order/${id}/status`, { status: statusValue })
+          .then(res => {
+            Swal.fire({
+              position: "top-end",
+              icon: res.data.cls,
+              title: res.data.msg,
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+            getOrders(activePage);
+          })
+          .catch(error => {
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Gagal mengubah status",
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+          });
+      }
+    });
+  }
+
+  const getStatusButtonClass = (status) => {
+    switch (status) {
+        case 'Pending':
+            return 'btn-warning';
+        case 'Completed':
+            return 'btn-success';
+        default:
+            return 'btn-secondary'; 
+    }
+  };
 
   useEffect(() => {
     getOrders();
@@ -180,19 +229,19 @@ const ListOrder = () => {
                             <th>Detail Pesanan</th>
                             <th>Pelanggan</th>
                             <th>Jumlah</th>
-                            <th>Penjual</th>
+                            <th>Karyawan</th>
                             <th>Tanggal/ Waktu</th>
                             <th>Aksi</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {Object.keys(orders).length > 0 ? orders.map((order, index) => (
+                          {orders.length > 0 ? orders.map((order, index) => (
                             <tr key={index}>
                               <td>{startFrom + index}</td>
                               <td>
                                 <p>No.Pesanan : <strong>{order.order_number}</strong></p>
-                                <p className='text-success'>Status Pesanan : {order.order_status_string}</p>
-                                <p>Status Pembayaran : {order.payment_status}</p>
+                                <p className='text-success'>Status Pesanan : {order.order_status}</p>
+                                <p>Status Pembayaran : <button className='btn btn-success btn-xs'>{order.payment_status}</button></p>
                               </td>
                               <td>
                                 <p>{order.customer_name}</p>
@@ -203,7 +252,7 @@ const ListOrder = () => {
                                 <p className='text-success'>Sub Total : {GlobalFunction.formatRupiah(order.sub_total)}</p>
                                 <p>Diskon : {GlobalFunction.formatRupiah(order.discount)}</p>
                                 <p className='text-success'>Total : {GlobalFunction.formatRupiah(order.total)}</p>
-                                <p className='text-success'>Jumlah Pembayaran : {GlobalFunction.formatRupiah(order.paid_amount)}</p>
+                                <p>Jumlah Pembayaran : {GlobalFunction.formatRupiah(order.paid_amount)}</p>
                               </td>
                               <td>
                                 <p>Kafe : {order.shop}</p>
@@ -213,12 +262,16 @@ const ListOrder = () => {
                                 <p className="mb-0">
                                   <small>Dibuat : {order.created_at}</small>
                                 </p>
-                                <p className="text-suc  cess">
+                                <p className="text-success">
                                   <small>Diubah : {order.updated_at}</small>
                                 </p>
                               </td>
                               <td>
                                 <Link to={`/order/details/${order.id}`}><button className='btn btn-info btn-sm'><i className="fas fa-solid fa-eye"></i></button></Link>
+                                
+                                {/* <button onClick={() => handleStatusUpdate(order.id, order.order_status)} className='btn btn-primary btn-sm my-1 mx-1'>
+                                  <i className="fas fa-solid fa-sync"></i>
+                                </button> */}
                               </td>
                             </tr>
                           )) : <NoDataFound colSpan={7} /> }
@@ -229,7 +282,7 @@ const ListOrder = () => {
                             <th>Detail Pesanan</th>
                             <th>Pelanggan</th>
                             <th>Jumlah</th>
-                            <th>Penjual</th>
+                            <th>Karyawan</th>
                             <th>Tanggal/ Waktu</th>
                             <th>Aksi</th>
                           </tr>
@@ -265,4 +318,4 @@ const ListOrder = () => {
   )
 }
 
-export default ListOrder
+export default ListOrder;

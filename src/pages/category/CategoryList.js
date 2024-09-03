@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import CategoryDetailsModal from '../../components/partials/modal/CategoryDetailsModal';
 import Loader from '../../components/partials/miniComponent/Loader';
 import NoDataFound from '../../components/partials/miniComponent/NoDataFound';
+
 const CategoryList = () => {
   const [input, setInput] = useState({
     order_by: 'serial',
@@ -31,26 +32,36 @@ const CategoryList = () => {
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
+
   const getCategories = (pageNumber = 1) => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/category?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
         .then(res => {
-            setCategories(res.data.data);
-            setItemsCountPerPage(res.data.meta.per_page);
-            setStartFrom(res.data.meta.from);
-            setTotalItemsCount(res.data.meta.total);
-            setActivePage(res.data.meta.current_page);
-            setIsLoading(false);
-        });
+        const { data, meta } = res.data;
+        if (data && meta) {
+            setCategories(data);
+            setItemsCountPerPage(meta.per_page);
+            setStartFrom(meta.from);
+            setTotalItemsCount(meta.total);
+            setActivePage(meta.current_page);
+        } 
+        setIsLoading(false);
+    })
+    .catch(error => {
+        setIsLoading(false);
+    });
   };
+
   const handlePhotoModal = (photo) => {
     setModalPhoto(photo);
     setModalPhotoShow(true);
   };
+
   const handleDetailsModal = (category) => {
     setCategory(category);
     setModalShow(true);
   };
+
   const handleStatusUpdate = (id, currentStatus) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     const statusValue = newStatus === "Active" ? 1 : 0; 

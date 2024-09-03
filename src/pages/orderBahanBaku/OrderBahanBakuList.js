@@ -66,6 +66,57 @@ const OrderBahanBakuList = () => {
     });
   }
 
+  const handleStatusUpdate = (id, currentStatus) => {
+    const newStatus = currentStatus === "Completed" ? "Pending" : "Completed";
+    const statusValue = newStatus === "Completed" ? 1 : 0; 
+  
+    Swal.fire({
+      title: "Update Status?",
+      text: `Apakah kamu yakin ingin mengubah status menjadi ${newStatus}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Update!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.put(`${Constants.BASE_URL}/order/${id}/status`, { status: statusValue })
+          .then(res => {
+            Swal.fire({
+              position: "top-end",
+              icon: res.data.cls,
+              title: res.data.msg,
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+            getOrders(activePage);
+          })
+          .catch(error => {
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Gagal mengubah status",
+              showConfirmButton: false,
+              toast: true,
+              timer: 1500
+            });
+          });
+      }
+    });
+  }
+  
+  const getStatusButtonClass = (status) => {
+    switch (status) {
+        case 'Pending':
+            return 'btn-warning';
+        case 'Completed':
+            return 'btn-success';
+        default:
+            return 'btn-secondary'; 
+    }
+  };
+
   useEffect(() => {
     getOrders();
   }, []);
@@ -190,8 +241,10 @@ const OrderBahanBakuList = () => {
                               <td>{startFrom + index}</td>
                               <td>
                                 <p>No.Pesanan <strong>{order.order_number}</strong></p>
-                                <p className='text-success'>Status Pesanan : {order.order_status_string}</p>
-                                <p>Status Pembayaran : {order.payment_status}</p>
+
+                                <p className='text-success'>Status Pesanan : {order.order_status}</p>
+                                
+                                <p>Status Pembayaran : <button className='btn btn-success btn-xs'>{order.payment_status}</button></p>
                               </td>
                               <td>
                                 <p>{order.supplier_name}</p>

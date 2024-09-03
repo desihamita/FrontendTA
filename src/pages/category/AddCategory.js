@@ -34,7 +34,6 @@ const AddCategory = () => {
     let reader = new FileReader();
     reader.onloadend = () => {
         setInput(prevState => ({...prevState, photo: reader.result}));
-        //document.getElementById('fileLabel').innerText = file.name;
     };
     reader.readAsDataURL(file);
   };
@@ -155,7 +154,7 @@ const AddCategory = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="exampleInputFile">Foto</label>
+                                        <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                         <input type="file" name="photo" className={errors.photo !== undefined ? 'form-control is-invalid ' : 'form-control'}onChange={handlePhoto} />
                                         {errors.photo !== undefined && (
                                             <div className="invalid-feedback">

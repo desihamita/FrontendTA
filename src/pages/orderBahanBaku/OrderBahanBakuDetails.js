@@ -127,7 +127,7 @@ const OrderBahanBakuDetails = () => {
                         </tr>
                         <tr>
                           <th>Status Pesanan</th>
-                          <td>{order?.order_status}</td>
+                          <td>{order?.order_status_string}</td>
                           <th>Status Pembayaran</th>
                           <td>
                             <button className={getPaymentStatusButtonClass(order?.payment_status)}>

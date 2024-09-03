@@ -24,12 +24,8 @@ const ItemDetailsModal = (props) => {
                     <table className='table table-hover table-striped table-bordered'>
                         <tbody>
                             <tr>
-                                <th>ID</th>
-                                <td>{items.id}</td>
-                            </tr>
-                            <tr>
                                 <th>Kuantitas</th>
-                                <td>{items.quantity }</td>
+                                <td>{items.quantity } Barang</td>
                             </tr>
                             <tr>
                                 <th>Tanggal</th>

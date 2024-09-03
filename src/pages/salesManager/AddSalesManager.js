@@ -172,7 +172,7 @@ const AddSalesManager = () => {
                               {errors.phone && <div className="invalid-feedback">{errors.phone[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Password</label>
+                              <label>Password <small>Minimal 8 karakter, mengandung huruf besar, huruf kecil, dan satu simbol.</small></label>
                               <input
                                 type='password'
                                 name="password"
@@ -333,7 +333,7 @@ const AddSalesManager = () => {
                                 {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Penunjuk/Penanda Jalan (Optional)</label>
+                              <label>Penunjuk/Penanda Jalan <small>(Optional)</small></label>
                               <input
                                 type="text"
                                 name="landmark"

@@ -26,8 +26,8 @@ const ProductAdd = () => {
     })
   }
 
-  const getSubCategories = (category_name) => {
-    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+  const getSubCategories = (category_id) => {
+    axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
       const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
       setSubCategories(activeSubCategories);
     }).catch(error => {
@@ -355,7 +355,7 @@ const ProductAdd = () => {
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Foto</label>
+                      <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                       <input type="file" name="photo" className={errors.photo !== undefined ? 'form-control is-invalid' : 'form-control'} onChange={handlePhoto} />
 
                       {errors.photo && <div className="invalid-feedback">{errors.photo[0]}</div>}

@@ -166,7 +166,7 @@ const EditBrand = () => {
                                         )}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label>Logo</label>
+                                        <label>Logo <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                         <input type="file" name="logo" className={errors.logo !== undefined ? 'form-control is-invalid ' : 'form-control'}onChange={handleLogo} />
                                         {errors.logo !== undefined && (
                                             <div className="invalid-feedback">

@@ -22,10 +22,6 @@ const CategoryDetailsModal = (props) => {
                 <table className='table table-hover table-striped table-bordered'>
                     <tbody>
                         <tr>
-                            <th>ID</th>
-                            <td>{props.category.id}</td>
-                        </tr>
-                        <tr>
                             <th>Nama</th>
                             <td>{props.category.name}</td>
                         </tr>

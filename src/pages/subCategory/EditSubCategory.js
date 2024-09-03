@@ -37,7 +37,7 @@ const EditSubCategory = () => {
             const activeCategories = res.data.filter(categories => categories.status === 1);
             setCategories(activeCategories)
         })
-      }
+    }
 
     const handleInput = (e) => {
         if (e.target.name === 'name') {
@@ -201,7 +201,7 @@ const EditSubCategory = () => {
                                             )}
                                         </div>
                                         <div className="form-group col-md-6">
-                                            <label htmlFor="exampleInputFile">Foto</label>
+                                            <label>Foto <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                                             <input 
                                                 type="file" 
                                                 name="photo" 

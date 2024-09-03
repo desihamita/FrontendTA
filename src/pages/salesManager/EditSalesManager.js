@@ -200,8 +200,13 @@ const EditSalesManager = () => {
                               {errors.phone && <div className="invalid-feedback">{errors.phone[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Password <small>(Kosongkan jika tidak ingin mengubah password)</small></label>
-                              <div className="invalid-feedback">Biarkan kosong untuk menyimpan kata sandi saat ini</div>
+                              <label>Password</label>
+                              <div>
+                                <small>Minimal 8 karakter, mengandung huruf besar, huruf kecil, dan satu simbol.</small>
+                                <div>
+                                  <small>Kosongkan jika tidak ingin mengubah password</small>
+                                </div>
+                              </div>
                               <input
                                 type='password'
                                 name="password"
@@ -367,7 +372,7 @@ const EditSalesManager = () => {
                                 {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Penunjuk/Penanda Jalan (Optional)</label>
+                              <label>Penunjuk/Penanda Jalan <small>(Optional)</small></label>
                               <input
                                 type="text"
                                 name="landmark"

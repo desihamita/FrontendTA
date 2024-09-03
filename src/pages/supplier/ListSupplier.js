@@ -51,10 +51,12 @@ const ListSupplier = () => {
         setIsLoading(false);
       });
   };
+
   const handleLogoModal = (logo) => {
     setModalLogo(logo);
     setModalLogoShow(true);
   };
+  
   const handleDetailsModal = (supplier) => {
     setSupplier(supplier);
     setModalShow(true);

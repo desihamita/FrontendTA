@@ -109,7 +109,6 @@ const EditSupplier = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setInput((prevState) => ({ ...prevState, logo: reader.result }));
-        //document.getElementById('fileLabel').innerText = file.name;
       };
       reader.readAsDataURL(file);
     }
@@ -226,7 +225,7 @@ const EditSupplier = () => {
                               {errors.details && <div className="invalid-feedback">{errors.details[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Logo</label>
+                              <label>Logo <small>PNG,JPG,JPEG,Webp (File Maksimal 500kb!)</small></label>
                               <input type="file" name="logo" className={errors.logo ? 'form-control is-invalid' : 'form-control'} onChange={handleLogo} />
                               {errors.logo && <div className="invalid-feedback">{errors.logo[0]}</div>}
 
@@ -323,7 +322,7 @@ const EditSupplier = () => {
                                 {errors.area_id && <div className="invalid-feedback">{errors.area_id[0]}</div>}
                             </div>
                             <div className="form-group">
-                              <label>Penunjuk/Penanda Jalan (Optional)</label>
+                              <label>Penunjuk/Penanda Jalan <small>(Optional)</small></label>
                               <input
                                 type="text"
                                 name="landmark"

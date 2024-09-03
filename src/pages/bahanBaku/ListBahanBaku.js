@@ -52,7 +52,7 @@ const ListBahanBaku = () => {
 
     const handleAttributeStatusUpdate = (id, currentStatus) => {
         const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
-        const statusValue = newStatus === "Active" ? 1 : 2; 
+        const statusValue = newStatus === "Active" ? 1 : 0; 
     
         Swal.fire({
             title: "Update Status?",
@@ -65,27 +65,27 @@ const ListBahanBaku = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.put(`${Constants.BASE_URL}/attribute/${id}/status`, { status: statusValue })
-                    .then(res => {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: res.data.cls,
-                            title: res.data.msg,
-                            showConfirmButton: false,
-                            toast: true,
-                            timer: 1500
-                        });
-                        getAttributes(activePage); 
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: "Gagal mengubah status",
-                            showConfirmButton: false,
-                            toast: true,
-                            timer: 1500
-                        });
+                .then(res => {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: res.data.cls,
+                        title: res.data.msg,
+                        showConfirmButton: false,
+                        toast: true,
+                        timer: 1500
                     });
+                    getAttributes(activePage); 
+                })
+                .catch(error => {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: "Gagal mengubah status",
+                        showConfirmButton: false,
+                        toast: true,
+                        timer: 1500
+                    });
+                });
             }
         });
     };
@@ -110,19 +110,21 @@ const ListBahanBaku = () => {
                                 <div className="card-header">
                                     <div className="d-flex justify-content-between align-items-center">
                                         {isAdmin && (
-                                            <CardHeader 
-                                                link={'/bahan-baku/create'} 
-                                                btnText="Tambah Bahan Baku"
-                                                btn="btn btn-warning"
-                                                icon="fas fa-plus"
-                                            />
+                                            <>
+                                                <CardHeader 
+                                                    link={'/bahan-baku/create'} 
+                                                    btnText="Tambah Bahan Baku"
+                                                    btn="btn btn-warning"
+                                                    icon="fas fa-plus"
+                                                />
+                                                <CardHeader 
+                                                    link={'/generate-barcode-bahan-baku'} 
+                                                    btnText="Generate Barcode"
+                                                    btn="btn btn-primary"
+                                                    icon="fas fa-barcode"
+                                                />
+                                            </>
                                         )}
-                                        <CardHeader 
-                                            link={'/generate-barcode-bahan-baku'} 
-                                            btnText="Generate Barcode"
-                                            btn="btn btn-primary"
-                                            icon="fas fa-barcode"
-                                        />
                                     </div>
                                 </div>
                                 <div className="card-body">

@@ -12,7 +12,6 @@ import Constants from '../../Constants'
 import Swal from 'sweetalert2'
 import DetailsSalesManager from './DetailsSalesManager'
 
-
 const ListSalesManager = () => {
     const [input, setInput] = useState({
         order_by: 'created_at',
@@ -224,7 +223,7 @@ const ListSalesManager = () => {
                                 <p className="text-success">No.Tlp : {salesManager.phone}</p>
                               </td>
                               <td>
-                                <p className="mb-0">Status : {salesManager.status}</p>
+                                <p className="mb-0">{salesManager.status}</p>
                               </td>
                               <td>
                                 <img

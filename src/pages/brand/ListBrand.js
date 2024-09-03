@@ -35,18 +35,24 @@ const ListBrand = () => {
       setInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   };
   
-  const getBrands = useCallback((pageNumber = 1) => {
+  const getBrands = (pageNumber = 1) => {
     setIsLoading(true);
     axios.get(`${Constants.BASE_URL}/brand?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&per_page=${input.per_page}&direction=${input.direction}`)
-    .then(res => {
-        setBrands(res.data.data);
-        setItemsCountPerPage(res.data.meta.per_page);
-        setStartFrom(res.data.meta.from);
-        setTotalItemsCount(res.data.meta.total);
-        setActivePage(res.data.meta.current_page);
+      .then(res => {
+        const { data, meta } = res.data;
+        if (data && meta) {
+            setBrands(data);
+            setItemsCountPerPage(meta.per_page);
+            setStartFrom(meta.from);
+            setTotalItemsCount(meta.total);
+            setActivePage(meta.current_page);
+        } 
+        setIsLoading(false);
+    })
+    .catch(error => {
         setIsLoading(false);
     });
-  }, [input]);
+  };
   
   const handlePhotoModal = (photo) => {
       setModalPhoto(photo);
@@ -100,7 +106,7 @@ const ListBrand = () => {
   
   useEffect(() => {
     getBrands()
-  }, [getBrands]);
+  }, []);
 
   return (
     <div className="content-wrapper">

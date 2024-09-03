@@ -19,6 +19,7 @@ const BarcodeComponent = () => {
   const [categories, setCategories] = useState([])
   const [subCategories, setSubCategories] = useState([])
   const [products, setProducts] = useState([])
+  const [notFound, setNotFound] = useState(false);
   const [paperSize, setPaperSize] = useState({
     a4: {
       width: 595,
@@ -53,10 +54,22 @@ const BarcodeComponent = () => {
   }
 
   const handleProductSearch = () => {
-    axios.get(`${Constants.BASE_URL}/get-product-list-for-barcode?name=${input?.name}&category_id=${input?.category_id}&sub_category_id=${input?.sub_category_id}`).then(res => {
-      setProducts(res.data.data)
-    })
-  }
+    setIsLoading(true);
+    axios.get(`${Constants.BASE_URL}/get-product-list-for-barcode`, {
+        params: {
+            name: input.name,
+            category_name: input.category_name,
+            sub_category_name: input.sub_category_name,
+        }
+    }).then(res => {
+      setProducts(res.data.data);
+        setNotFound(res.data.data.length === 0); 
+        setIsLoading(false);
+    }).catch(error => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+    });
+  };
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -70,7 +83,7 @@ const BarcodeComponent = () => {
     <>
     <div className="content-wrapper">
       <section className="content-header">
-        <Breadcrumb title="Generate and Print Barcode" />
+        <Breadcrumb title="Generate and Print Barcode" breadcrumb="generate" />
       </section>
       <section className="content">
         <div className="card">
@@ -144,6 +157,12 @@ const BarcodeComponent = () => {
                 />
               </div>
             </div>
+            
+            {notFound && (
+              <div className="alert alert-warning mt-4">
+                  No results found for the given filters.
+              </div>
+            )}
           </div>
         </div>
       </section>

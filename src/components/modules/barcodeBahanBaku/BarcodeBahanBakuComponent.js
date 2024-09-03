@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import Constants from '../../../Constants';
 import { useReactToPrint } from 'react-to-print'
 import BarcodeBahanBakuPage from './BarcodeBahanBakuPage';
@@ -18,6 +18,7 @@ const BarcodeBahanBakuComponent = () => {
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
     const [attributes, setAttributes] = useState([]);
+    const [notFound, setNotFound] = useState(false);
     const [paperSize, setPaperSize] = useState({
         a4: {
             width: 595,
@@ -26,13 +27,24 @@ const BarcodeBahanBakuComponent = () => {
     });
 
     const handleInput = (e) => {
-        if (e.target.name === 'category_id') {
-            let category_id = parseInt(e.target.value);
-            if (!Number.isNaN(category_id)) {
-                getSubCategories(e.target.value);
+        const { name, value } = e.target;
+    
+        if (name === 'category_id') {
+            let category = categories.find(cat => cat.id === parseInt(value));
+            if (category) {
+                setInput(prevState => ({ ...prevState, category_name: category.name }));
+                getSubCategories(category.id); 
             }
         }
-        setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+    
+        if (name === 'sub_category_id') {
+            let subCategory = subCategories.find(sub => sub.id === parseInt(value));
+            if (subCategory) {
+                setInput(prevState => ({ ...prevState, sub_category_name: subCategory.name }));
+            }
+        }
+    
+        setInput(prevState => ({ ...prevState, [name]: value }));
     };
 
     const getCategories = useCallback(() => {
@@ -42,8 +54,8 @@ const BarcodeBahanBakuComponent = () => {
         })
     },[]);
 
-    const getSubCategories = (category_name) => {
-        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_name}`).then(res => {
+    const getSubCategories = (category_id) => {
+        axios.get(`${Constants.BASE_URL}/get-sub-category-list/${category_id}`).then(res => {
             const activeSubCategories = res.data.filter(subCategories => subCategories.status === 1);
             setSubCategories(activeSubCategories);
         }).catch(error => {
@@ -52,8 +64,20 @@ const BarcodeBahanBakuComponent = () => {
     }
 
     const handleBahanBakuSearch = () => {
-        axios.get(`${Constants.BASE_URL}/get-bahan-baku-list-for-barcode?name=${input?.name}&category_id=${input?.category_id}&sub_category_id=${input?.sub_category_id}`).then(res => {
+        setIsLoading(true);
+        axios.get(`${Constants.BASE_URL}/get-bahan-baku-list-for-barcode`, {
+            params: {
+                name: input.name,
+                category_name: input.category_name,
+                sub_category_name: input.sub_category_name,
+            }
+        }).then(res => {
             setAttributes(res.data.data);
+            setNotFound(res.data.data.length === 0); 
+            setIsLoading(false);
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+            setIsLoading(false);
         });
     };
 
@@ -69,7 +93,7 @@ const BarcodeBahanBakuComponent = () => {
         <>
             <div className="content-wrapper">
                 <section className="content-header">
-                    <Breadcrumb title="Generate and Print Barcode" />
+                    <Breadcrumb title="Generate and Print Barcode" breadcrumb="generate" />
                 </section>
                 <section className="content">
                     <div className="card">
@@ -133,7 +157,12 @@ const BarcodeBahanBakuComponent = () => {
                                     />
                                 </div>
                             </div>
-                            <div className='print-area-parent' style={{ display: Object.keys(attributes).length > 0 ? 'block' : 'none' }}>
+                            {notFound && (
+                                <div className="alert alert-warning mt-4">
+                                    No results found for the given filters.
+                                </div>
+                            )}
+                            <div className='print-area-parent' style={{ display: attributes.length > 0 ? 'block' : 'none' }}>
                                 <button className="btn btn-primary mt-2 mb-3 float-right" onClick={handlePrint}>Print</button>
                                 <div className='barcode-area-wrapper'>
                                     <BarcodeBahanBakuPage
