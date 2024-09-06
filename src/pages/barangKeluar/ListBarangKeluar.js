@@ -130,8 +130,8 @@ const ListBarangKeluar = () => {
                                                         value={input.order_by}
                                                         onChange={handleInput}
                                                     >
-                                                      <option value={'created_at'}>Created At</option>
-                                                      <option value={'updated_at'}>Updated At</option>
+                                                      <option value={'quantity'}>Kuantitas</option>
+                                                      <option value={'created_at'}>Dibuat</option>
                                                     </select>
                                                 </label>
                                             </div>
@@ -180,11 +180,12 @@ const ListBarangKeluar = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
+                                                        <th>Barang</th>
                                                         <th>Kuantitas</th>
-                                                        <th>Tanggal</th>
                                                         <th>Karyawan</th>
                                                         <th>Keterangan</th>
                                                         <th>Kafe</th>
+                                                        <th>Tanggal/Waktu</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -192,11 +193,16 @@ const ListBarangKeluar = () => {
                                                     {items.length > 0 ? items.map((item, index) => (
                                                         <tr key={index}>
                                                             <td>{startFrom + index}</td>
+                                                            <td>{item.attribute}</td>
                                                             <td>{item.quantity} Barang</td>
-                                                            <td>{item.date}</td>
                                                             <td>{item.sales_manager}</td>
                                                             <td>{item.keterangan}</td>
                                                             <td>{item.shop}</td>
+                                                            <td>
+                                                                <p className="mb-0">
+                                                                    <small>{item.created_at}</small>
+                                                                </p>
+                                                            </td>
                                                             <td>
                                                                 <button onClick={() => handleDetailsModal(item)} className='btn btn-info btn-sm my-1'><i className="fas fa-solid fa-eye"></i></button>
                                                             </td>
@@ -208,10 +214,10 @@ const ListBarangKeluar = () => {
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Kuantitas</th>
-                                                        <th>Tanggal</th>
                                                         <th>Karyawan</th>
                                                         <th>Keterangan</th>
                                                         <th>Kafe</th>
+                                                        <th>Tanggal/Waktu</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </tfoot>
